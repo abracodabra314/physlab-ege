@@ -1,0 +1,69 @@
+#include "ModelFactory.h"
+
+#include "models/BoatModel.h"
+#include "models/MixtureModel.h"
+#include "models/MotionModel.h"
+#include "models/TankModel.h"
+#include "models/WellModel.h"
+#include "models/WorkModel.h"
+
+#include "scenes/BoatScene.h"
+#include "scenes/MixtureScene.h"
+#include "scenes/MotionScene.h"
+#include "scenes/TankScene.h"
+#include "scenes/WellScene.h"
+#include "scenes/WorkScene.h"
+
+namespace lab {
+namespace {
+
+LabSetup makeMotion() {
+    auto* model = new models::MotionModel;
+    return {model, new scenes::MotionScene(model)};
+}
+
+LabSetup makeBoat() {
+    auto* model = new models::BoatModel;
+    return {model, new scenes::BoatScene(model)};
+}
+
+LabSetup makeTank() {
+    auto* model = new models::TankModel;
+    return {model, new scenes::TankScene(model)};
+}
+
+LabSetup makeWell() {
+    auto* model = new models::WellModel;
+    return {model, new scenes::WellScene(model)};
+}
+
+LabSetup makeWork() {
+    auto* model = new models::WorkModel;
+    return {model, new scenes::WorkScene(model)};
+}
+
+LabSetup makeMixture() {
+    auto* model = new models::MixtureModel;
+    return {model, new scenes::MixtureScene(model)};
+}
+
+}  // namespace
+
+QVector<ModelDescriptor> allDescriptors() {
+    return {
+        {QStringLiteral("motion"), QStringLiteral("Два движущихся автомобиля"),
+         QStringLiteral("Встречное движение, обгон, задержка старта: s₁ = s₁₀ + v₁t"), makeMotion},
+        {QStringLiteral("boat"), QStringLiteral("Движение теплоходов"),
+         QStringLiteral("Скорость по и против течения, время рейса между пристанями"), makeBoat},
+        {QStringLiteral("tank"), QStringLiteral("Резервуар с водой"),
+         QStringLiteral("Краны наполнения и слива: V(t) = V₀ + (q₁ + q₂ − q₃)·t"), makeTank},
+        {QStringLiteral("well"), QStringLiteral("Колодец: камень и эхо"),
+         QStringLiteral("Свободное падение h = gt²/2 и возврат звука T = t₁ + t₂"), makeWell},
+        {QStringLiteral("work"), QStringLiteral("Совместная работа механизмов"),
+         QStringLiteral("A = (p₁ + p₂)·t, раздельный и совместный этапы"), makeWork},
+        {QStringLiteral("mixture"), QStringLiteral("Смешивание растворов"),
+         QStringLiteral("C = (V₁C₁ + V₂C₂)/(V₁ + V₂), масса вещества m = V·C"), makeMixture},
+    };
+}
+
+}  // namespace lab

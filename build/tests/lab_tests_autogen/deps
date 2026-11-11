@@ -1,0 +1,11 @@
+lab_tests_autogen/timestamp: \
+	/Users/abracodabra/Documents/phisics_sim/tests/CMakeLists.txt \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_boat.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_core.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_motion.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_tank.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_well.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp \
+	/opt/homebrew/share/cmake/Modules/GoogleTest.cmake \
+	/opt/homebrew/bin/cmake

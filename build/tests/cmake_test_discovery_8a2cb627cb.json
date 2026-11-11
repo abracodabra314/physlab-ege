@@ -1,0 +1,395 @@
+{
+  "tests": 67,
+  "name": "AllTests",
+  "testsuites": [
+    {
+      "name": "SimulationCore",
+      "tests": 8,
+      "testsuite": [
+        {
+          "name": "LifecycleTransitions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 12
+        },
+        {
+          "name": "AdvanceDoesNothingWhenStopped",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 37
+        },
+        {
+          "name": "FinishedWhenEventTimeReached",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 44
+        },
+        {
+          "name": "StepOnceIsDiscreteAndPauses",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 55
+        },
+        {
+          "name": "TimeClampedToDuration",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 67
+        },
+        {
+          "name": "ParameterChangeReopensFinishedExperiment",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 75
+        },
+        {
+          "name": "ParametersAreClampedToRange",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 91
+        },
+        {
+          "name": "HandlesRespectModelRanges",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 102
+        }
+      ]
+    },
+    {
+      "name": "MathText",
+      "tests": 4,
+      "testsuite": [
+        {
+          "name": "FormatsNumbersWithCommaAndNoTrailingZeros",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 114
+        },
+        {
+          "name": "RendersFractionsAndSubscripts",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 121
+        },
+        {
+          "name": "EscapesHtmlAndRendersSymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 129
+        },
+        {
+          "name": "DurationFormatting",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_core.cpp",
+          "line": 136
+        }
+      ]
+    },
+    {
+      "name": "MotionModel",
+      "tests": 11,
+      "testsuite": [
+        {
+          "name": "Meeting",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 23
+        },
+        {
+          "name": "Overtake",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 42
+        },
+        {
+          "name": "DelayedStart",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 55
+        },
+        {
+          "name": "NoMeetingWhenSpeedsAreEqualInSameDirection",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 69
+        },
+        {
+          "name": "NoMeetingWhenGapGrows",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 76
+        },
+        {
+          "name": "IntersectionBeforeDelayedStartIsNotAnEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 84
+        },
+        {
+          "name": "StateAtTimeMatchesFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 92
+        },
+        {
+          "name": "InvalidParametersAreRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 107
+        },
+        {
+          "name": "DerivationContainsMeetingSolution",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 119
+        },
+        {
+          "name": "DragChangesCoordinateDistanceAndEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 140
+        },
+        {
+          "name": "HeadOnFromBothSidesOfRoad",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_motion.cpp",
+          "line": 152
+        }
+      ]
+    },
+    {
+      "name": "BoatModel",
+      "tests": 9,
+      "testsuite": [
+        {
+          "name": "DownstreamSpeedAndTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 21
+        },
+        {
+          "name": "UpstreamSpeedAndTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 33
+        },
+        {
+          "name": "UpstreamRequiresOwnSpeedGreaterThanCurrent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 44
+        },
+        {
+          "name": "DepartureDelayShiftsArrival",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 52
+        },
+        {
+          "name": "PositionAtTimeStopsAtBerth",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 62
+        },
+        {
+          "name": "EarlierArrivalIsTheEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 73
+        },
+        {
+          "name": "StateMatchesPositions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 88
+        },
+        {
+          "name": "PierDragChangesDistanceAndTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 97
+        },
+        {
+          "name": "DerivationHasDownstreamAndUpstreamFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_boat.cpp",
+          "line": 107
+        }
+      ]
+    },
+    {
+      "name": "TankModel",
+      "tests": 9,
+      "testsuite": [
+        {
+          "name": "GeometryAndCapacity",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 23
+        },
+        {
+          "name": "FillingLinearLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 31
+        },
+        {
+          "name": "DrainWithSimultaneousFill",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 44
+        },
+        {
+          "name": "VolumeNeverExceedsCapacityOrBelowZero",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 56
+        },
+        {
+          "name": "ClosedTapsAreRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 68
+        },
+        {
+          "name": "EmptyTankWithDrainAndFullTankWithFillRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 75
+        },
+        {
+          "name": "WaterLevelDragChangesVolumeAndTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 85
+        },
+        {
+          "name": "DerivationContainsFillEquation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 95
+        },
+        {
+          "name": "StateFlagsFillEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_tank.cpp",
+          "line": 114
+        }
+      ]
+    },
+    {
+      "name": "WellModel",
+      "tests": 7,
+      "testsuite": [
+        {
+          "name": "FallTimeAndSoundTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 12
+        },
+        {
+          "name": "StonePositionMatchesFreeFall",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 23
+        },
+        {
+          "name": "SoundFrontPositions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 33
+        },
+        {
+          "name": "EchoTimeIsEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 43
+        },
+        {
+          "name": "InverseProblemDepthFromEchoTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 54
+        },
+        {
+          "name": "InverseProblemRejectsInvalidData",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 71
+        },
+        {
+          "name": "DerivationMatchesNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_well.cpp",
+          "line": 77
+        }
+      ]
+    },
+    {
+      "name": "WorkModel",
+      "tests": 10,
+      "testsuite": [
+        {
+          "name": "TogetherWorkTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 23
+        },
+        {
+          "name": "ProgressAtTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 35
+        },
+        {
+          "name": "DisabledMachinesAreIgnored",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 45
+        },
+        {
+          "name": "ThreeMachinesTogether",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 54
+        },
+        {
+          "name": "SequentialStageThenTogether",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 64
+        },
+        {
+          "name": "AllDisabledIsRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 79
+        },
+        {
+          "name": "SoloMachineMustBeEnabled",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 85
+        },
+        {
+          "name": "DragChangesRateAndTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 93
+        },
+        {
+          "name": "DerivationHasSumFormula",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 102
+        },
+        {
+          "name": "StateContributionSumsToProgress",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_work.cpp",
+          "line": 116
+        }
+      ]
+    },
+    {
+      "name": "MixtureModel",
+      "tests": 8,
+      "testsuite": [
+        {
+          "name": "FinalConcentration",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 21
+        },
+        {
+          "name": "EqualVolumesAverageConcentration",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 35
+        },
+        {
+          "name": "PureSolventDilutes",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 42
+        },
+        {
+          "name": "PumpingScheduleIsSequential",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 49
+        },
+        {
+          "name": "IntermediateConcentrationIsWeightedMean",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 71
+        },
+        {
+          "name": "StateAtMatchesTransfer",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 89
+        },
+        {
+          "name": "VolumeDragChangesFinalConcentration",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 101
+        },
+        {
+          "name": "DerivationHasConservationLaws",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 110
+        }
+      ]
+    },
+    {
+      "name": "WorkModelVolumeGuard",
+      "tests": 1,
+      "testsuite": [
+        {
+          "name": "EmptyVolumesRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
+          "line": 81
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Иконка лаборатории: дорога, автомобиль и формула s = vt. -->
+  <rect x="8" y="8" width="112" height="112" rx="22" fill="#f7f6f2" stroke="#1f2a36" stroke-width="6"/>
+  <rect x="20" y="74" width="88" height="16" fill="#565a61"/>
+  <line x1="26" y1="82" x2="102" y2="82" stroke="#f0f0eb" stroke-width="2.4" stroke-dasharray="7 7"/>
+  <g stroke="#103c69" stroke-width="2">
+    <rect x="34" y="52" width="34" height="14" rx="4" fill="#2176c6"/>
+    <rect x="41" y="43" width="19" height="10" rx="3" fill="#2176c6"/>
+    <circle cx="43" cy="68" r="5.5" fill="#282c32" stroke="#14161a" stroke-width="1.5"/>
+    <circle cx="61" cy="68" r="5.5" fill="#282c32" stroke="#14161a" stroke-width="1.5"/>
+  </g>
+  <text x="64" y="38" font-family="Georgia, 'Times New Roman', serif" font-size="26"
+        font-style="italic" font-weight="bold" fill="#1f2a36" text-anchor="middle">s=vt</text>
+</svg>

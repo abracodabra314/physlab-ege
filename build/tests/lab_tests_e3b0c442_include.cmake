@@ -1,0 +1,5 @@
+if(EXISTS "/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_e3b0c442_tests.cmake")
+  include("/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_e3b0c442_tests.cmake")
+else()
+  add_test(lab_tests_NOT_BUILT lab_tests_NOT_BUILT)
+endif()

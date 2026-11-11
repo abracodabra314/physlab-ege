@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/abracodabra/Documents/phisics_sim/build/cmake_install.cmake",
+		"/Users/abracodabra/Documents/phisics_sim/build/tests/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

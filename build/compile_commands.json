@@ -1,0 +1,218 @@
+[
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/lab_lib_autogen/mocs_compilation.cpp.o -c /Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/mocs_compilation.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/mocs_compilation.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/lab_lib_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ModelFactory.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ModelFactory.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ModelFactory.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ModelFactory.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/core/Simulation.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/core/Simulation.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/core/Simulation.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/core/Simulation.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/BoatModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/BoatModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/BoatModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/BoatModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/MixtureModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/MixtureModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/MixtureModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/MixtureModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/MotionModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/MotionModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/MotionModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/MotionModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/TankModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/TankModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/TankModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/TankModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/WellModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/WellModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/WellModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/WellModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/models/WorkModel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/models/WorkModel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/models/WorkModel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/models/WorkModel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/BoatScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/BoatScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/BoatScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/BoatScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/DragHandleItem.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/DragHandleItem.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/DragHandleItem.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/DragHandleItem.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/LabScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/LabScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/LabScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/LabScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/MixtureScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/MixtureScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/MixtureScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/MixtureScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/MotionScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/MotionScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/MotionScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/MotionScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/SchemePrimitives.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/SchemePrimitives.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/SchemePrimitives.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/SchemePrimitives.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/TankScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/TankScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/TankScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/TankScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/WellScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/WellScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/WellScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/WellScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/scenes/WorkScene.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/scenes/WorkScene.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/scenes/WorkScene.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/scenes/WorkScene.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/DerivationPanel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/DerivationPanel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/DerivationPanel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/DerivationPanel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/ExperimentController.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/ExperimentController.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/ExperimentController.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/ExperimentController.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/LabView.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/LabView.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/LabView.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/LabView.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/LabWindow.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/LabWindow.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/LabWindow.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/LabWindow.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/ParamPanel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/ParamPanel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/ParamPanel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/ParamPanel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/ReadoutPanel.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/ReadoutPanel.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/ReadoutPanel.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/ReadoutPanel.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/ui/ShotsMode.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/ui/ShotsMode.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/ui/ShotsMode.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/ui/ShotsMode.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/lab_lib_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/lab_lib.dir/src/utils/MathText.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/utils/MathText.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/utils/MathText.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/lab_lib.dir/src/utils/MathText.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/physlab_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/physlab.dir/physlab_autogen/mocs_compilation.cpp.o -c /Users/abracodabra/Documents/phisics_sim/build/physlab_autogen/mocs_compilation.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/build/physlab_autogen/mocs_compilation.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/physlab.dir/physlab_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build -I/Users/abracodabra/Documents/phisics_sim -I/Users/abracodabra/Documents/phisics_sim/build/physlab_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o CMakeFiles/physlab.dir/src/main.cpp.o -c /Users/abracodabra/Documents/phisics_sim/src/main.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/src/main.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/CMakeFiles/physlab.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/lab_tests_autogen/mocs_compilation.cpp.o -c /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/mocs_compilation.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/mocs_compilation.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/lab_tests_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_core.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_core.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_core.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_core.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_motion.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_motion.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_motion.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_motion.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_boat.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_boat.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_boat.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_boat.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_tank.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_tank.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_tank.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_tank.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_well.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_well.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_well.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_well.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_work.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_work.cpp.o"
+},
+{
+  "directory": "/Users/abracodabra/Documents/phisics_sim/build",
+  "command": "/usr/bin/clang++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/Users/abracodabra/Documents/phisics_sim/build/tests -I/Users/abracodabra/Documents/phisics_sim/tests -I/Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests_autogen/include -I/Users/abracodabra/Documents/phisics_sim/src -isystem /opt/homebrew/include/QtCore -iframework /opt/homebrew/lib -isystem /opt/homebrew/share/qt/mkspecs/macx-clang -isystem /opt/homebrew/include/QtGui -isystem /opt/homebrew/include/QtWidgets -isystem /opt/homebrew/include -g -std=gnu++20 -arch arm64 -idirafter /opt/homebrew/include -o tests/CMakeFiles/lab_tests.dir/test_mixture.cpp.o -c /Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp",
+  "file": "/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp",
+  "output": "/Users/abracodabra/Documents/phisics_sim/build/tests/CMakeFiles/lab_tests.dir/test_mixture.cpp.o"
+}
+]

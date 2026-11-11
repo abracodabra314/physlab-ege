@@ -1,0 +1,7 @@
+set(__QT_DEPLOY_TARGETS "lab_tests;lab_lib;physlab")
+set(__QT_DEPLOY_TARGET_lab_tests_FILE /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests)
+set(__QT_DEPLOY_TARGET_lab_tests_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_lab_lib_FILE /Users/abracodabra/Documents/phisics_sim/build/liblab_lib.a)
+set(__QT_DEPLOY_TARGET_lab_lib_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_physlab_FILE /Users/abracodabra/Documents/phisics_sim/build/physlab)
+set(__QT_DEPLOY_TARGET_physlab_TYPE EXECUTABLE)
