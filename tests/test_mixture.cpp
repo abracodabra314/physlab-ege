@@ -125,3 +125,67 @@ TEST(MixtureModel, DerivationHasConservationLaws) {
     // Ответ: 33 %.
     EXPECT_TRUE(d.answerTemplate.contains(QStringLiteral("33")));
 }
+
+// ------------------------------------------------------------------
+// Краны и порядок перекачки
+// ------------------------------------------------------------------
+
+TEST(MixtureModel, ClosedTapExcludesItsSolution) {
+    MixtureModel model;
+    fillBase(model);
+    setSetup(model, QStringLiteral("on2=0"));
+    ASSERT_FALSE(isInvalid(model));
+    // В смеситель попадёт только первый раствор: C = C1.
+    EXPECT_NEAR(model.totalVolume(), 30.0, 1e-9);
+    EXPECT_NEAR(model.totalSolute(), 3.6, 1e-9);
+    EXPECT_NEAR(model.finalConcentration(), 0.12, 1e-9);
+    // Закрытая линия не перекачивает ничего и стартует «никогда».
+    EXPECT_NEAR(model.transferredAt(1, 100.0), 0.0, 1e-9);
+    EXPECT_FALSE(std::isfinite(model.lineStartTime(1)));
+    // Время эксперимента определяется единственной открытой линией.
+    EXPECT_NEAR(model.eventTime(), 0.5, 1e-9);
+    EXPECT_NEAR(model.transferredAt(0, model.eventTime()), 30.0, 1e-9);
+}
+
+TEST(MixtureModel, BothTapsClosedIsRejected) {
+    MixtureModel model;
+    fillBase(model);
+    setSetup(model, QStringLiteral("on1=0; on2=0"));
+    EXPECT_TRUE(isInvalid(model));
+}
+
+TEST(MixtureModel, SimultaneousModeStartsBothLinesAtOnce) {
+    MixtureModel model;
+    fillBase(model);
+    setSetup(model, QStringLiteral("mode=1"));
+    ASSERT_TRUE(model.pumpsSimultaneously());
+    EXPECT_NEAR(model.lineStartTime(0), 0.0, 1e-9);
+    EXPECT_NEAR(model.lineStartTime(1), 0.0, 1e-9);
+
+    // Обе линии работают с самого начала.
+    EXPECT_NEAR(model.transferredAt(0, 0.25), 15.0, 1e-9);
+    EXPECT_NEAR(model.transferredAt(1, 0.25), 15.0, 1e-9);
+    // C = (15·0.12 + 15·0.42)/30 = 27 % — средневзвешенное текущих объёмов.
+    EXPECT_NEAR(model.currentConcentrationAt(0.25), 0.27, 1e-9);
+    // Закончится та линия, что длиннее: 70 л / 60 л/мин.
+    EXPECT_NEAR(model.eventTime(), 70.0 / 60.0, 1e-9);
+    EXPECT_NEAR(model.currentConcentrationAt(model.eventTime()), model.finalConcentration(), 1e-9);
+}
+
+TEST(MixtureModel, SequentialModeMatchesLegacySchedule) {
+    MixtureModel model;
+    fillBase(model);
+    // По умолчанию — режим по очереди: вторая линия стартует после опорожнения первой.
+    EXPECT_FALSE(model.pumpsSimultaneously());
+    EXPECT_NEAR(model.lineStartTime(1), 0.5, 1e-9);
+    EXPECT_NEAR(model.eventTime(), 0.5 + 70.0 / 60.0, 1e-9);
+}
+
+TEST(MixtureModel, StateReflectsTapFlags) {
+    MixtureModel model;
+    fillBase(model);
+    setSetup(model, QStringLiteral("on2=0; mode=1"));
+    const auto state = model.stateAt(0.25);
+    EXPECT_TRUE(state.entities[0].active);
+    EXPECT_FALSE(state.entities[1].active);   // кран закрыт — потока нет
+}

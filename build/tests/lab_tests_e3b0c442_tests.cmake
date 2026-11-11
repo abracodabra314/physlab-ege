@@ -466,11 +466,29 @@ set_tests_properties([=[WorkModel.ThreeMachinesTogether]=]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
 )
-add_test([=[WorkModel.SequentialStageThenTogether]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModel.SequentialStageThenTogether]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[WorkModel.SequentialStageThenTogether]=]
+add_test([=[WorkModel.DelayedStart]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModel.DelayedStart]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[WorkModel.DelayedStart]=]
   PROPERTIES
     
     DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:64]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[WorkModel.ContributionSumsToProgress]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModel.ContributionSumsToProgress]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[WorkModel.ContributionSumsToProgress]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:78]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[WorkModel.MachineStatusFlags]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModel.MachineStatusFlags]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[WorkModel.MachineStatusFlags]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:89]==]
     WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
@@ -479,16 +497,7 @@ add_test([=[WorkModel.AllDisabledIsRejected]=]  /Users/abracodabra/Documents/phi
 set_tests_properties([=[WorkModel.AllDisabledIsRejected]=]
   PROPERTIES
     
-    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:79]==]
-    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
-    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
-    
-)
-add_test([=[WorkModel.SoloMachineMustBeEnabled]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModel.SoloMachineMustBeEnabled]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[WorkModel.SoloMachineMustBeEnabled]=]
-  PROPERTIES
-    
-    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:85]==]
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:98]==]
     WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
@@ -497,7 +506,7 @@ add_test([=[WorkModel.DragChangesRateAndTime]=]  /Users/abracodabra/Documents/ph
 set_tests_properties([=[WorkModel.DragChangesRateAndTime]=]
   PROPERTIES
     
-    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:93]==]
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:104]==]
     WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
@@ -506,7 +515,7 @@ add_test([=[WorkModel.DerivationHasSumFormula]=]  /Users/abracodabra/Documents/p
 set_tests_properties([=[WorkModel.DerivationHasSumFormula]=]
   PROPERTIES
     
-    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:102]==]
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:113]==]
     WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
@@ -515,7 +524,7 @@ add_test([=[WorkModel.StateContributionSumsToProgress]=]  /Users/abracodabra/Doc
 set_tests_properties([=[WorkModel.StateContributionSumsToProgress]=]
   PROPERTIES
     
-    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:116]==]
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp:127]==]
     WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
@@ -592,6 +601,51 @@ set_tests_properties([=[MixtureModel.DerivationHasConservationLaws]=]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
 )
+add_test([=[MixtureModel.ClosedTapExcludesItsSolution]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=MixtureModel.ClosedTapExcludesItsSolution]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[MixtureModel.ClosedTapExcludesItsSolution]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp:133]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[MixtureModel.BothTapsClosedIsRejected]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=MixtureModel.BothTapsClosedIsRejected]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[MixtureModel.BothTapsClosedIsRejected]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp:150]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[MixtureModel.SimultaneousModeStartsBothLinesAtOnce]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=MixtureModel.SimultaneousModeStartsBothLinesAtOnce]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[MixtureModel.SimultaneousModeStartsBothLinesAtOnce]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp:157]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[MixtureModel.SequentialModeMatchesLegacySchedule]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=MixtureModel.SequentialModeMatchesLegacySchedule]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[MixtureModel.SequentialModeMatchesLegacySchedule]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp:175]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
+add_test([=[MixtureModel.StateReflectsTapFlags]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=MixtureModel.StateReflectsTapFlags]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[MixtureModel.StateReflectsTapFlags]=]
+  PROPERTIES
+    
+    DEF_SOURCE_LINE [==[/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp:184]==]
+    WORKING_DIRECTORY [==[/Users/abracodabra/Documents/phisics_sim/build/tests]==]
+    SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
+    
+)
 add_test([=[WorkModelVolumeGuard.EmptyVolumesRejected]=]  /Users/abracodabra/Documents/phisics_sim/build/tests/lab_tests [==[--gtest_filter=WorkModelVolumeGuard.EmptyVolumesRejected]==] --gtest_also_run_disabled_tests)
 set_tests_properties([=[WorkModelVolumeGuard.EmptyVolumesRejected]=]
   PROPERTIES
@@ -601,4 +655,4 @@ set_tests_properties([=[WorkModelVolumeGuard.EmptyVolumesRejected]=]
     SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==]
     
 )
-set(lab_tests_TESTS [==[SimulationCore.LifecycleTransitions]==] [==[SimulationCore.AdvanceDoesNothingWhenStopped]==] [==[SimulationCore.FinishedWhenEventTimeReached]==] [==[SimulationCore.StepOnceIsDiscreteAndPauses]==] [==[SimulationCore.TimeClampedToDuration]==] [==[SimulationCore.ParameterChangeReopensFinishedExperiment]==] [==[SimulationCore.ParametersAreClampedToRange]==] [==[SimulationCore.HandlesRespectModelRanges]==] [==[MathText.FormatsNumbersWithCommaAndNoTrailingZeros]==] [==[MathText.RendersFractionsAndSubscripts]==] [==[MathText.EscapesHtmlAndRendersSymbols]==] [==[MathText.DurationFormatting]==] [==[MotionModel.Meeting]==] [==[MotionModel.Overtake]==] [==[MotionModel.DelayedStart]==] [==[MotionModel.NoMeetingWhenSpeedsAreEqualInSameDirection]==] [==[MotionModel.NoMeetingWhenGapGrows]==] [==[MotionModel.IntersectionBeforeDelayedStartIsNotAnEvent]==] [==[MotionModel.StateAtTimeMatchesFormulas]==] [==[MotionModel.InvalidParametersAreRejected]==] [==[MotionModel.DerivationContainsMeetingSolution]==] [==[MotionModel.DragChangesCoordinateDistanceAndEvent]==] [==[MotionModel.HeadOnFromBothSidesOfRoad]==] [==[BoatModel.DownstreamSpeedAndTime]==] [==[BoatModel.UpstreamSpeedAndTime]==] [==[BoatModel.UpstreamRequiresOwnSpeedGreaterThanCurrent]==] [==[BoatModel.DepartureDelayShiftsArrival]==] [==[BoatModel.PositionAtTimeStopsAtBerth]==] [==[BoatModel.EarlierArrivalIsTheEvent]==] [==[BoatModel.StateMatchesPositions]==] [==[BoatModel.PierDragChangesDistanceAndTime]==] [==[BoatModel.DerivationHasDownstreamAndUpstreamFormulas]==] [==[TankModel.GeometryAndCapacity]==] [==[TankModel.FillingLinearLaw]==] [==[TankModel.DrainWithSimultaneousFill]==] [==[TankModel.VolumeNeverExceedsCapacityOrBelowZero]==] [==[TankModel.ClosedTapsAreRejected]==] [==[TankModel.EmptyTankWithDrainAndFullTankWithFillRejected]==] [==[TankModel.WaterLevelDragChangesVolumeAndTime]==] [==[TankModel.DerivationContainsFillEquation]==] [==[TankModel.StateFlagsFillEvent]==] [==[WellModel.FallTimeAndSoundTime]==] [==[WellModel.StonePositionMatchesFreeFall]==] [==[WellModel.SoundFrontPositions]==] [==[WellModel.EchoTimeIsEvent]==] [==[WellModel.InverseProblemDepthFromEchoTime]==] [==[WellModel.InverseProblemRejectsInvalidData]==] [==[WellModel.DerivationMatchesNumbers]==] [==[WorkModel.TogetherWorkTime]==] [==[WorkModel.ProgressAtTime]==] [==[WorkModel.DisabledMachinesAreIgnored]==] [==[WorkModel.ThreeMachinesTogether]==] [==[WorkModel.SequentialStageThenTogether]==] [==[WorkModel.AllDisabledIsRejected]==] [==[WorkModel.SoloMachineMustBeEnabled]==] [==[WorkModel.DragChangesRateAndTime]==] [==[WorkModel.DerivationHasSumFormula]==] [==[WorkModel.StateContributionSumsToProgress]==] [==[MixtureModel.FinalConcentration]==] [==[MixtureModel.EqualVolumesAverageConcentration]==] [==[MixtureModel.PureSolventDilutes]==] [==[MixtureModel.PumpingScheduleIsSequential]==] [==[MixtureModel.IntermediateConcentrationIsWeightedMean]==] [==[MixtureModel.StateAtMatchesTransfer]==] [==[MixtureModel.VolumeDragChangesFinalConcentration]==] [==[MixtureModel.DerivationHasConservationLaws]==] [==[WorkModelVolumeGuard.EmptyVolumesRejected]==])
+set(lab_tests_TESTS [==[SimulationCore.LifecycleTransitions]==] [==[SimulationCore.AdvanceDoesNothingWhenStopped]==] [==[SimulationCore.FinishedWhenEventTimeReached]==] [==[SimulationCore.StepOnceIsDiscreteAndPauses]==] [==[SimulationCore.TimeClampedToDuration]==] [==[SimulationCore.ParameterChangeReopensFinishedExperiment]==] [==[SimulationCore.ParametersAreClampedToRange]==] [==[SimulationCore.HandlesRespectModelRanges]==] [==[MathText.FormatsNumbersWithCommaAndNoTrailingZeros]==] [==[MathText.RendersFractionsAndSubscripts]==] [==[MathText.EscapesHtmlAndRendersSymbols]==] [==[MathText.DurationFormatting]==] [==[MotionModel.Meeting]==] [==[MotionModel.Overtake]==] [==[MotionModel.DelayedStart]==] [==[MotionModel.NoMeetingWhenSpeedsAreEqualInSameDirection]==] [==[MotionModel.NoMeetingWhenGapGrows]==] [==[MotionModel.IntersectionBeforeDelayedStartIsNotAnEvent]==] [==[MotionModel.StateAtTimeMatchesFormulas]==] [==[MotionModel.InvalidParametersAreRejected]==] [==[MotionModel.DerivationContainsMeetingSolution]==] [==[MotionModel.DragChangesCoordinateDistanceAndEvent]==] [==[MotionModel.HeadOnFromBothSidesOfRoad]==] [==[BoatModel.DownstreamSpeedAndTime]==] [==[BoatModel.UpstreamSpeedAndTime]==] [==[BoatModel.UpstreamRequiresOwnSpeedGreaterThanCurrent]==] [==[BoatModel.DepartureDelayShiftsArrival]==] [==[BoatModel.PositionAtTimeStopsAtBerth]==] [==[BoatModel.EarlierArrivalIsTheEvent]==] [==[BoatModel.StateMatchesPositions]==] [==[BoatModel.PierDragChangesDistanceAndTime]==] [==[BoatModel.DerivationHasDownstreamAndUpstreamFormulas]==] [==[TankModel.GeometryAndCapacity]==] [==[TankModel.FillingLinearLaw]==] [==[TankModel.DrainWithSimultaneousFill]==] [==[TankModel.VolumeNeverExceedsCapacityOrBelowZero]==] [==[TankModel.ClosedTapsAreRejected]==] [==[TankModel.EmptyTankWithDrainAndFullTankWithFillRejected]==] [==[TankModel.WaterLevelDragChangesVolumeAndTime]==] [==[TankModel.DerivationContainsFillEquation]==] [==[TankModel.StateFlagsFillEvent]==] [==[WellModel.FallTimeAndSoundTime]==] [==[WellModel.StonePositionMatchesFreeFall]==] [==[WellModel.SoundFrontPositions]==] [==[WellModel.EchoTimeIsEvent]==] [==[WellModel.InverseProblemDepthFromEchoTime]==] [==[WellModel.InverseProblemRejectsInvalidData]==] [==[WellModel.DerivationMatchesNumbers]==] [==[WorkModel.TogetherWorkTime]==] [==[WorkModel.ProgressAtTime]==] [==[WorkModel.DisabledMachinesAreIgnored]==] [==[WorkModel.ThreeMachinesTogether]==] [==[WorkModel.DelayedStart]==] [==[WorkModel.ContributionSumsToProgress]==] [==[WorkModel.MachineStatusFlags]==] [==[WorkModel.AllDisabledIsRejected]==] [==[WorkModel.DragChangesRateAndTime]==] [==[WorkModel.DerivationHasSumFormula]==] [==[WorkModel.StateContributionSumsToProgress]==] [==[MixtureModel.FinalConcentration]==] [==[MixtureModel.EqualVolumesAverageConcentration]==] [==[MixtureModel.PureSolventDilutes]==] [==[MixtureModel.PumpingScheduleIsSequential]==] [==[MixtureModel.IntermediateConcentrationIsWeightedMean]==] [==[MixtureModel.StateAtMatchesTransfer]==] [==[MixtureModel.VolumeDragChangesFinalConcentration]==] [==[MixtureModel.DerivationHasConservationLaws]==] [==[MixtureModel.ClosedTapExcludesItsSolution]==] [==[MixtureModel.BothTapsClosedIsRejected]==] [==[MixtureModel.SimultaneousModeStartsBothLinesAtOnce]==] [==[MixtureModel.SequentialModeMatchesLegacySchedule]==] [==[MixtureModel.StateReflectsTapFlags]==] [==[WorkModelVolumeGuard.EmptyVolumesRejected]==])

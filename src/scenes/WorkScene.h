@@ -5,8 +5,10 @@
 namespace lab::scenes {
 
 /**
- * Сцена модели «Совместная работа механизмов»: три станка с шестернями,
- * шкала выполненной работы, диаграмма вкладов каждого механизма.
+ * Сцена модели «Совместная работа механизмов»: производственная площадка
+ * со станками (шестерни, вход/выход, индикация состояния), общая лента
+ * конвейера, шкала готовности работы и продукция, пропорциональная
+ * выполненной доле.
  */
 class WorkScene : public LabScene {
     Q_OBJECT
@@ -23,7 +25,11 @@ protected:
 
 private:
     QRectF machineZone() const;
+    QRectF conveyorRect() const;   // общая лента конвейера под станками
     double machineX(int index) const;
+    /** Корпус станка: станина, стойка, шестерни, вход/выход. */
+    static void drawMachineBody(QPainter* painter, double x, double baseY, const QColor& color, bool running,
+                                double spin);
 };
 
 }  // namespace lab::scenes

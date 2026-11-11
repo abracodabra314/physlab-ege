@@ -18,6 +18,7 @@
 #include <QStatusBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWidgetAction>
 
 #include "ModelFactory.h"
 #include "utils/MathText.h"
@@ -107,8 +108,9 @@ LabWindow::LabWindow(QWidget* parent) : QMainWindow(parent) {
 
 void LabWindow::applyStyleSheet() {
     setStyleSheet(QStringLiteral(
-        "QMainWindow, QWidget { background: #f7f6f2; color: #262c34; "
-        "font-family: 'Segoe UI', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif; font-size: 14px; }"
+        // Шрифт не задаём явно: берётся системный UI-шрифт платформы
+        // (Windows — Segoe UI, macOS —苹系统ный, Linux — шрифт окружения).
+        "QMainWindow, QWidget { background: #f7f6f2; color: #262c34; font-size: 14px; }"
         "#topBar, #bottomBar { background: #ffffff; border: 1px solid #dfe3e8; }"
         "#pageTitle { font-size: 19px; font-weight: 700; color: #1f2a36; }"
         "#pageSubtitle { font-size: 12.5px; color: #5c6673; }"
@@ -187,6 +189,57 @@ void LabWindow::buildTopBar() {
     m_showDerivationAction->setCheckable(true);
     m_showDerivationAction->setChecked(true);
     connect(m_showDerivationAction, &QAction::toggled, this, [this]() { toggleDerivation(); });
+
+    // Отдельные переключатели категорий векторов: скорости, ускорения, силы.
+    // Они действуют на все сцены и сохраняются между запусками.
+    QSettings settings(QStringLiteral("PhysLabEge"), QStringLiteral("PhysLab"));
+    auto* vectorsMenu = m_settingsMenu->addMenu(QStringLiteral("Векторы на сценах"));
+    m_showVelocitiesAction = vectorsMenu->addAction(QStringLiteral("Скорости (v)"));
+    m_showVelocitiesAction->setCheckable(true);
+    m_showVelocitiesAction->setChecked(settings.value(QStringLiteral("vectors/velocities"), true).toBool());
+    m_showAccelerationsAction = vectorsMenu->addAction(QStringLiteral("Ускорения (a)"));
+    m_showAccelerationsAction->setCheckable(true);
+    m_showAccelerationsAction->setChecked(settings.value(QStringLiteral("vectors/accelerations"), true).toBool());
+    m_showForcesAction = vectorsMenu->addAction(QStringLiteral("Силы (mg, N, F)"));
+    m_showForcesAction->setCheckable(true);
+    m_showForcesAction->setChecked(settings.value(QStringLiteral("vectors/forces"), true).toBool());
+    m_vectorScaleCombo = new QComboBox(m_settingsMenu);
+    m_vectorScaleCombo->addItem(QStringLiteral("Стрелки мелкие"), 0.6);
+    m_vectorScaleCombo->addItem(QStringLiteral("Стрелки обычные"), 1.0);
+    m_vectorScaleCombo->addItem(QStringLiteral("Стрелки крупные"), 1.6);
+    const int storedScaleIndex = m_vectorScaleCombo->findData(settings.value(QStringLiteral("vectors/scale"), 1.0));
+    m_vectorScaleCombo->setCurrentIndex(storedScaleIndex >= 0 ? storedScaleIndex : 1);
+    auto* vectorsScaleWidget = new QWidgetAction(m_settingsMenu);
+    {
+        auto* rowWidget = new QWidget;
+        auto* row = new QHBoxLayout(rowWidget);
+        row->setContentsMargins(8, 4, 8, 4);
+        row->addWidget(new QLabel(QStringLiteral("Масштаб стрелок:"), rowWidget));
+        row->addWidget(m_vectorScaleCombo, 1);
+        vectorsScaleWidget->setDefaultWidget(rowWidget);
+    }
+    vectorsMenu->addAction(vectorsScaleWidget);
+
+    connect(m_showVelocitiesAction, &QAction::toggled, this, [this](bool on) {
+        applyVectorOptions();
+        QSettings s(QStringLiteral("PhysLabEge"), QStringLiteral("PhysLab"));
+        s.setValue(QStringLiteral("vectors/velocities"), on);
+    });
+    connect(m_showAccelerationsAction, &QAction::toggled, this, [this](bool on) {
+        applyVectorOptions();
+        QSettings s(QStringLiteral("PhysLabEge"), QStringLiteral("PhysLab"));
+        s.setValue(QStringLiteral("vectors/accelerations"), on);
+    });
+    connect(m_showForcesAction, &QAction::toggled, this, [this](bool on) {
+        applyVectorOptions();
+        QSettings s(QStringLiteral("PhysLabEge"), QStringLiteral("PhysLab"));
+        s.setValue(QStringLiteral("vectors/forces"), on);
+    });
+    connect(m_vectorScaleCombo, &QComboBox::currentIndexChanged, this, [this](int) {
+        applyVectorOptions();
+        QSettings s(QStringLiteral("PhysLabEge"), QStringLiteral("PhysLab"));
+        s.setValue(QStringLiteral("vectors/scale"), m_vectorScaleCombo->currentData());
+    });
     m_settingsButton->setMenu(m_settingsMenu);
 
     m_fullScreenButton = new QPushButton(QStringLiteral("Во весь экран"), bar);
@@ -481,6 +534,7 @@ void LabWindow::openModel(const QString& modelId) {
 
     m_controller->setSimulation(page.model);
     m_controller->reset();
+    applyVectorOptions();
     m_paramPanel->setModel(page.model);
     m_readoutPanel->setModel(page.model);
     m_derivationPanel->setModel(page.model);
@@ -525,6 +579,17 @@ void LabWindow::toggleDerivation() {
     // Вычисления можно скрыть — сцена и интерактивность продолжают работать.
     m_derivationContainer->setVisible(show);
     m_derivationPanel->setVisible(show);
+}
+
+void LabWindow::applyVectorOptions() {
+    Simulation* model = m_controller->simulation();
+    if (!model)
+        return;
+    model->setShowsVelocities(m_showVelocitiesAction && m_showVelocitiesAction->isChecked());
+    model->setShowsAccelerations(m_showAccelerationsAction && m_showAccelerationsAction->isChecked());
+    model->setShowsForces(m_showForcesAction && m_showForcesAction->isChecked());
+    if (m_vectorScaleCombo)
+        model->setVectorScale(m_vectorScaleCombo->currentData().toDouble());
 }
 
 void LabWindow::keyPressEvent(QKeyEvent* event) {

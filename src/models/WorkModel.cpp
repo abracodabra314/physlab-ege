@@ -22,42 +22,40 @@ QString WorkModel::title() const {
 }
 
 QString WorkModel::subtitle() const {
-    return QStringLiteral("Производительности, раздельная и совместная работа");
+    return QStringLiteral("Производительности, моменты включения, A = Σ pᵢ·(t − tᵢ)");
 }
 
 QString WorkModel::statement() const {
     return QStringLiteral(
-        "Нужно выполнить работу, приняв её за единицу. Первый механизм "
-        "выполняет её один за известное время, второй — за своё. Через "
-        "сколько времени работа будет выполнена, если механизмы "
-        "работают вместе?");
+        "Нужно выполнить работу, приняв её за единицу. Каждый механизм "
+        "работает со своей производительностью и включается в своё время. "
+        "Чер сколько времени работа будет выполнена?");
 }
 
 QString WorkModel::problemText() const {
     using utils::formatNumber;
     QString text = QStringLiteral("Вся работа принята за 1. ");
+    bool any = false;
     for (int i = 0; i < kMachineCount; ++i) {
         if (!enabled(i))
             continue;
+        any = true;
         const double rate = rateOf(i);
-        text += QStringLiteral("Механизм %1 выполняет %2 % всей работы в минуту (в одиночку — за %3 мин); ")
+        text += QStringLiteral("Механизм %1 выполняет %2 % всей работы в минуту (в одиночку — за %3 мин), "
+                               "включается через %4 мин; ")
                     .arg(i + 1)
                     .arg(formatNumber(rate * 100.0, 1))
-                    .arg(formatNumber(1.0 / rate, 1));
+                    .arg(formatNumber(1.0 / rate, 1))
+                    .arg(formatNumber(startTimeOf(i), 2));
     }
-    if (mode() == Mode::Sequential) {
-        text += QStringLiteral("Сначала %1 мин работает только механизм %2, затем включаются все.")
-                    .arg(formatNumber(soloTime(), 2))
-                    .arg(soloIndex() + 1);
-    } else {
-        text += QStringLiteral("Механизмы работают вместе с самого начала.");
-    }
+    if (!any)
+        text += QStringLiteral("Все механизмы выключены.");
     return text;
 }
 
 QVector<ParamSpec> WorkModel::paramSpecs() const {
     const auto slider = [](QString id, QString label, QString unit, double mn, double mx, double step,
-                           double decimals, double def, QString group, QString help = {}) {
+                           double decimals, double def, QString group, QString help = {}, bool allowZero = false) {
         ParamSpec s;
         s.id = std::move(id);
         s.label = std::move(label);
@@ -67,7 +65,7 @@ QVector<ParamSpec> WorkModel::paramSpecs() const {
         s.maxValue = mx;
         s.stepValue = step;
         s.decimals = decimals;
-        s.allowZero = false;
+        s.allowZero = allowZero;
         s.defaultValue = def;
         s.group = std::move(group);
         s.helpText = std::move(help);
@@ -84,65 +82,43 @@ QVector<ParamSpec> WorkModel::paramSpecs() const {
         return s;
     };
 
-    const QString scenario = QStringLiteral("Сценарий");
-    QVector<ParamSpec> specs;
-
-    ParamSpec modeSpec;
-    modeSpec.id = QStringLiteral("mode");
-    modeSpec.label = QStringLiteral("Как работают механизмы");
-    modeSpec.kind = ParamKind::Choice;
-    modeSpec.choices = {QStringLiteral("Все работают вместе"),
-                        QStringLiteral("Сначала один, потом все вместе")};
-    modeSpec.group = scenario;
-    modeSpec.defaultValue = 0.0;
-    specs.push_back(modeSpec);
-
-    ParamSpec solo;
-    solo.id = QStringLiteral("solo");
-    solo.label = QStringLiteral("Какой механизм работает один");
-    solo.kind = ParamKind::Choice;
-    solo.choices = {QStringLiteral("Механизм 1"), QStringLiteral("Механизм 2"), QStringLiteral("Механизм 3")};
-    solo.group = scenario;
-    solo.defaultValue = 0.0;
-    specs.push_back(solo);
-
-    auto soloWork = slider(QStringLiteral("soloWork"), QStringLiteral("Часть работы, выполненная в одиночку"),
-                           QStringLiteral("доля"), 0.05, 0.95, 0.05, 2.0, 0.3, scenario,
-                           QStringLiteral("Например, 0,3 — первый механизм один сделал 30 % всей работы."));
-    specs.push_back(soloWork);
-
     const double defaults[kMachineCount] = {1.0 / 12.0, 1.0 / 8.0, 1.0 / 24.0};
+    QVector<ParamSpec> specs;
     for (int i = 0; i < kMachineCount; ++i) {
         const QString idx = QString::number(i + 1);
-        auto rate = slider(QStringLiteral("p%1").arg(idx),
-                           QStringLiteral("Производительность механизма %1").arg(idx),
-                           QStringLiteral("часть/мин"), 1.0 / 120.0, 1.0, 0.01, 3.0, defaults[i],
-                           QStringLiteral("Механизм %1").arg(idx),
-                           QStringLiteral("В одиночку механизм выполнит всю работу за %1 мин.")
-                               .arg(utils::formatNumber(1.0 / defaults[i], 1)));
-        rate.group = QStringLiteral("Механизм %1").arg(idx);
-        specs.push_back(rate);
+        const QString group = QStringLiteral("Механизм %1").arg(idx);
+        specs.push_back(slider(QStringLiteral("p%1").arg(idx),
+                               QStringLiteral("Производительность механизма %1").arg(idx),
+                               QStringLiteral("часть/мин"), 1.0 / 120.0, 1.0, 0.01, 3.0, defaults[i], group,
+                               QStringLiteral("В одиночку механизм выполнит всю работу за %1 мин.")
+                                   .arg(utils::formatNumber(1.0 / defaults[i], 1))));
+        specs.push_back(slider(QStringLiteral("start%1").arg(idx),
+                               QStringLiteral("Время включения механизма %1").arg(idx),
+                               QStringLiteral("мин"), 0.0, 60.0, 0.5, 2.0, 0.0, group,
+                               QStringLiteral("0 — механизм работает с самого начала."), /*allowZero=*/true));
         specs.push_back(toggle(QStringLiteral("on%1").arg(idx), QStringLiteral("Механизм %1 участвует").arg(idx),
-                               QStringLiteral("Механизм %1").arg(idx), i < 2 ? 1.0 : 0.0));
+                               group, i < 2 ? 1.0 : 0.0));
     }
     return specs;
 }
 
 double WorkModel::rateOf(int index) const {
+    if (index < 0 || index >= kMachineCount)
+        return 0.0;
     const double raw = param(QStringLiteral("p%1").arg(index + 1));
     return enabled(index) ? std::max(0.0, raw) : 0.0;
 }
 
+double WorkModel::startTimeOf(int index) const {
+    if (index < 0 || index >= kMachineCount)
+        return 0.0;
+    return std::max(0.0, param(QStringLiteral("start%1").arg(index + 1)));
+}
+
 bool WorkModel::enabled(int index) const {
+    if (index < 0 || index >= kMachineCount)
+        return false;
     return paramFlag(QStringLiteral("on%1").arg(index + 1));
-}
-
-WorkModel::Mode WorkModel::mode() const {
-    return paramChoiceIndex(QStringLiteral("mode")) == 0 ? Mode::Together : Mode::Sequential;
-}
-
-int WorkModel::soloIndex() const {
-    return qBound(0, paramChoiceIndex(QStringLiteral("solo")), kMachineCount - 1);
 }
 
 QVector<double> WorkModel::activeRates() const {
@@ -161,41 +137,62 @@ double WorkModel::totalRate() const {
     return sum;
 }
 
-double WorkModel::soloTime() const {
-    if (mode() != Mode::Sequential)
-        return 0.0;
-    const double soloRate = rateOf(soloIndex());
-    if (soloRate < kEps)
-        return std::numeric_limits<double>::infinity();
-    return param(QStringLiteral("soloWork")) / soloRate;
-}
-
 double WorkModel::progressAt(double t) const {
     const double timeValue = std::max(0.0, t);
-    if (mode() == Mode::Sequential && enabled(soloIndex())) {
-        const double ts = soloTime();
-        const double soloWork = param(QStringLiteral("soloWork"));
-        if (timeValue <= ts)
-            return std::min(1.0, rateOf(soloIndex()) * timeValue);
-        return std::min(1.0, soloWork + totalRate() * (timeValue - ts));
-    }
-    return std::min(1.0, totalRate() * timeValue);
+    double sum = 0.0;
+    for (int i = 0; i < kMachineCount; ++i)
+        sum += rateOf(i) * std::max(0.0, timeValue - startTimeOf(i));
+    return std::clamp(sum, 0.0, 1.0);
+}
+
+double WorkModel::contributionOf(int index, double t) const {
+    if (!enabled(index))
+        return 0.0;
+    const double running = std::max(0.0, std::max(0.0, t) - startTimeOf(index));
+    return std::clamp(rateOf(index) * running, 0.0, 1.0);
+}
+
+bool WorkModel::isWorking(int index, double t) const {
+    return enabled(index) && t > startTimeOf(index) + kEps && progressAt(t) < 1.0 - kEps &&
+           contributionOf(index, t) < 1.0 - kEps;
 }
 
 double WorkModel::completionTime() const {
-    const double total = totalRate();
-    if (total < kEps)
-        return std::numeric_limits<double>::infinity();
-    if (mode() == Mode::Sequential && enabled(soloIndex())) {
-        const double soloWork = param(QStringLiteral("soloWork"));
-        const double ts = soloTime();
-        if (!std::isfinite(ts))
-            return std::numeric_limits<double>::infinity();
-        if (soloWork >= 1.0 - kEps)
-            return ts;
-        return ts + (1.0 - soloWork) / total;
+    // Кусочно-линейная функция A(t): идём по возрастанию моментов включения;
+    // на каждом интервале суммарная производительность постоянна.
+    QVector<int> order;
+    for (int i = 0; i < kMachineCount; ++i) {
+        if (enabled(i))
+            order.push_back(i);
     }
-    return 1.0 / total;
+    if (order.isEmpty())
+        return std::numeric_limits<double>::infinity();
+    std::sort(order.begin(), order.end(),
+              [this](int a, int b) { return startTimeOf(a) < startTimeOf(b); });
+
+    double work = 0.0;
+    double rate = 0.0;
+    double prev = startTimeOf(order.first());
+    qsizetype next = 0;
+    while (next < order.size()) {
+        const double onTime = startTimeOf(order[next]);
+        if (onTime > prev + kEps) {
+            if (rate > kEps) {
+                const double need = (1.0 - work) / rate;
+                if (prev + need <= onTime + kEps)
+                    return prev + need;
+                work += rate * (onTime - prev);
+            }
+            prev = onTime;
+        }
+        while (next < order.size() && startTimeOf(order[next]) <= prev + kEps) {
+            rate += rateOf(order[next]);
+            ++next;
+        }
+    }
+    if (rate > kEps)
+        return prev + (1.0 - work) / rate;
+    return std::numeric_limits<double>::infinity();
 }
 
 double WorkModel::eventTime() const {
@@ -208,43 +205,28 @@ SimState WorkModel::stateAt(double t) const {
     SimState state;
     state.time = t;
     state.primary = progressAt(t);
+    state.secondary = completionTime();
 
-    const double sequentialSwitch = mode() == Mode::Sequential ? soloTime() : 0.0;
-
+    double contributionSum = 0.0;
     for (int i = 0; i < kMachineCount; ++i) {
         EntityVisual machine;
         machine.id = QStringLiteral("machine%1").arg(i + 1);
         machine.label = QStringLiteral("Механизм %1").arg(i + 1);
         machine.value1 = rateOf(i);
-        if (mode() == Mode::Sequential) {
-            // В соло-фазе работает только выбранный механизм.
-            machine.active = enabled(i) && (i == soloIndex() || t >= sequentialSwitch);
-        } else {
-            machine.active = enabled(i);
-        }
-        const bool inUse = machine.active && t < completionTime() + kEps && state.primary < 1.0 - kEps;
-        machine.visible = enabled(i);
+        machine.value2 = startTimeOf(i);
         // position — личный вклад механизма в работу (0..1).
-        if (!enabled(i)) {
-            machine.position = 0.0;
-        } else if (mode() == Mode::Sequential) {
-            const double soloRate = rateOf(i);
-            if (i == soloIndex()) {
-                const double ts = soloTime();
-                const double soloWork = param(QStringLiteral("soloWork"));
-                machine.position = t <= ts ? soloRate * t : soloWork + soloRate * std::max(0.0, t - ts);
-            } else {
-                machine.position = t >= sequentialSwitch ? rateOf(i) * std::max(0.0, t - sequentialSwitch) : 0.0;
-            }
-        } else {
-            machine.position = std::min(1.0, rateOf(i) * t);
-        }
-        machine.value2 = inUse ? 1.0 : 0.0;  // признак «крутится прямо сейчас» (для анимации шестерни)
+        machine.position = contributionOf(i, t);
+        machine.active = isWorking(i, t);
+        machine.visible = enabled(i);
         machine.variant = i;
+        contributionSum += machine.position;
         state.entities.push_back(machine);
     }
+    // Вклады механизмов в сумме дают выполненную работу.
+    state.primary = std::clamp(std::min(contributionSum, 1.0), 0.0, 1.0);
 
-    if (t >= completionTime() - 1e-9 && std::isfinite(completionTime())) {
+    const double finish = completionTime();
+    if (std::isfinite(finish) && t >= finish - 1e-9) {
         state.resolved = true;
         state.eventLabel = QStringLiteral("Вся работа выполнена");
     }
@@ -277,13 +259,6 @@ ValidationResult WorkModel::validate() const {
         result.hint = QStringLiteral("Включите хотя бы один механизм.");
         return result;
     }
-    if (mode() == Mode::Sequential && !enabled(soloIndex())) {
-        result.ok = false;
-        result.message = QStringLiteral("Выбранный механизм %1 выключен, но по сценарию он должен работать первым.")
-                             .arg(soloIndex() + 1);
-        result.hint = QStringLiteral("Включите этот механизм или выберите другого.");
-        return result;
-    }
     for (int i = 0; i < kMachineCount; ++i) {
         if (enabled(i) && rateOf(i) < kEps) {
             result.ok = false;
@@ -291,6 +266,12 @@ ValidationResult WorkModel::validate() const {
             result.hint = QStringLiteral("Увеличьте производительность или выключите механизм.");
             return result;
         }
+    }
+    if (!std::isfinite(completionTime())) {
+        result.ok = false;
+        result.message = QStringLiteral("При выбранных временах включения работа никогда не завершится.");
+        result.hint = QStringLiteral("Уменьшите времена включения или включите дополнительные механизмы.");
+        return result;
     }
     return result;
 }
@@ -304,8 +285,6 @@ Derivation WorkModel::derivation() const {
     const ValidationResult check = validate();
     d.valid = check.ok;
     d.problemText = problemText();
-
-    const bool sequential = mode() == Mode::Sequential;
     d.unknown = QStringLiteral("Время t выполнения всей работы A = 1");
 
     if (!check.ok) {
@@ -315,67 +294,105 @@ Derivation WorkModel::derivation() const {
     }
 
     QString given = QStringLiteral("A = 1,\\quad ");
-    QString ratesSum;
     for (int i = 0; i < kMachineCount; ++i) {
         if (!enabled(i))
             continue;
         const QString idx = QString::number(i + 1);
-        given += QStringLiteral("p_{%1} = %2 \\text{ мин}^{-1};\\quad").arg(idx).arg(formatNumber(rateOf(i), 3));
-        if (ratesSum.isEmpty())
-            ratesSum = QStringLiteral("p_{%1}").arg(idx);
-        else
-            ratesSum += QStringLiteral(" + p_{%1}").arg(idx);
+        given += QStringLiteral("p_{%1} = %2 \\text{ мин}^{-1},\\; t_{0,%1} = %3 \\text{ мин};\\quad")
+                     .arg(idx)
+                     .arg(formatNumber(rateOf(i), 3))
+                     .arg(formatNumber(startTimeOf(i), 2));
     }
     d.steps.push_back({QStringLiteral("1. Исходные данные"), given});
 
     d.steps.push_back({QStringLiteral("2. Модель"),
-                       QStringLiteral("A = (p_{1} + p_{2} + \\ldots) \\cdot t = "
-                                      "\\sum_{i} p_{i} \\cdot t,\\qquad A = 1")});
+                       QStringLiteral("A(t) = \\sum_{i} p_{i} \\cdot \\max(0,\\, t - t_{0,i}),\\qquad A = 1")});
 
-    double total = totalRate();
-    d.steps.push_back({QStringLiteral("3. Суммарная производительность"),
+    // Этапы: от момента включения к моменту включения; на каждом интервале
+    // суммарная производительность постоянна.
+    QVector<int> order;
+    for (int i = 0; i < kMachineCount; ++i) {
+        if (enabled(i))
+            order.push_back(i);
+    }
+    std::sort(order.begin(), order.end(),
+              [this](int a, int b) { return startTimeOf(a) < startTimeOf(b); });
+
+    struct Stage {
+        double startTime = 0.0;   // начало этапа
+        double rate = 0.0;        // суммарная производительность на этапе
+        double workStart = 0.0;   // выполненная работа к началу этапа
+    };
+    QVector<Stage> stages;
+    {
+        double work = 0.0;
+        double rate = 0.0;
+        double prevTime = startTimeOf(order.first());
+        qsizetype next = 0;
+        while (next < order.size()) {
+            const double onTime = startTimeOf(order[next]);
+            if (onTime > prevTime + kEps) {
+                if (rate > kEps)
+                    work += rate * (onTime - prevTime);
+                prevTime = onTime;
+            }
+            while (next < order.size() && startTimeOf(order[next]) <= prevTime + kEps) {
+                rate += rateOf(order[next]);
+                ++next;
+            }
+            stages.push_back({prevTime, rate, work});
+        }
+    }
+
+    QString stagesText;
+    for (int s = 0; s + 1 < stages.size(); ++s) {
+        const Stage& stage = stages[s];
+        const double gained = stage.rate * (stages[s + 1].startTime - stage.startTime);
+        stagesText += QStringLiteral("на [%1; %2] мин: ΔA = %3·(%2 − %1) = %4; ")
+                          .arg(formatNumber(stage.startTime, 2))
+                          .arg(formatNumber(stages[s + 1].startTime, 2))
+                          .arg(formatNumber(stage.rate, 3))
+                          .arg(formatNumber(gained, 3));
+    }
+    if (!stagesText.isEmpty())
+        d.steps.push_back({QStringLiteral("3. Этапы включения"), QStringLiteral("\\text{%1}").arg(stagesText)});
+
+    d.steps.push_back({QStringLiteral("4. Суммарная производительность после всех включений"),
                        QStringLiteral("\\sum_{i \\in \\text{вкл}} p_{i} = %1 \\text{ мин}^{-1}")
-                           .arg(formatNumber(total, 3))});
+                           .arg(formatNumber(totalRate(), 3))});
 
-    if (!sequential) {
-        d.steps.push_back({QStringLiteral("4. Уравнение"),
-                           QStringLiteral("1 = %1 \\cdot t \\;\\Rightarrow\\; t = \\frac{1}{%1}")
-                               .arg(formatNumber(total, 3))});
-    } else {
-        const double soloWork = param(QStringLiteral("soloWork"));
-        const double ts = soloTime();
-        d.steps.push_back({QStringLiteral("4. Раздельный этап"),
-                           QStringLiteral("Механизм %1 один выполняет часть %2 — это занимает "
-                                          "t_{1} = \\frac{A_{1}}{p_{%1}} = \\frac{%2}{%3} = %4 мин")
-                               .arg(soloIndex() + 1)
-                               .arg(formatNumber(soloWork, 2))
-                               .arg(formatNumber(rateOf(soloIndex()), 3))
-                               .arg(formatNumber(ts, 2))});
-        d.steps.push_back({QStringLiteral("Совместный этап"),
-                           QStringLiteral("Оставшуюся часть 1 - %1 выполняют все вместе: "
-                                          "t_{2} = \\frac{1 - %1}{\\sum p_{i}} = %2 мин")
-                               .arg(formatNumber(soloWork, 2))
-                               .arg(formatNumber((1.0 - soloWork) / total, 2))});
-        d.steps.push_back({QStringLiteral("5. Итог"),
-                           QStringLiteral("t = t_{1} + t_{2} = %1 + %2 = %3 мин")
-                               .arg(formatNumber(ts, 2), formatNumber((1.0 - soloWork) / total, 2),
-                                    formatNumber(completionTime(), 2))});
+    const double finish = completionTime();
+    // Этап, на котором работа завершается.
+    Stage finalStage = stages.last();
+    for (const Stage& stage : stages) {
+        const double endOfWork = stage.workStart + stage.rate * (finish - stage.startTime);
+        if (endOfWork >= 1.0 - kEps) {
+            finalStage = stage;
+            break;
+        }
     }
 
-    if (!std::isfinite(total) || total < kEps) {
-        d.answerTemplate = QStringLiteral("Работа не выполняется");
-        return d;
-    }
+    d.steps.push_back({QStringLiteral("5. Уравнение финального этапа"),
+                       QStringLiteral("При t ≥ %1 мин суммарная производительность %2: "
+                                      "A(t) = %3 + %2·(t − %1)")
+                           .arg(formatNumber(finalStage.startTime, 2), formatNumber(finalStage.rate, 3),
+                                formatNumber(finalStage.workStart, 4))});
+    d.steps.push_back({QStringLiteral("6. Решение"),
+                       QStringLiteral("1 = %1 + %2·(t − %3) \\;\\Rightarrow\\; "
+                                      "t = %3 + \\frac{1 - %1}{%2} = %4 \\text{ мин}")
+                           .arg(formatNumber(finalStage.workStart, 4), formatNumber(finalStage.rate, 3),
+                                formatNumber(finalStage.startTime, 2), formatNumber(finish, 2))});
 
-    if (!sequential) {
-        d.steps.push_back({QStringLiteral("5. Ответ"),
-                           QStringLiteral("t = %1 мин \\approx %2")
-                               .arg(formatNumber(completionTime(), 2),
-                                    utils::formatDuration(completionTime(), timeUnit()))});
-    }
+    d.steps.push_back({QStringLiteral("7. Проверка"),
+                       QStringLiteral("A(%1) = %2 ⇒ работа выполнена полностью")
+                           .arg(formatNumber(finish, 2), formatNumber(progressAt(finish), 3))});
+
+    d.steps.push_back({QStringLiteral("8. Ответ"),
+                       QStringLiteral("t = %1 мин \\approx %2")
+                           .arg(formatNumber(finish, 2), utils::formatDuration(finish, timeUnit()))});
 
     d.answerTemplate = QStringLiteral("Работа будет выполнена за %1")
-                           .arg(utils::formatDuration(completionTime(), timeUnit()));
+                           .arg(utils::formatDuration(finish, timeUnit()));
     return d;
 }
 
@@ -394,6 +411,8 @@ QVector<Readout> WorkModel::readouts() const {
                         QStringLiteral("%1 %").arg(formatNumber(machine.position * 100.0, 1)), false});
         list.push_back({machine.label + QStringLiteral(": производительность"),
                         QStringLiteral("%1 %/мин").arg(formatNumber(machine.value1 * 100.0, 2)), false});
+        list.push_back({machine.label + QStringLiteral(": включение"),
+                        QStringLiteral("через %1 мин").arg(formatNumber(machine.value2, 2)), false});
     }
 
     list.push_back({QStringLiteral("Суммарная производительность"),
@@ -426,20 +445,6 @@ QVector<HandleInfo> WorkModel::handles() const {
         h.readbackLabel = QStringLiteral("Время в одиночку");
         h.readbackValue = QStringLiteral("%1 мин").arg(utils::formatNumber(1.0 / std::max(1e-6, rateOf(i)), 1));
         list.push_back(h);
-    }
-    if (mode() == Mode::Sequential) {
-        HandleInfo part;
-        part.id = QStringLiteral("soloWork");
-        part.label = QStringLiteral("Часть одиночной работы");
-        part.value = param(QStringLiteral("soloWork"));
-        part.minValue = 0.05;
-        part.maxValue = 0.95;
-        part.step = 0.01;
-        part.unit = QStringLiteral("доля");
-        part.axis = QStringLiteral("x");
-        part.readbackLabel = QStringLiteral("Время одиночного этапа");
-        part.readbackValue = QStringLiteral("%1 мин").arg(utils::formatNumber(soloTime(), 2));
-        list.push_back(part);
     }
     return list;
 }

@@ -33,12 +33,24 @@ QString MixtureModel::statement() const {
 
 QString MixtureModel::problemText() const {
     using utils::formatNumber;
-    return QStringLiteral("Имеется %1 л раствора с концентрацией %2 %% и %3 л раствора с концентрацией %4 %%. "
-                          "Оба раствора перекачивают в пустой смеситель.")
-        .arg(formatNumber(volumeOf(0), 1))
-        .arg(formatNumber(concentrationOf(0) * 100.0, 1))
-        .arg(formatNumber(volumeOf(1), 1))
-        .arg(formatNumber(concentrationOf(1) * 100.0, 1));
+    QString text;
+    if (tapOpen(0))
+        text += QStringLiteral("Имеется %1 л раствора с концентрацией %2 %%. ")
+                    .arg(formatNumber(volumeOf(0), 1))
+                    .arg(formatNumber(concentrationOf(0) * 100.0, 1));
+    if (tapOpen(1))
+        text += QStringLiteral("Имеется %1 л раствора с концентрацией %2 %%. ")
+                    .arg(formatNumber(volumeOf(1), 1))
+                    .arg(formatNumber(concentrationOf(1) * 100.0, 1));
+    if (tapOpen(0) && tapOpen(1))
+        text += pumpsSimultaneously()
+                    ? QStringLiteral("Оба крана открываются одновременно, оба раствора перекачиваются в "
+                                     "пустой смеситель.")
+                    : QStringLiteral("Сначала в пустой смеситель полностью перекачивают первый раствор, "
+                                     "затем — второй.");
+    else
+        text += QStringLiteral("Кран открыт только у этой линии, раствор перекачивается в пустой смеситель.");
+    return text;
 }
 
 QVector<ParamSpec> MixtureModel::paramSpecs() const {
@@ -63,6 +75,17 @@ QVector<ParamSpec> MixtureModel::paramSpecs() const {
     const QString first = QStringLiteral("Раствор 1");
     const QString second = QStringLiteral("Раствор 2");
 
+    const auto toggle = [](QString id, QString label, QString group, double def) {
+        ParamSpec s;
+        s.id = std::move(id);
+        s.label = std::move(label);
+        s.unit = QStringLiteral("кран открыт");
+        s.kind = ParamKind::Toggle;
+        s.group = std::move(group);
+        s.defaultValue = def;
+        return s;
+    };
+
     QVector<ParamSpec> specs;
     auto v1 = slider(QStringLiteral("v1"), QStringLiteral("Объём раствора"),
                      QStringLiteral("л"), 1.0, 200.0, 1.0, 1.0, false, 30.0, first,
@@ -70,6 +93,7 @@ QVector<ParamSpec> MixtureModel::paramSpecs() const {
     specs.push_back(v1);
     specs.push_back(slider(QStringLiteral("c1"), QStringLiteral("Концентрация"),
                            QStringLiteral("%"), 0.0, 100.0, 0.5, 1.0, true, 12.0, first));
+    specs.push_back(toggle(QStringLiteral("on1"), QStringLiteral("Кран линии 1 открыт"), first, 1.0));
 
     auto v2 = slider(QStringLiteral("v2"), QStringLiteral("Объём раствора"),
                      QStringLiteral("л"), 1.0, 200.0, 1.0, 1.0, false, 70.0, second,
@@ -77,7 +101,27 @@ QVector<ParamSpec> MixtureModel::paramSpecs() const {
     specs.push_back(v2);
     specs.push_back(slider(QStringLiteral("c2"), QStringLiteral("Концентрация"),
                            QStringLiteral("%"), 0.0, 100.0, 0.5, 1.0, true, 42.0, second));
+    specs.push_back(toggle(QStringLiteral("on2"), QStringLiteral("Кран линии 2 открыт"), second, 1.0));
+
+    const QString schedule = QStringLiteral("Порядок перекачки");
+    ParamSpec mode;
+    mode.id = QStringLiteral("mode");
+    mode.label = QStringLiteral("Как открывать краны");
+    mode.kind = ParamKind::Choice;
+    mode.choices = {QStringLiteral("По очереди: сначала раствор 1, затем раствор 2"),
+                    QStringLiteral("Одновременно: оба крана открыты")};
+    mode.group = schedule;
+    mode.defaultValue = 0.0;
+    specs.push_back(mode);
     return specs;
+}
+
+bool MixtureModel::tapOpen(int number) const {
+    return paramFlag(number == 0 ? QStringLiteral("on1") : QStringLiteral("on2"));
+}
+
+bool MixtureModel::pumpsSimultaneously() const {
+    return paramChoiceIndex(QStringLiteral("mode")) == 1;
 }
 
 double MixtureModel::volumeOf(int number) const {
@@ -97,22 +141,31 @@ double MixtureModel::pumpDuration(int number) const {
     return volumeOf(number) / kPumpRate;
 }
 
+double MixtureModel::lineStartTime(int number) const {
+    // Закрытый кран: линия не работает вовсе.
+    if (!tapOpen(number))
+        return std::numeric_limits<double>::infinity();
+    if (pumpsSimultaneously())
+        return 0.0;
+    // По очереди: первая линия стартует сразу, вторая — когда первая опустеет.
+    if (number == 0)
+        return 0.0;
+    return tapOpen(0) ? pumpDuration(0) : 0.0;
+}
+
 double MixtureModel::secondPhaseStart() const {
-    return pumpDuration(0);
+    return lineStartTime(1);
 }
 
 double MixtureModel::pumpSwitchTime() const {
-    return secondPhaseStart();
+    return lineStartTime(1);
 }
 
 double MixtureModel::transferredAt(int number, double t) const {
-    const double timeValue = std::max(0.0, t);
-    if (number == 0)
-        return std::min(volumeOf(0), kPumpRate * timeValue);
-    const double start = secondPhaseStart();
-    if (timeValue <= start)
+    const double start = lineStartTime(number);
+    if (!std::isfinite(start) || t <= start)
         return 0.0;
-    return std::min(volumeOf(1), kPumpRate * (timeValue - start));
+    return std::min(volumeOf(number), kPumpRate * (t - start));
 }
 
 double MixtureModel::currentConcentrationAt(double t) const {
@@ -124,11 +177,22 @@ double MixtureModel::currentConcentrationAt(double t) const {
 }
 
 double MixtureModel::totalVolume() const {
-    return volumeOf(0) + volumeOf(1);
+    // В смеситель попадают только растворы линий с открытыми кранами.
+    double sum = 0.0;
+    for (int i = 0; i < 2; ++i) {
+        if (tapOpen(i))
+            sum += volumeOf(i);
+    }
+    return sum;
 }
 
 double MixtureModel::totalSolute() const {
-    return soluteOf(0) + soluteOf(1);
+    double sum = 0.0;
+    for (int i = 0; i < 2; ++i) {
+        if (tapOpen(i))
+            sum += soluteOf(i);
+    }
+    return sum;
 }
 
 double MixtureModel::finalConcentration() const {
@@ -141,7 +205,15 @@ double MixtureModel::finalConcentration() const {
 double MixtureModel::eventTime() const {
     if (!validate().ok)
         return std::numeric_limits<double>::quiet_NaN();
-    return pumpDuration(0) + pumpDuration(1);
+    // Момент, когда последняя открытая линия закончит перекачку.
+    double finish = 0.0;
+    for (int i = 0; i < 2; ++i) {
+        const double start = lineStartTime(i);
+        if (!std::isfinite(start))
+            continue;
+        finish = std::max(finish, start + pumpDuration(i));
+    }
+    return finish;
 }
 
 SimState MixtureModel::stateAt(double t) const {
@@ -165,7 +237,8 @@ SimState MixtureModel::stateAt(double t) const {
     vessel1.position = firstLevel;              // 1 = полный, 0 = пустой
     vessel1.value1 = concentrationOf(0) * 100.0;
     vessel1.value2 = volumeOf(0);
-    vessel1.active = firstPoured > kEps && firstLevel > kEps;  // идёт перекачка
+    // Линия активна, только если кран открыт и перекачка ещё идёт.
+    vessel1.active = tapOpen(0) && firstPoured > kEps && firstLevel > kEps;
     vessel1.variant = 0;
 
     EntityVisual vessel2;
@@ -174,7 +247,7 @@ SimState MixtureModel::stateAt(double t) const {
     vessel2.position = secondLevel;
     vessel2.value1 = concentrationOf(1) * 100.0;
     vessel2.value2 = volumeOf(1);
-    const bool secondRunning = t > secondPhaseStart() + kEps && secondPoured < volumeOf(1) - kEps;
+    const bool secondRunning = tapOpen(1) && t > lineStartTime(1) + kEps && secondPoured < volumeOf(1) - kEps;
     vessel2.active = secondRunning;
     vessel2.variant = 1;
 
@@ -192,7 +265,10 @@ SimState MixtureModel::stateAt(double t) const {
 
     if (t >= eventTime() - 1e-9) {
         state.resolved = true;
-        state.eventLabel = QStringLiteral("Оба раствора перелиты, смесь готова");
+        if (tapOpen(0) && tapOpen(1))
+            state.eventLabel = QStringLiteral("Оба раствора перелиты, смесь готова");
+        else
+            state.eventLabel = QStringLiteral("Раствор открытой линии перелит, смесь готова");
     }
     return state;
 }
@@ -217,6 +293,12 @@ double MixtureModel::stepSize() const {
 
 ValidationResult MixtureModel::validate() const {
     ValidationResult result;
+    if (!tapOpen(0) && !tapOpen(1)) {
+        result.ok = false;
+        result.message = QStringLiteral("Оба крана закрыты — переливание не выполняется.");
+        result.hint = QStringLiteral("Откройте кран хотя бы одной линии.");
+        return result;
+    }
     if (totalVolume() < kEps) {
         result.ok = false;
         result.message = QStringLiteral("Оба раствора пусты — смешивать нечего.");
@@ -243,18 +325,30 @@ Derivation MixtureModel::derivation() const {
         return d;
     }
 
-    const double v1 = volumeOf(0);
-    const double v2 = volumeOf(1);
+    // В расчёт входят только растворы линий с открытыми кранами.
+    const double v1 = tapOpen(0) ? volumeOf(0) : 0.0;
+    const double v2 = tapOpen(1) ? volumeOf(1) : 0.0;
     const double c1 = concentrationOf(0);
     const double c2 = concentrationOf(1);
-    const double m1 = soluteOf(0);
-    const double m2 = soluteOf(1);
+    const double m1 = tapOpen(0) ? soluteOf(0) : 0.0;
+    const double m2 = tapOpen(1) ? soluteOf(1) : 0.0;
 
     d.steps.push_back({QStringLiteral("1. Исходные данные"),
                        QStringLiteral("V_{1} = %1 \\text{ л},\\; C_{1} = %2 \\text{ \\%};\\quad "
                                       "V_{2} = %3 \\text{ л},\\; C_{2} = %4 \\text{ \\%}")
                            .arg(formatNumber(v1, 1), formatNumber(c1 * 100.0, 1),
                                 formatNumber(v2, 1), formatNumber(c2 * 100.0, 1))});
+
+    if (tapOpen(0) && tapOpen(1)) {
+        d.steps.push_back({QStringLiteral("Порядок перекачки"),
+                           pumpsSimultaneously()
+                               ? QStringLiteral("\\text{Оба крана открыты одновременно: } "
+                                                "V(t) = 2q t \\\\text{ при } t \\le T_{\\min},\\; q = 60 "
+                                                "\\text{ л/мин}")
+                               : QStringLiteral("\\text{Сначала линия 1 (0…%1 мин), затем линия 2 "
+                                                "(%1…%2 мин)}")
+                                     .arg(formatNumber(pumpDuration(0), 2), formatNumber(eventTime(), 2))});
+    }
 
     d.steps.push_back({QStringLiteral("2. Масса вещества в каждом растворе"),
                        QStringLiteral("m = V \\cdot C")});
@@ -299,6 +393,8 @@ QVector<Readout> MixtureModel::readouts() const {
     for (int i = 0; i < 2; ++i) {
         const QString name = QStringLiteral("Раствор %1").arg(i + 1);
         const double remaining = volumeOf(i) - transferredAt(i, t);
+        list.push_back({name + QStringLiteral(": кран"),
+                        tapOpen(i) ? QStringLiteral("открыт") : QStringLiteral("закрыт"), false});
         list.push_back({name + QStringLiteral(": осталось в ёмкости"),
                         QStringLiteral("%1 л").arg(formatNumber(remaining, 1)), false});
         list.push_back({name + QStringLiteral(": вещество (m = V·C)"),

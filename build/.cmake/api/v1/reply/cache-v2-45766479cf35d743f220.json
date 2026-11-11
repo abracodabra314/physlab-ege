@@ -139,10 +139,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "CXX compiler"
+					"value" : "Full path to the compiler used for language <LANG>. Set by CMake during compiler detection on the first configure; users may override on the command line to select a specific toolchain."
 				}
 			],
-			"type" : "STRING",
+			"type" : "FILEPATH",
 			"value" : "/usr/bin/clang++"
 		},
 		{
@@ -159,7 +159,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : ""
+			"value" : "-Wall -Wextra"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS_DEBUG",
@@ -1020,6 +1020,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "1"
+		},
+		{
+			"name" : "CMAKE_PREFIX_PATH",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Semicolon-separated list of installation prefixes searched by find_package(), find_program(), find_library(), find_file(), and find_path(). Empty by default; intended to be set by the project or the user."
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : "/opt/homebrew/opt/qt"
 		},
 		{
 			"name" : "CMAKE_PROJECT_COMPAT_VERSION",

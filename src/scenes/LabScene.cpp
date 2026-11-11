@@ -1,5 +1,6 @@
 #include "scenes/LabScene.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPen>
 
@@ -18,6 +19,7 @@ LabScene::LabScene(Simulation* model, QObject* parent) : QGraphicsScene(parent),
         connect(m_model, &Simulation::timeChanged, this, &LabScene::refresh);
         connect(m_model, &Simulation::parametersChanged, this, &LabScene::refresh);
         connect(m_model, &Simulation::runStateChanged, this, &LabScene::refresh);
+        connect(m_model, &Simulation::vectorOptionsChanged, this, &LabScene::refresh);
     }
 }
 
@@ -30,7 +32,8 @@ void LabScene::setRanges(const QRectF& area, double horizontalMin, double horizo
     m_worldMax = std::max(horizontalMin + 1e-9, horizontalMax);
     m_valueMin = verticalMin;
     m_valueMax = std::max(verticalMin + 1e-9, verticalMax);
-    setSceneRect(area.adjusted(-30, -30, 30, 30));
+    // Запас снизу — под общую ось времени.
+    setSceneRect(area.adjusted(-30, -30, 30, 64));
 }
 
 double LabScene::pixelsPerUnit() const {
@@ -75,6 +78,12 @@ double LabScene::toModelValueY(qreal sceneY) const {
 }
 
 void LabScene::refresh() {
+    // Мир сцены перестраивается под новую область окна и под изменившиеся
+    // параметры (например, переставленный автомобиль не должен «выехать»
+    // за край дороги). m_requestedArea при этом не меняется — повторный
+    // вызов reconfigure детерминирован и не создаёт цикла перерисовок.
+    if (!m_requestedArea.isEmpty())
+        reconfigure(m_requestedArea);
     rebuildHandles();
     positionHandles();
     update(sceneRect());
@@ -167,6 +176,128 @@ void LabScene::drawBackground(QPainter* painter, const QRectF& rect) {
 
     painter->setRenderHint(QPainter::Antialiasing, true);
     paintScheme(painter);
+    drawTimeAxis(painter);
+}
+
+// ------------------------------------------------------------------
+// Ось времени: полоса внизу сцены, по которой бежит точка состояния.
+// Клик или перетаскивание по оси перемоткой меняет модельное время.
+// ------------------------------------------------------------------
+
+QRectF LabScene::timeAxisRect() const {
+    // Ось времени лежит под расчётной областью сцены: сцены не должны
+    // резервировать под неё место, им достаточно рисовать в m_viewArea.
+    const double height = 30.0;
+    return QRectF(m_viewArea.left() + 6.0, m_viewArea.bottom() + 12.0, m_viewArea.width() - 12.0, height);
+}
+
+double LabScene::timeAtScenePosition(const QPointF& pos) const {
+    const QRectF axis = timeAxisRect();
+    const double fraction = std::clamp((pos.x() - axis.left()) / std::max(1.0, axis.width()), 0.0, 1.0);
+    return m_model ? m_model->duration() * fraction : 0.0;
+}
+
+void LabScene::drawTimeAxis(QPainter* painter) {
+    if (!m_model)
+        return;
+    const QRectF axis = timeAxisRect();
+    const double duration = std::max(1e-6, m_model->duration());
+    const QString unit = m_model->timeUnit() == QLatin1String("h")
+                             ? QStringLiteral("ч")
+                             : m_model->timeUnit() == QLatin1String("min") ? QStringLiteral("мин")
+                                                                           : QStringLiteral("с");
+
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setPen(QPen(style::inkSoft(), 1.2));
+    painter->setBrush(QColor(255, 255, 255, 225));
+    painter->drawRoundedRect(axis, 8, 8);
+
+    const double trackY = axis.center().y() + 3.0;
+    const double trackLeft = axis.left() + 12.0;
+    const double trackRight = axis.right() - 12.0;
+    const double trackWidth = std::max(10.0, trackRight - trackLeft);
+
+    // Шкала времени.
+    painter->setPen(QPen(style::ink(), 1.6));
+    painter->drawLine(QPointF(trackLeft, trackY), QPointF(trackRight, trackY));
+    painter->setFont(style::uiFont(7.5));
+    painter->setPen(style::inkSoft());
+    for (int i = 0; i <= 4; ++i) {
+        const double t = duration * i / 4.0;
+        const double x = trackLeft + trackWidth * i / 4.0;
+        painter->setPen(QPen(style::inkSoft(), 1.0));
+        painter->drawLine(QPointF(x, trackY - 4.0), QPointF(x, trackY + 4.0));
+        painter->setPen(style::inkSoft());
+        painter->drawText(QRectF(x - 30, trackY + 5.0, 60, 12), Qt::AlignHCenter,
+                          utils::formatNumber(t, duration < 8 ? 1 : 0));
+    }
+
+    // Момент ключевого события задачи.
+    const double event = m_model->eventTime();
+    if (std::isfinite(event) && event >= 0.0 && event <= duration) {
+        const double x = trackLeft + trackWidth * (event / duration);
+        painter->setPen(QPen(style::success(), 2.0, Qt::DashLine));
+        painter->drawLine(QPointF(x, axis.top() + 3.0), QPointF(x, trackY + 6.0));
+    }
+
+    // Заголовок оси.
+    painter->setFont(style::uiFont(8.0, true));
+    painter->setPen(style::ink());
+    painter->drawText(QRectF(axis.left() + 6, axis.top() - 2, axis.width() - 12, 12), Qt::AlignLeft,
+                      QStringLiteral("Ось времени, %1").arg(unit));
+
+    // Точка состояния: бежит по оси синхронно с модельным временем.
+    const double dotX = trackLeft + trackWidth * std::clamp(m_model->time() / duration, 0.0, 1.0);
+    painter->setPen(QPen(style::danger(), 1.4));
+    painter->setBrush(style::danger());
+    painter->drawEllipse(QPointF(dotX, trackY), 6.0, 6.0);
+    // Внутренняя метка: paused / running.
+    painter->setPen(QPen(Qt::white, 1.0));
+    painter->setBrush(Qt::NoBrush);
+
+    // Подсказка о текущем режиме справа.
+    QString stateText;
+    switch (m_model->runState()) {
+        case RunState::Stopped:  stateText = QStringLiteral("t = 0"); break;
+        case RunState::Running:  stateText = QStringLiteral("идёт"); break;
+        case RunState::Paused:   stateText = QStringLiteral("пауза"); break;
+        case RunState::Finished: stateText = QStringLiteral("готово"); break;
+    }
+    painter->setFont(style::uiFont(8.0, true));
+    painter->setPen(style::danger().darker(110));
+    painter->drawText(QRectF(axis.right() - 140, axis.top() - 2, 134, 12), Qt::AlignRight,
+                      QStringLiteral("t = %1 · %2").arg(utils::formatNumber(m_model->time(), 2), stateText));
+    painter->restore();
+}
+
+void LabScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    // Касание оси времени: останавливаем эксперимент и перематываем.
+    if (m_model && event->button() == Qt::LeftButton && timeAxisRect().adjusted(-4, -10, 4, 10).contains(event->scenePos())) {
+        m_scrubbingTime = true;
+        m_model->seekTo(timeAtScenePosition(event->scenePos()));
+        event->accept();
+        return;
+    }
+    QGraphicsScene::mousePressEvent(event);
+}
+
+void LabScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+    if (m_scrubbingTime && m_model) {
+        m_model->seekTo(timeAtScenePosition(event->scenePos()));
+        event->accept();
+        return;
+    }
+    QGraphicsScene::mouseMoveEvent(event);
+}
+
+void LabScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+    if (m_scrubbingTime) {
+        m_scrubbingTime = false;
+        event->accept();
+        return;
+    }
+    QGraphicsScene::mouseReleaseEvent(event);
 }
 
 void LabScene::drawForeground(QPainter* painter, const QRectF& rect) {

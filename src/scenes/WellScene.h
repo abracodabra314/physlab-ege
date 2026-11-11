@@ -24,8 +24,12 @@ protected:
 
 private:
     QRectF shaftRect() const;
+    QRectF shaftZone() const;    // фиксированная зона шахты (постоянный масштаб)
+    double pxPerMeter() const;   // пикселей на метр глубины
     double depthToY(double depthValue) const;
     double yToDepth(qreal y) const;
+    /** Наблюдатель у края колодца (фиксирован во время эксперимента). */
+    static void drawObserver(QPainter* painter, const QPointF& groundPos);
 };
 
 }  // namespace lab::scenes

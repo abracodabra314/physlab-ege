@@ -66,6 +66,12 @@ QVector<ParamSpec> WellModel::paramSpecs() const {
                             QStringLiteral("Колодец"),
                             QStringLiteral("Перетащите уровень воды мышью — глубина пересчитается."));
     specs.push_back(depthSpec);
+    auto releaseSpec = slider(QStringLiteral("release"), QStringLiteral("Глубина отпуска камня от устья"),
+                              QStringLiteral("м"), 0.0, 59.5, 0.1, 2.0, 0.0,
+                              QStringLiteral("Колодец"),
+                              QStringLiteral("0 м — камень бросают из устья. Перетащите камень мышью."));
+    releaseSpec.allowZero = true;
+    specs.push_back(releaseSpec);
     specs.push_back(slider(QStringLiteral("g"), QStringLiteral("Ускорение свободного падения g"),
                            QStringLiteral("м/с²"), 1.0, 25.0, 0.1, 2.0, kDefaultGravity,
                            QStringLiteral("Физика")));
@@ -79,6 +85,11 @@ double WellModel::depth() const {
     return param(QStringLiteral("depth"));
 }
 
+double WellModel::releaseDepth() const {
+    // Камень не может быть отпущен на уровне воды или ниже дна.
+    return std::clamp(param(QStringLiteral("release")), 0.0, std::max(0.0, depth() - 0.1));
+}
+
 double WellModel::gravity() const {
     return param(QStringLiteral("g"));
 }
@@ -89,9 +100,10 @@ double WellModel::soundSpeed() const {
 
 double WellModel::fallTime() const {
     const double g = gravity();
+    const double distance = std::max(0.0, depth() - releaseDepth());
     if (g < kEps)
         return std::numeric_limits<double>::infinity();
-    return std::sqrt(2.0 * depth() / g);
+    return std::sqrt(2.0 * distance / g);
 }
 
 double WellModel::soundTime() const {
@@ -108,10 +120,10 @@ double WellModel::echoTime() const {
 double WellModel::stoneDepthAt(double t) const {
     const double tf = fallTime();
     if (t <= 0.0)
-        return 0.0;
+        return releaseDepth();
     if (t >= tf)
         return depth();
-    return 0.5 * gravity() * t * t;
+    return releaseDepth() + 0.5 * gravity() * t * t;
 }
 
 double WellModel::soundFrontAt(double t) const {
@@ -162,7 +174,8 @@ SimState WellModel::stateAt(double t) const {
     stone.id = QStringLiteral("stone");
     stone.label = QStringLiteral("Камень");
     stone.position = stoneDepthAt(t);       // глубина от устья
-    stone.value1 = std::min(gravity() * t, gravity() * tf);  // текущая скорость падения
+    // Скорость растёт до удара, после удара камень лежит на дне.
+    stone.value1 = (t <= kEps || t >= tf) ? 0.0 : gravity() * t;
     stone.active = t > kEps && t < tf;
     stone.variant = 2;
 
@@ -196,7 +209,9 @@ double WellModel::timePerSecond() const {
 }
 
 double WellModel::duration() const {
-    return std::max(1.0, echoTime() * 1.15 + 0.3);
+    // Наблюдение идёт до возвращения эха и чуть дольше: после удара камень
+    // лежит на дне, фронт звука поднимается к устью.
+    return std::max(1.0, echoTime() * 1.1 + 0.2);
 }
 
 double WellModel::stepSize() const {
@@ -246,20 +261,22 @@ Derivation WellModel::derivation() const {
     const double h = depth();
     const double g = gravity();
     const double c = soundSpeed();
+    const double h0 = releaseDepth();
+    const double fallDistance = std::max(0.0, h - h0);
     const double tf = fallTime();
     const double ts = soundTime();
 
     d.steps.push_back({QStringLiteral("1. Исходные данные"),
-                       QStringLiteral("h = %1 \\text{ м},\\quad g = %2 \\text{ м/с}^{2},\\quad "
-                                      "c = %3 \\text{ м/с}")
-                           .arg(formatNumber(h, 2), formatNumber(g, 2), formatNumber(c, 0))});
+                       QStringLiteral("h = %1 \\text{ м},\\quad h_{0} = %4 \\text{ м (глубина отпуска камня)},\\quad "
+                                      "g = %2 \\text{ м/с}^{2},\\quad c = %3 \\text{ м/с}")
+                           .arg(formatNumber(h, 2), formatNumber(g, 2), formatNumber(c, 0), formatNumber(h0, 2))});
 
     d.steps.push_back({QStringLiteral("2. Закон свободного падения"),
-                       QStringLiteral("h = \\frac{g t_{1}^{2}}{2} \\;\\Rightarrow\\; "
-                                      "t_{1} = \\sqrt{\\frac{2h}{g}}")});
+                       QStringLiteral("h - h_{0} = \\frac{g t_{1}^{2}}{2} \\;\\Rightarrow\\; "
+                                      "t_{1} = \\sqrt{\\frac{2(h - h_{0})}{g}}")});
     d.steps.push_back({QStringLiteral("3. Подстановка (время падения)"),
                        QStringLiteral("t_{1} = \\sqrt{\\frac{2 \\cdot %1}{%2}} = %3 \\text{ с}")
-                           .arg(formatNumber(h, 2), formatNumber(g, 2), formatNumber(tf, 4))});
+                           .arg(formatNumber(fallDistance, 2), formatNumber(g, 2), formatNumber(tf, 4))});
 
     d.steps.push_back({QStringLiteral("4. Распространение звука"),
                        QStringLiteral("t_{2} = \\frac{h}{c} = \\frac{%1}{%2} = %3 \\text{ с}")
@@ -269,8 +286,10 @@ Derivation WellModel::derivation() const {
                        QStringLiteral("T = t_{1} + t_{2} = %1 + %2 = %3 \\text{ с}")
                            .arg(formatNumber(tf, 4), formatNumber(ts, 4), formatNumber(tf + ts, 4))});
 
-    // Обратная задача: глубина по измеренному времени эха.
-    const double T = tf + ts;
+    // Обратная задача: глубина по измеренному времени эха. Классическая
+    // постановка предполагает, что камень отпущен из устья (h₀ = 0), поэтому
+    // для неё используется время T = sqrt(2h/g) + h/c.
+    const double T = std::sqrt(2.0 * h / g) + h / c;
     const double b = std::sqrt(2.0 / g);
     const double a = 1.0 / c;
     const double discriminant = b * b + 4.0 * a * T;
@@ -340,6 +359,19 @@ QVector<HandleInfo> WellModel::handles() const {
     water.readbackLabel = QStringLiteral("Время до эха");
     water.readbackValue = QStringLiteral("%1 с").arg(utils::formatNumber(echoTime(), 3));
     list.push_back(water);
+
+    HandleInfo stone;
+    stone.id = QStringLiteral("release");
+    stone.label = QStringLiteral("Камень: глубина отпуска");
+    stone.value = releaseDepth();
+    stone.minValue = 0.0;
+    stone.maxValue = std::max(0.0, depth() - 0.1);
+    stone.step = 0.1;
+    stone.unit = QStringLiteral("м от устья");
+    stone.axis = QStringLiteral("y");
+    stone.readbackLabel = QStringLiteral("Время падения");
+    stone.readbackValue = QStringLiteral("%1 с").arg(utils::formatNumber(fallTime(), 3));
+    list.push_back(stone);
     return list;
 }
 

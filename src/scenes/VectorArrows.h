@@ -1,0 +1,63 @@
+#pragma once
+
+#include <QColor>
+#include <QPointF>
+#include <QString>
+
+class QPainter;
+
+namespace lab::vectors {
+
+/**
+ * Общая подсистема отрисовки физических векторов для всех сцен.
+ *
+ * Правила (едины для лаборатории):
+ *  - рядом со стрелкой показывается только обозначение величины (v, a, mg, N…),
+ *    без числовых значений;
+ *  - длина стрелки пропорциональна физической величине (коэффициент масштаба
+ *    задаётся сценой отдельно для скоростей и сил, они различаются размерно);
+ *  - каждый тип вектора имеет свой цвет, одинаковый во всех сценах;
+ *  - показ скоростей, ускорений и сил включается и выключается независимо.
+ */
+enum class Kind {
+    Velocity,      // скорость  — v
+    Acceleration,  // ускорение — a
+    Gravity,       // сила тяжести — mg
+    Normal,        // реакция опоры — N
+    Friction,      // сила трения — F_тр
+    Tension,       // сила натяжения — T
+    Flow,          // направление потока жидкости (не физический вектор)
+};
+
+/** Канонический цвет вектора данного типа. */
+QColor colorOf(Kind kind);
+
+/**
+ * Длина стрелки в пикселях: magnitude * pxPerUnit с ограничением
+ * [minPx, maxPx]; нулевая величина даёт нулевую длину (стрелка не рисуется).
+ */
+double visualLength(double magnitude, double pxPerUnit, double minPx = 20.0, double maxPx = 130.0);
+
+/** Один вектор: от from до to с обозначением symbol у наконечника. */
+struct Arrow {
+    QPointF from;
+    QPointF to;
+    QString symbol;            // «v₁», «a», «mg» — без чисел
+    Kind kind = Kind::Velocity;
+    QColor color;              // переопределение цвета (пусто — цвет по типу)
+    qreal width = 2.6;
+    bool dashed = false;       // слагаемые векторной суммы рисуются штрихом
+    QPointF labelOffset = QPointF(0.0, -16.0);  // сдвиг подписи от наконечника
+    bool labelAtTail = false;  // подпись у начала (для слагаемых суммы)
+};
+
+/** Рисует стрелку с наконечником и обозначением. Нулевая длина — ничего. */
+void drawArrow(QPainter* painter, const Arrow& arrow);
+
+/**
+ * Длина на одну единицу величины так, чтобы самый длинный из векторов
+ * заданной сцены вписывался в maxPx, но не был короче minPx при magMax.
+ */
+double autoScale(double magMax, double maxPx = 110.0, double minPx = 24.0);
+
+}  // namespace lab::vectors

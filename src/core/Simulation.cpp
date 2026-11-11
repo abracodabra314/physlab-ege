@@ -161,6 +161,35 @@ void Simulation::advanceModelTime(double dtModel) {
     setStateTime(m_time + dtModel, /*stopAtEvent=*/true);
 }
 
+void Simulation::setShowsVelocities(bool on) {
+    if (m_showVelocities == on)
+        return;
+    m_showVelocities = on;
+    emit vectorOptionsChanged();
+}
+
+void Simulation::setShowsAccelerations(bool on) {
+    if (m_showAccelerations == on)
+        return;
+    m_showAccelerations = on;
+    emit vectorOptionsChanged();
+}
+
+void Simulation::setShowsForces(bool on) {
+    if (m_showForces == on)
+        return;
+    m_showForces = on;
+    emit vectorOptionsChanged();
+}
+
+void Simulation::setVectorScale(double scale) {
+    const double clamped = std::clamp(scale, 0.2, 5.0);
+    if (qFuzzyCompare(1.0 + m_vectorScale, 1.0 + clamped))
+        return;
+    m_vectorScale = clamped;
+    emit vectorOptionsChanged();
+}
+
 void Simulation::seekTo(double t) {
     if (m_runState == RunState::Stopped)
         m_runState = RunState::Paused;  // перемотка выводит эксперимент в «просмотр»

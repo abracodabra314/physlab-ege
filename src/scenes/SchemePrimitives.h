@@ -21,9 +21,14 @@ void drawVessel(QPainter* painter, const QRectF& rect, double fraction, const QC
 /** Волнистая поверхность жидкости на заданной высоте. */
 void drawLiquidSurface(QPainter* painter, double left, double right, double y, const QColor& liquid);
 
-/** Стрелка-потока (труба наполнения/слива) с подписью производительности. */
+/**
+ * Стрелка-поток (струя наполнения, слива, линия перекачки): показывает
+ * направление движения воды. Числовых значений не содержит.
+ * time — модельное время: по нему движутся пунктирные «капли», поэтому
+ * анимация потока остановится на паузе и при сбросе.
+ */
 void drawFlowArrow(QPainter* painter, const QPointF& from, const QPointF& to, const QString& text,
-                   const QColor& color, bool active);
+                   const QColor& color, bool active, double time = 0.0);
 
 /** Схема теплохода: корпус над водой, рубка, труба. Подпись рисует вызывающий код. */
 void drawBoat(QPainter* painter, const QPointF& waterlineCenter, const QColor& color,

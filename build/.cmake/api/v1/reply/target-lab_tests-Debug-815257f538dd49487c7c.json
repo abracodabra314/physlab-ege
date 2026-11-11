@@ -177,7 +177,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++20 -arch arm64"
+					"fragment" : "-Wall -Wextra -g -std=gnu++20 -arch arm64"
 				},
 				{
 					"backtrace" : 2,
@@ -293,11 +293,11 @@
 			"id" : "lab_lib::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "lab_tests_autogen_timestamp_deps::@a44f0ac069e85531cdee"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "lab_tests_autogen::@a44f0ac069e85531cdee"
+		},
+		{
+			"id" : "lab_tests_autogen_timestamp_deps::@a44f0ac069e85531cdee"
 		}
 	],
 	"id" : "lab_tests::@a44f0ac069e85531cdee",
@@ -306,7 +306,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-Wall -Wextra -g",
 				"role" : "flags"
 			},
 			{
@@ -408,11 +408,11 @@
 			"id" : "Qt6::moc::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "lab_tests_autogen_timestamp_deps::@a44f0ac069e85531cdee"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "lab_tests_autogen::@a44f0ac069e85531cdee"
+		},
+		{
+			"id" : "lab_tests_autogen_timestamp_deps::@a44f0ac069e85531cdee"
 		}
 	],
 	"paths" : 

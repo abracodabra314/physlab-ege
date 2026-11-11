@@ -130,7 +130,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++20 -arch arm64"
+					"fragment" : "-Wall -Wextra -g -std=gnu++20 -arch arm64"
 				},
 				{
 					"backtrace" : 2,
@@ -235,11 +235,11 @@
 			"id" : "lab_lib::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "physlab_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "physlab_autogen::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "physlab_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "physlab::@6890427a1f51a3e7e1df",
@@ -248,7 +248,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-Wall -Wextra -g",
 				"role" : "flags"
 			},
 			{
@@ -336,11 +336,11 @@
 			"id" : "Qt6::moc::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "physlab_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
-		},
-		{
 			"backtrace" : 0,
 			"id" : "physlab_autogen::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "physlab_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		}
 	],
 	"paths" : 

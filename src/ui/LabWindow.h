@@ -59,6 +59,8 @@ private:
     void updateRunButtons(RunState state);
     void toggleFullScreen();
     void toggleDerivation();
+    /** Переносит флаги и масштаб векторов из меню настроек в активную модель. */
+    void applyVectorOptions();
     Page& pageFor(const QString& modelId);
 
     QHash<QString, Page> m_pages;
@@ -91,6 +93,10 @@ private:
 
     QMenu* m_settingsMenu = nullptr;
     QAction* m_showDerivationAction = nullptr;
+    QAction* m_showVelocitiesAction = nullptr;
+    QAction* m_showAccelerationsAction = nullptr;
+    QAction* m_showForcesAction = nullptr;
+    QComboBox* m_vectorScaleCombo = nullptr;
     bool m_fullScreenOn = false;
 };
 

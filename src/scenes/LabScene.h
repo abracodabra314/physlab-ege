@@ -48,6 +48,9 @@ public:
      */
     virtual void reconfigure(const QRectF& area) = 0;
 
+    /** Область, запрошенная представлением; используется при refresh(). */
+    void requestViewArea(const QRectF& area) { m_requestedArea = area; }
+
     QRectF viewArea() const { return m_viewArea; }
     double worldMin() const { return m_worldMin; }
     double worldMax() const { return m_worldMax; }
@@ -95,15 +98,7 @@ signals:
     /** Пользователь перетащил ручку: панель параметров должна обновиться. */
     void handleMoved(const QString& handleId);
 
-protected:
-    /** Потомок рисует схему по текущему состоянию модели. */
-    virtual void paintScheme(QPainter* painter) = 0;
-
-    /** Фон: цвет и учебная сетка, затем — paintScheme(). */
-    void drawBackground(QPainter* painter, const QRectF& rect) override;
-    /** Предупреждение о недопустимых параметрах поверх сцены. */
-    void drawForeground(QPainter* painter, const QRectF& rect) override;
-
+public:
     /** Текстовая подпись-«пилюля» поверх элемента. */
     static void drawTag(QPainter* painter, const QPointF& center, const QString& text,
                         const QColor& background = QColor(255, 255, 255, 230),
@@ -113,6 +108,27 @@ protected:
     static void drawDimension(QPainter* painter, const QPointF& from, const QPointF& to,
                               const QString& text, const QColor& color = QColor(55, 71, 89),
                               double offset = 0.0);
+
+protected:
+    /** Потомок рисует схему по текущему состоянию модели. */
+    virtual void paintScheme(QPainter* painter) = 0;
+
+    /** Фон: цвет и учебная сетка, затем — paintScheme(), затем — ось времени. */
+    void drawBackground(QPainter* painter, const QRectF& rect) override;
+    /** Предупреждение о недопустимых параметрах поверх сцены. */
+    void drawForeground(QPainter* painter, const QRectF& rect) override;
+
+    /** Нажатие на нижнюю ось времени — перемотка; захват точки — живая перемотка. */
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+
+    /** Прямоугольник нижней оси времени (сцены резервируют под неё место). */
+    QRectF timeAxisRect() const;
+    /** Модельное время под точкой оси (для перемотки). */
+    double timeAtScenePosition(const QPointF& pos) const;
+    /** Рисует ось времени с бегущей точкой состояния и отметкой события. */
+    void drawTimeAxis(QPainter* painter);
 
     /** Одна кривая графика: точки (время, значение) и стиль. */
     struct PlotSeries {
@@ -134,11 +150,14 @@ protected:
 
     Simulation* m_model = nullptr;
     QRectF m_viewArea;
+    /** Последняя запрошенная представлением область (для перестройки масштаба). */
+    QRectF m_requestedArea;
     double m_worldMin = 0.0;
     double m_worldMax = 1.0;
     double m_valueMin = 0.0;
     double m_valueMax = 1.0;
     QVector<DragHandleItem*> m_handles;
+    bool m_scrubbingTime = false;
 };
 
 }  // namespace lab

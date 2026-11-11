@@ -121,6 +121,24 @@ public:
     virtual void endInteraction();
     bool isInteracting() const { return m_interacting; }
 
+    // ---------------- видимость векторов ----------------
+    /**
+     * Флаги включают/выключают категории векторов на всех сценах
+     * (скорости, ускорения, силы). Поток жидкости — не физический вектор,
+     * он управляется состоянием кранов/насосов и здесь не дублируется.
+     */
+    bool showsVelocities() const { return m_showVelocities; }
+    bool showsAccelerations() const { return m_showAccelerations; }
+    bool showsForces() const { return m_showForces; }
+    /** Масштаб стрелок скорости (пикселей на единицу величины) — общий для сцен. */
+    double vectorScale() const { return m_vectorScale; }
+
+public slots:
+    void setShowsVelocities(bool on);
+    void setShowsAccelerations(bool on);
+    void setShowsForces(bool on);
+    void setVectorScale(double scale);
+
     // ---------------- управление экспериментом ----------------
     void reset();
     void start();
@@ -146,6 +164,8 @@ signals:
     void runStateChanged(lab::RunState state);
     /** Обновилась запись решения — панель вычислений перерисовывается. */
     void derivationChanged();
+    /** Изменились флаги или масштаб отображения векторов — сцены перерисовываются. */
+    void vectorOptionsChanged();
 
 protected:
     /** Заполняет m_params значениями по умолчанию из paramSpecs(). Вызывается из конструкторов потомков. */
@@ -168,6 +188,10 @@ protected:
     bool m_interacting = false;
     double m_time = 0.0;
     RunState m_runState = RunState::Stopped;
+    bool m_showVelocities = true;
+    bool m_showAccelerations = true;
+    bool m_showForces = true;
+    double m_vectorScale = 1.0;
 
 private:
     ParamSpec findSpec(const QString& id) const;

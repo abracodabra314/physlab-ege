@@ -86,11 +86,14 @@ void drawLiquidSurface(QPainter* painter, double left, double right, double y, c
 }
 
 void drawFlowArrow(QPainter* painter, const QPointF& from, const QPointF& to, const QString& text,
-                   const QColor& color, bool active) {
+                   const QColor& color, bool active, double time) {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     const QColor penColor = active ? color : QColor(163, 167, 173);
-    painter->setPen(QPen(penColor, active ? 5.0 : 2.4, active ? Qt::SolidLine : Qt::DashLine));
+
+    // Труба (фон стрелки).
+    painter->setPen(QPen(active ? penColor.darker(115) : QColor(190, 193, 198), active ? 7.5 : 3.2,
+                         active ? Qt::SolidLine : Qt::DashLine, Qt::FlatCap));
     painter->drawLine(from, to);
 
     QPointF dir = to - from;
@@ -98,6 +101,20 @@ void drawFlowArrow(QPainter* painter, const QPointF& from, const QPointF& to, co
     if (length > 1e-6) {
         dir /= length;
         const QPointF normal(-dir.y(), dir.x());
+
+        // Движущиеся «капли»: пунктир смещается вместе с модельным временем,
+        // поэтому на паузе и при сбросе поток останавливается.
+        if (active) {
+            QPen drops(penColor.lighter(150), 3.0, Qt::SolidLine, Qt::RoundCap);
+            QVector<qreal> pattern;
+            pattern << 0.02 << 6.5;   // точка + зазор ~20 пикселей
+            drops.setDashPattern(pattern);
+            const double cycle = 0.02 * 3.0 + 6.5 * 3.0;
+            drops.setDashOffset(std::fmod(time * 34.0, cycle));
+            painter->setPen(drops);
+            painter->drawLine(from, to - dir * 12.0);
+        }
+
         painter->setBrush(penColor);
         painter->setPen(Qt::NoPen);
         QPolygonF head;
@@ -119,48 +136,64 @@ void drawBoat(QPainter* painter, const QPointF& waterlineCenter, const QColor& c
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->translate(waterlineCenter);
-
+    // Корпус рисуем носом вправо и зеркалим, если теплоход идёт влево.
     const double bowSign = headingRight ? 1.0 : -1.0;
+    painter->scale(bowSign, 1.0);
+
     const double half = 46.0;
 
-    // Корпус.
+    // Корпус: скошенный нос справа, корма слева, ватерлиния у y = 0.
     QPainterPath hull;
     hull.moveTo(-half, -14.0);
-    hull.lineTo(half * 0.70, -14.0);
-    hull.lineTo(half, -8.0);
-    hull.lineTo(half * 0.55, 2.0);
-    hull.lineTo(-half * 0.82, 2.0);
+    hull.lineTo(half * 0.62, -14.0);
+    hull.lineTo(half, -7.0);            // форштевень
+    hull.lineTo(half * 0.50, 2.5);
+    hull.lineTo(-half * 0.86, 2.5);
     hull.closeSubpath();
-    hull.translate(0, 0);
-    if (bowSign < 0)
-        hull.translate(0, 0);  // зеркало не требуется: схема симметрична по форме
 
     painter->setPen(QPen(color.darker(170), 1.4));
     painter->setBrush(color);
     painter->drawPath(hull);
+    // Красная линия ниже ватерлинии.
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(color.darker(145));
+    QPainterPath below;
+    below.moveTo(-half * 0.86, 0.5);
+    below.lineTo(half * 0.66, 0.5);
+    below.lineTo(half * 0.50, 2.5);
+    below.lineTo(-half * 0.86, 2.5);
+    below.closeSubpath();
+    painter->drawPath(below);
 
-    // Надстройка и труба.
+    // Надстройка у кормы + труба.
     painter->setPen(QPen(color.darker(190), 1.2));
     painter->setBrush(QColor(248, 247, 243));
-    painter->drawRoundedRect(QRectF(-20.0, -30.0, 30.0, 16.0), 3, 3);
+    painter->drawRoundedRect(QRectF(-30.0, -30.0, 32.0, 16.0), 3, 3);
     painter->setBrush(QColor(62, 66, 72));
     painter->setPen(Qt::NoPen);
-    painter->drawRect(QRectF(6.0, -40.0, 6.0, 11.0));
+    painter->drawRect(QRectF(-22.0, -40.0, 6.0, 11.0));
+    // Рубка управления ближе к носу.
+    painter->setBrush(QColor(248, 247, 243));
+    painter->setPen(QPen(color.darker(190), 1.0));
+    painter->drawRoundedRect(QRectF(10.0, -24.0, 14.0, 10.0), 2, 2);
 
-    // Иллюминаторы.
+    // Иллюминаторы надстройки и переборки.
     painter->setBrush(QColor(226, 238, 248));
-    for (int i = -1; i <= 1; ++i)
-        painter->drawEllipse(QPointF(-8.0 + i * 12.0, -22.0), 2.4, 2.4);
+    painter->setPen(Qt::NoPen);
+    for (int i = 0; i < 3; ++i)
+        painter->drawEllipse(QPointF(-24.0 + i * 9.0, -22.0), 2.3, 2.3);
+    painter->drawEllipse(QPointF(17.0, -19.0), 2.3, 2.3);
 
-    // Бурун при движении.
+    // Бурун у носа и след кормы при движении.
     if (moving) {
         painter->setPen(QPen(QColor(255, 255, 255, 215), 1.6));
         painter->setBrush(Qt::NoBrush);
         QPainterPath wake;
-        const double bow = half * bowSign;
-        wake.moveTo(bow, -6.0);
-        wake.cubicTo(bow + 12.0 * bowSign, -9.0, bow + 18.0 * bowSign, 1.0, bow + 26.0 * bowSign, 4.0);
+        wake.moveTo(half, -6.0);
+        wake.cubicTo(half + 12.0, -9.0, half + 18.0, 1.0, half + 26.0, 4.0);
         painter->drawPath(wake);
+        painter->setPen(QPen(QColor(255, 255, 255, 150), 1.2, Qt::DashLine));
+        painter->drawLine(QPointF(-half - 4.0, 1.0), QPointF(-half - 22.0, 1.0));
     }
     painter->restore();
 }

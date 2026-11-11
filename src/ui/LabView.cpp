@@ -33,8 +33,11 @@ void LabView::notifySceneGeometry() {
     auto* lab = qobject_cast<LabScene*>(scene());
     if (!lab)
         return;
+    // Снизу резервируется полоса под общую ось времени сцены (LabScene::drawTimeAxis).
+    constexpr double kTimeAxisReserve = 58.0;
     const QRectF area(20.0, 12.0, std::max(320.0, viewport()->width() - 40.0),
-                      std::max(240.0, viewport()->height() - 24.0));
+                      std::max(220.0, viewport()->height() - 24.0 - kTimeAxisReserve));
+    lab->requestViewArea(area);
     lab->reconfigure(area);
 }
 

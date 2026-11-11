@@ -430,6 +430,7 @@ QVector<HandleInfo> TankModel::handles() const {
     water.maxValue = height();
     water.step = 0.01;
     water.unit = QStringLiteral("м");
+    water.axis = QStringLiteral("y");   // уровень меняется только по вертикали
     water.readbackLabel = QStringLiteral("Объём воды");
     water.readbackValue = QStringLiteral("%1 л").arg(utils::formatNumber(initialVolume(), 0));
     list.push_back(water);
@@ -442,6 +443,7 @@ QVector<HandleInfo> TankModel::handles() const {
     lid.maxValue = 5.0;
     lid.step = 0.05;
     lid.unit = QStringLiteral("м");
+    lid.axis = QStringLiteral("y");   // высота меняется перетаскиванием по вертикали
     lid.readbackLabel = QStringLiteral("Вместимость");
     lid.readbackValue = QStringLiteral("%1 л").arg(utils::formatNumber(capacity(), 0));
     list.push_back(lid);
