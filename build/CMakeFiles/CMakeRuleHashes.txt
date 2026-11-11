@@ -1,4 +1,0 @@
-# Hashes of file build rules.
-e75d7c9b1a3b255812f8931f5c022243 lab_lib_autogen/timestamp
-738564300b4ef2924d6a23e48b8173b7 physlab_autogen/timestamp
-4caa40511f3f93503fac7c79f975e7a9 tests/lab_tests_autogen/timestamp
