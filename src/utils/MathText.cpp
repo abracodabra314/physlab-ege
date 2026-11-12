@@ -83,8 +83,24 @@ private:
             {QStringLiteral("tan"), QStringLiteral("tan")},
             {QStringLiteral("max"), QStringLiteral("max")},
             {QStringLiteral("min"), QStringLiteral("min")},
+            {QStringLiteral("ll"), QStringLiteral("&#8810;")},         // ≪
+            {QStringLiteral("gg"), QStringLiteral("&#8811;")},         // ≫
+            {QStringLiteral("perp"), QStringLiteral("&#8869;")},       // ⊥
+            {QStringLiteral("angle"), QStringLiteral("&#8736;")},      // ∠
+            // \left( ... \right) — «тянущиеся» скобки: самой скобке
+            // размера не задаём, команды просто пропускаются.
+            {QStringLiteral("left"), QStringLiteral("")},
+            {QStringLiteral("right"), QStringLiteral("")},
+            {QStringLiteral("arcsin"), QStringLiteral("arcsin")},
+            {QStringLiteral("arccos"), QStringLiteral("arccos")},
+            {QStringLiteral("arctan"), QStringLiteral("arctan")},
+            {QStringLiteral("ln"), QStringLiteral("ln")},
+            {QStringLiteral("log"), QStringLiteral("log")},
             {QStringLiteral("sum"), QStringLiteral("&#8721;")},        // ∑
             {QStringLiteral("quad"), QStringLiteral("&nbsp;&nbsp;&nbsp;")},
+            {QStringLiteral("qquad"), QStringLiteral("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")},
+            {QStringLiteral("sim"), QStringLiteral("&sim;")},          // ∼
+            {QStringLiteral("propto"), QStringLiteral("&prop;")},      // ∝
             {QStringLiteral(";"), QStringLiteral("&nbsp;")},
             {QStringLiteral(" "), QStringLiteral("&nbsp;")},
         };

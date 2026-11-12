@@ -1,6 +1,7 @@
 #include "ModelFactory.h"
 
 #include "models/BoatModel.h"
+#include "models/HorizonModel.h"
 #include "models/MixtureModel.h"
 #include "models/MotionModel.h"
 #include "models/ProjectileModel.h"
@@ -11,6 +12,7 @@
 #include "models/WorkModel.h"
 
 #include "scenes/BoatScene.h"
+#include "scenes/HorizonScene.h"
 #include "scenes/MixtureScene.h"
 #include "scenes/MotionScene.h"
 #include "scenes/ProjectileScene.h"
@@ -63,6 +65,11 @@ LabSetup makeProjectile() {
     return {model, new scenes::ProjectileScene(model)};
 }
 
+LabSetup makeHorizon() {
+    auto* model = new models::HorizonModel;
+    return {model, new scenes::HorizonScene(model)};
+}
+
 LabSetup makeSpringVertical() {
     auto* model = new models::SpringVerticalModel;
     return {model, new scenes::SpringVerticalScene(model)};
@@ -90,6 +97,8 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("m·x″ = −kx − μmg·sign(v); ω = √(k/m), T = 2π√(m/k)"), makeSpringHorizontal},
         {QStringLiteral("spring_v"), QStringLiteral("Пружина с грузом: вертикальные колебания"),
          QStringLiteral("k·Δl = mg; m·x″ = −kx — трения нет, груз подвешен"), makeSpringVertical},
+        {QStringLiteral("horizon"), QStringLiteral("Дальность видимого горизонта"),
+         QStringLiteral("d = √(2Rh + h²); s = R·arccos(R/(R + h))"), makeHorizon},
     };
 }
 
