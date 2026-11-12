@@ -64,6 +64,10 @@ private:
             {QStringLiteral("leftarrow"), QStringLiteral("&larr;")},
             {QStringLiteral("pm"), QStringLiteral("&plusmn;")},        // ±
             {QStringLiteral("pi"), QStringLiteral("&pi;")},
+            {QStringLiteral("theta"), QStringLiteral("&theta;")},
+            {QStringLiteral("mu"), QStringLiteral("&mu;")},
+            {QStringLiteral("varphi"), QStringLiteral("&phi;")},
+            {QStringLiteral("omega"), QStringLiteral("&omega;")},
             {QStringLiteral("Delta"), QStringLiteral("&Delta;")},      // Δ
             {QStringLiteral("alpha"), QStringLiteral("&alpha;")},
             {QStringLiteral("beta"), QStringLiteral("&beta;")},
@@ -72,6 +76,14 @@ private:
             {QStringLiteral("percent"), QStringLiteral("%")},
             {QStringLiteral("degree"), QStringLiteral("&deg;")},
             {QStringLiteral("circ"), QStringLiteral("&deg;")},
+            {QStringLiteral("in"), QStringLiteral("&isin;")},
+            // Названия функций выводятся прямыми буквами (как в школьной записи).
+            {QStringLiteral("sin"), QStringLiteral("sin")},
+            {QStringLiteral("cos"), QStringLiteral("cos")},
+            {QStringLiteral("tan"), QStringLiteral("tan")},
+            {QStringLiteral("max"), QStringLiteral("max")},
+            {QStringLiteral("min"), QStringLiteral("min")},
+            {QStringLiteral("sum"), QStringLiteral("&#8721;")},        // ∑
             {QStringLiteral("quad"), QStringLiteral("&nbsp;&nbsp;&nbsp;")},
             {QStringLiteral(";"), QStringLiteral("&nbsp;")},
             {QStringLiteral(" "), QStringLiteral("&nbsp;")},

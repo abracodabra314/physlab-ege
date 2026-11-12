@@ -51,6 +51,14 @@ public:
     /** Область, запрошенная представлением; используется при refresh(). */
     void requestViewArea(const QRectF& area) { m_requestedArea = area; }
 
+    /**
+     * Рисует фон и схему в painters в координатах сцены.
+     * Представление вызывает эти методы явно: QGraphicsView по умолчанию
+     * заполняет фон собственной кистью и может не звать QGraphicsScene::drawBackground,
+     * из-за чего схема осталась бы невидимой.
+     */
+    void paintBackgroundInto(QPainter* painter, const QRectF& rect) { drawBackground(painter, rect); }
+
     QRectF viewArea() const { return m_viewArea; }
     double worldMin() const { return m_worldMin; }
     double worldMax() const { return m_worldMax; }
@@ -130,6 +138,9 @@ protected:
     /** Рисует ось времени с бегущей точкой состояния и отметкой события. */
     void drawTimeAxis(QPainter* painter);
 
+    /** Единица модельного времени по-русски: "ч" | "мин" | "с" (для подписей графиков). */
+    QString timeUnitLabel() const;
+
     /** Одна кривая графика: точки (время, значение) и стиль. */
     struct PlotSeries {
         QVector<QPointF> points;
@@ -147,6 +158,17 @@ protected:
     static void drawPlot(QPainter* painter, const QRectF& rect, const QString& title,
                          const QString& timeUnit, const QVector<PlotSeries>& series,
                          double tMax, double currentT, double eventT);
+
+    /**
+     * Обобщённый график произвольной зависимости Y(X): используется там,
+     * где аргументом является не время (p(V), T(V), N(h), траектория y(x)).
+     * Обе оси масштабируются по данным; пары NaN разрывают линию.
+     * currentPoint отмечает текущее состояние системы (NaN — не рисовать).
+     */
+    static void drawGraph(QPainter* painter, const QRectF& rect, const QString& title,
+                          const QString& xAxisLabel, const QString& yAxisLabel,
+                          const QVector<PlotSeries>& series, const QPointF& currentPoint,
+                          bool showLegend = false);
 
     Simulation* m_model = nullptr;
     QRectF m_viewArea;

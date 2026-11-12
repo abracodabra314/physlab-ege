@@ -3,6 +3,9 @@
 #include "models/BoatModel.h"
 #include "models/MixtureModel.h"
 #include "models/MotionModel.h"
+#include "models/ProjectileModel.h"
+#include "models/SpringHorizontalModel.h"
+#include "models/SpringVerticalModel.h"
 #include "models/TankModel.h"
 #include "models/WellModel.h"
 #include "models/WorkModel.h"
@@ -10,6 +13,9 @@
 #include "scenes/BoatScene.h"
 #include "scenes/MixtureScene.h"
 #include "scenes/MotionScene.h"
+#include "scenes/ProjectileScene.h"
+#include "scenes/SpringHorizontalScene.h"
+#include "scenes/SpringVerticalScene.h"
 #include "scenes/TankScene.h"
 #include "scenes/WellScene.h"
 #include "scenes/WorkScene.h"
@@ -47,6 +53,21 @@ LabSetup makeMixture() {
     return {model, new scenes::MixtureScene(model)};
 }
 
+LabSetup makeSpringHorizontal() {
+    auto* model = new models::SpringHorizontalModel;
+    return {model, new scenes::SpringHorizontalScene(model)};
+}
+
+LabSetup makeProjectile() {
+    auto* model = new models::ProjectileModel;
+    return {model, new scenes::ProjectileScene(model)};
+}
+
+LabSetup makeSpringVertical() {
+    auto* model = new models::SpringVerticalModel;
+    return {model, new scenes::SpringVerticalScene(model)};
+}
+
 }  // namespace
 
 QVector<ModelDescriptor> allDescriptors() {
@@ -63,6 +84,12 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("A = (p₁ + p₂)·t, раздельный и совместный этапы"), makeWork},
         {QStringLiteral("mixture"), QStringLiteral("Смешивание растворов"),
          QStringLiteral("C = (V₁C₁ + V₂C₂)/(V₁ + V₂), масса вещества m = V·C"), makeMixture},
+        {QStringLiteral("projectile"), QStringLiteral("Полёт снаряда по параболе"),
+         QStringLiteral("x = x₀ + v₀t·cosθ; y = y₀ + v₀t·sinθ − gt²/2"), makeProjectile},
+        {QStringLiteral("spring_h"), QStringLiteral("Пружина с грузом: горизонтальные колебания"),
+         QStringLiteral("m·x″ = −kx − μmg·sign(v); ω = √(k/m), T = 2π√(m/k)"), makeSpringHorizontal},
+        {QStringLiteral("spring_v"), QStringLiteral("Пружина с грузом: вертикальные колебания"),
+         QStringLiteral("k·Δl = mg; m·x″ = −kx — трения нет, груз подвешен"), makeSpringVertical},
     };
 }
 

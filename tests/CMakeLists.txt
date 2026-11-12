@@ -1,5 +1,7 @@
-# Тесты математического ядра лаборатории (GoogleTest).
-# Тестируются только модели и утилиты — без окна и без Graphics View.
+# Тесты лаборатории (GoogleTest): математическое ядро моделей и геометрия
+# сцен. Тесты отрисовки создают QApplication с offscreen-платформой и
+# проверяют векторы и графики по кадру, не полагаясь на цвет пикселей
+# (антиалиасинг смешивает цвета тонких линий).
 
 add_executable(lab_tests
     test_core.cpp
@@ -8,7 +10,12 @@ add_executable(lab_tests
     test_tank.cpp
     test_well.cpp
     test_work.cpp
-    test_mixture.cpp)
+    test_mixture.cpp
+    test_spring.cpp
+    test_spring_scene.cpp
+    test_spring_vertical.cpp
+    test_projectile.cpp
+    test_projectile_scene.cpp)
 
 target_include_directories(lab_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(lab_tests PRIVATE lab_lib GTest::gtest_main)

@@ -191,6 +191,15 @@ QRectF LabScene::timeAxisRect() const {
     return QRectF(m_viewArea.left() + 6.0, m_viewArea.bottom() + 12.0, m_viewArea.width() - 12.0, height);
 }
 
+QString LabScene::timeUnitLabel() const {
+    const QString unit = m_model ? m_model->timeUnit() : QStringLiteral("s");
+    if (unit == QLatin1String("h"))
+        return QStringLiteral("ч");
+    if (unit == QLatin1String("min"))
+        return QStringLiteral("мин");
+    return QStringLiteral("с");
+}
+
 double LabScene::timeAtScenePosition(const QPointF& pos) const {
     const QRectF axis = timeAxisRect();
     const double fraction = std::clamp((pos.x() - axis.left()) / std::max(1.0, axis.width()), 0.0, 1.0);
@@ -468,6 +477,150 @@ void LabScene::drawPlot(QPainter* painter, const QRectF& rect, const QString& ti
         const double x = mapX(currentT);
         painter->setPen(QPen(style::danger(), 1.4));
         painter->drawLine(QPointF(x, plot.top()), QPointF(x, plot.bottom()));
+    }
+    painter->restore();
+}
+
+void LabScene::drawGraph(QPainter* painter, const QRectF& rect, const QString& title,
+                         const QString& xAxisLabel, const QString& yAxisLabel,
+                         const QVector<PlotSeries>& series, const QPointF& currentPoint,
+                         bool showLegend) {
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, true);
+
+    painter->setPen(QPen(style::inkSoft(), 1.0));
+    painter->setBrush(QColor(255, 255, 255, 235));
+    painter->drawRoundedRect(rect, 8, 8);
+    painter->setFont(style::uiFont(9.0, true));
+    painter->setPen(style::ink());
+    painter->drawText(rect.adjusted(10, 6, -10, -6), Qt::AlignLeft | Qt::AlignTop, title);
+
+    const QRectF plot = rect.adjusted(50, 26, -16, -30);
+    if (plot.width() < 20.0 || plot.height() < 20.0) {
+        painter->restore();
+        return;
+    }
+
+    // Диапазон обеих осей — по всем конечным точкам (NaN пропускаются).
+    double xMin = 0.0, xMax = 0.0, yMin = 0.0, yMax = 0.0;
+    bool first = true;
+    for (const PlotSeries& s : series) {
+        for (const QPointF& p : s.points) {
+            if (!std::isfinite(p.x()) || !std::isfinite(p.y()))
+                continue;
+            if (first) {
+                xMin = xMax = p.x();
+                yMin = yMax = p.y();
+                first = false;
+            } else {
+                xMin = std::min(xMin, p.x());
+                xMax = std::max(xMax, p.x());
+                yMin = std::min(yMin, p.y());
+                yMax = std::max(yMax, p.y());
+            }
+        }
+    }
+    if (first) {
+        painter->restore();
+        return;
+    }
+    if (xMax - xMin < 1e-12) {
+        xMin -= 1.0;
+        xMax += 1.0;
+    }
+    if (yMax - yMin < 1e-12) {
+        yMin -= 1.0;
+        yMax += 1.0;
+    }
+    const double xPad = (xMax - xMin) * 0.06;
+    const double yPad = (yMax - yMin) * 0.08;
+    xMin -= xPad;
+    xMax += xPad;
+    yMin -= yPad;
+    yMax += yPad;
+
+    auto mapX = [&](double x) { return plot.left() + (x - xMin) / (xMax - xMin) * plot.width(); };
+    auto mapY = [&](double y) { return plot.bottom() - (y - yMin) / (yMax - yMin) * plot.height(); };
+
+    // Сетка и подписи делений обеих осей.
+    painter->setFont(style::uiFont(7.5));
+    for (int i = 0; i <= 4; ++i) {
+        const double x = xMin + (xMax - xMin) * i / 4.0;
+        const double xx = mapX(x);
+        painter->setPen(QPen(style::grid(), 0.7));
+        painter->drawLine(QPointF(xx, plot.top()), QPointF(xx, plot.bottom()));
+        painter->setPen(style::inkSoft());
+        painter->drawText(QRectF(xx - 30, plot.bottom() + 2, 60, 13), Qt::AlignHCenter,
+                          utils::formatNumber(x, std::abs(xMax) < 10 ? 1 : 0));
+    }
+    for (int i = 0; i <= 3; ++i) {
+        const double y = yMin + (yMax - yMin) * i / 3.0;
+        const double yy = mapY(y);
+        painter->setPen(QPen(style::grid(), 0.7));
+        painter->drawLine(QPointF(plot.left(), yy), QPointF(plot.right(), yy));
+        painter->setPen(style::inkSoft());
+        painter->drawText(QRectF(rect.left() + 2, yy - 7, 44, 14), Qt::AlignRight,
+                          utils::formatNumber(y, std::abs(yMax) < 10 ? 1 : 0));
+    }
+
+    // Подписи осей.
+    painter->setPen(style::inkSoft());
+    painter->drawText(QRectF(plot.left(), plot.bottom() + 14, plot.width(), 14), Qt::AlignCenter,
+                      xAxisLabel);
+    painter->save();
+    painter->translate(rect.left() + 13, plot.center().y());
+    painter->rotate(-90.0);
+    painter->drawText(QRectF(-70, -10, 140, 14), Qt::AlignCenter, yAxisLabel);
+    painter->restore();
+
+    // Кривые: пары NaN разрывают линию.
+    for (const PlotSeries& s : series) {
+        if (s.points.size() < 2)
+            continue;
+        QPen pen(s.color, s.width);
+        if (s.dashed)
+            pen.setStyle(Qt::DashLine);
+        painter->setPen(pen);
+        painter->setBrush(Qt::NoBrush);
+        QPainterPath path;
+        bool penDown = false;
+        for (const QPointF& p : s.points) {
+            if (!std::isfinite(p.x()) || !std::isfinite(p.y())) {
+                penDown = false;
+                continue;
+            }
+            const QPointF mapped(mapX(p.x()), mapY(p.y()));
+            if (!penDown) {
+                path.moveTo(mapped);
+                penDown = true;
+            } else {
+                path.lineTo(mapped);
+            }
+        }
+        painter->drawPath(path);
+    }
+
+    // Текущее состояние системы.
+    if (std::isfinite(currentPoint.x()) && std::isfinite(currentPoint.y())) {
+        painter->setPen(QPen(style::danger(), 1.4));
+        painter->setBrush(style::paper());
+        painter->drawEllipse(QPointF(mapX(currentPoint.x()), mapY(currentPoint.y())), 5.0, 5.0);
+    }
+
+    if (showLegend) {
+        double legendY = plot.top() + 4.0;
+        painter->setFont(style::uiFont(7.5));
+        for (const PlotSeries& s : series) {
+            if (s.label.isEmpty())
+                continue;
+            const QRectF swatch(plot.right() - 92, legendY, 13, 8);
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(s.color);
+            painter->drawRect(swatch);
+            painter->setPen(style::ink());
+            painter->drawText(QRectF(swatch.right() + 4, legendY - 4, 92, 14), Qt::AlignLeft, s.label);
+            legendY += 14.0;
+        }
     }
     painter->restore();
 }

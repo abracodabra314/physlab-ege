@@ -41,16 +41,6 @@ public:
     Simulation* activeModel() const;
     /** Сцена активной установки (пусто, если открыт каталог). */
     LabScene* activeScene() const;
-    /** Прямоугольник активного представления в координатах окна (диагностика компоновки). */
-    QRect activeViewGeometry() const;
-    /** Активное представление (пусто, если открыт каталог). */
-    LabView* activeView() const { return m_activeView; }
-    /** Размер viewport активного представления. */
-    QSize activeViewportSize() const;
-    /** Масштаб отрисовки активного представления (1 — сцена в пикселях 1:1). */
-    double activeViewScale() const;
-    /** Область сцены, которую реально показывает активное представление. */
-    QRectF activeVisibleSceneRegion() const;
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;

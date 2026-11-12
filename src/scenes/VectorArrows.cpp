@@ -19,7 +19,9 @@ QColor colorOf(Kind kind) {
         case Kind::Normal:       return style::success();         // зелёный
         case Kind::Friction:     return QColor(142, 84, 176);     // фиолетовый
         case Kind::Tension:      return QColor(20, 130, 140);     // бирюзовый
+        case Kind::Elastic:      return QColor(20, 130, 140);     // бирюзовый (тяга/упругость)
         case Kind::Flow:         return style::waterDeep();       // сине-стальной
+        case Kind::Current:      return QColor(214, 122, 34);     // оранжевый (ток)
     }
     return style::ink();
 }
@@ -50,18 +52,29 @@ void drawArrow(QPainter* painter, const Arrow& arrow) {
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    QPen pen(color, arrow.width, arrow.dashed ? Qt::DashLine : Qt::SolidLine, Qt::FlatCap);
-    painter->setPen(pen);
-    // Хвост до наконечника (сам наконечник дорисовывается отдельно).
     const double headLen = std::min(11.0, length * 0.45);
     const QPointF base = arrow.to - dir * headLen;
-    painter->drawLine(arrow.from, base);
-
-    // Наконечник — закрашенный треугольник.
     const QPointF normal(-dir.y(), dir.x());
     const double halfWidth = std::min(5.5, arrow.width * 2.1);
     QPolygonF head;
     head << arrow.to << base + normal * halfWidth << base - normal * halfWidth;
+
+    if (arrow.halo) {
+        // Светлая обводка: стрелка остаётся видимой на тёмной заливке тела.
+        painter->setPen(QPen(QColor(255, 255, 255, 235), arrow.width + 3.2,
+                             arrow.dashed ? Qt::DashLine : Qt::SolidLine, Qt::FlatCap));
+        painter->drawLine(arrow.from, base);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor(255, 255, 255, 235));
+        painter->drawPolygon(head);
+    }
+
+    QPen pen(color, arrow.width, arrow.dashed ? Qt::DashLine : Qt::SolidLine, Qt::FlatCap);
+    painter->setPen(pen);
+    // Хвост до наконечника (сам наконечник дорисовывается отдельно).
+    painter->drawLine(arrow.from, base);
+
+    // Наконечник — закрашенный треугольник.
     painter->setPen(Qt::NoPen);
     painter->setBrush(color);
     painter->drawPolygon(head);

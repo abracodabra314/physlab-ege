@@ -20,6 +20,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
+    void drawBackground(QPainter* painter, const QRectF& rect) override;
 
 private:
     void notifySceneGeometry();

@@ -264,8 +264,9 @@ void LabWindow::buildCatalog() {
     auto* title = new QLabel(QStringLiteral("Интерактивная физическая лаборатория"), m_catalogPage);
     title->setObjectName(QStringLiteral("catalogTitle"));
     auto* subtitle = new QLabel(QStringLiteral(
-                                    "Шесть моделей задачи №10 ЕГЭ: двигайте объекты мышью, меняйте параметры, "
-                                    "запускайте движение и следите за тем, как меняется математическая модель."),
+                                    "Модели задачи №10 ЕГЭ и физические эксперименты: двигайте объекты мышью, "
+                                    "меняйте параметры, запускайте движение и следите за тем, как меняется "
+                                    "математическая модель."),
                                 m_catalogPage);
     subtitle->setObjectName(QStringLiteral("catalogSubtitle"));
     subtitle->setWordWrap(true);
@@ -288,7 +289,7 @@ void LabWindow::buildCatalog() {
         cardLayout->setContentsMargins(16, 14, 16, 14);
         cardLayout->setSpacing(6);
 
-        auto* number = new QLabel(QStringLiteral("Модель %1 · №10").arg(i + 1), card);
+        auto* number = new QLabel(QStringLiteral("Модель %1").arg(i + 1), card);
         number->setStyleSheet(QStringLiteral("color: #2176c6; font-weight: 700; font-size: 12px; background: transparent; border: none;"));
         auto* cardTitle = new QLabel(descriptor.title, card);
         cardTitle->setObjectName(QStringLiteral("catalogCardTitle"));
@@ -557,28 +558,6 @@ LabScene* LabWindow::activeScene() const {
     return m_activeView && m_activeView->scene()
                ? qobject_cast<LabScene*>(m_activeView->scene())
                : nullptr;
-}
-
-QRect LabWindow::activeViewGeometry() const {
-    if (!m_activeView)
-        return QRect();
-    return QRect(m_activeView->mapTo(this, QPoint(0, 0)), m_activeView->size());
-}
-
-QSize LabWindow::activeViewportSize() const {
-    return m_activeView && m_activeView->viewport() ? m_activeView->viewport()->size() : QSize();
-}
-
-double LabWindow::activeViewScale() const {
-    if (!m_activeView)
-        return 0.0;
-    return m_activeView->transform().m11();
-}
-
-QRectF LabWindow::activeVisibleSceneRegion() const {
-    if (!m_activeView)
-        return QRectF();
-    return m_activeView->mapToScene(m_activeView->viewport()->rect()).boundingRect();
 }
 
 void LabWindow::showCatalog() {

@@ -5,8 +5,6 @@
 
 #include <algorithm>
 
-#include "scenes/Style.h"
-
 namespace lab::ui {
 
 LabView::LabView(LabScene* scene, QWidget* parent) : QGraphicsView(scene, parent) {
@@ -16,8 +14,23 @@ LabView::LabView(LabScene* scene, QWidget* parent) : QGraphicsView(scene, parent
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameShape(QFrame::NoFrame);
-    setBackgroundBrush(lab::style::background());
+    // Кисть фона у представления намеренно не задаётся: при непустом
+    // backgroundBrush QGraphicsView::drawBackground() рисует только её и
+    // не вызывает QGraphicsScene::drawBackground(), а именно там схема
+    // лаборатории рисует саму себя (фон, сетку, объекты и ось времени).
+    setBackgroundRole(QPalette::NoRole);
     setMouseTracking(true);
+}
+
+void LabView::drawBackground(QPainter* painter, const QRectF& rect) {
+    // Явно отдаём фон сцене: LabScene::drawBackground() заполняет область
+    // цветом бумаги, рисует учебную сетку, схему (paintScheme) и ось времени.
+    auto* lab = qobject_cast<LabScene*>(scene());
+    if (!lab) {
+        QGraphicsView::drawBackground(painter, rect);
+        return;
+    }
+    lab->paintBackgroundInto(painter, rect);
 }
 
 void LabView::resizeEvent(QResizeEvent* event) {

@@ -55,4 +55,27 @@ void drawCurrentArrow(QPainter* painter, const QRectF& area, const QColor& water
 void drawScale(QPainter* painter, const QRectF& rect, int majorSteps, const QString& unit,
                double maxValue, const QColor& color);
 
+/**
+ * Пружина между точками from и to (работает для любого направления):
+ * витки распределяются по фактической длине, поэтому пружина визуально
+ * растягивается и сжимается вместе с положением груза.
+ * coils — число витков, amplitude — высота витка в пикселях.
+ */
+void drawSpring(QPainter* painter, const QPointF& from, const QPointF& to, int coils, double amplitude,
+                const QColor& color, qreal width = 2.4);
+
+/**
+ * Неподвижная опора (стена, потолок, кронштейн): прямоугольник-основание
+ * со штриховкой, показывающей, что элемент закреплён.
+ * hatchDirection — направление штриховки наружу от основания.
+ */
+void drawFixedSupport(QPainter* painter, const QRectF& rect, const QPointF& hatchDirection,
+                      const QColor& color);
+
+/**
+ * Штриховка под поверхностью (грунт под столом, дном сосуда): косые линии
+ * под линией контакта — стандартное обозначение твёрдой опоры.
+ */
+void drawHatchedSurface(QPainter* painter, const QRectF& rect, const QColor& color);
+
 }  // namespace lab::primitives

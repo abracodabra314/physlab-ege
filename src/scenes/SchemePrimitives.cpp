@@ -316,4 +316,88 @@ void drawScale(QPainter* painter, const QRectF& rect, int majorSteps, const QStr
     painter->restore();
 }
 
+void drawSpring(QPainter* painter, const QPointF& from, const QPointF& to, int coils, double amplitude,
+                const QColor& color, qreal width) {
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setPen(QPen(color, width, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->setBrush(Qt::NoBrush);
+
+    QPointF dir = to - from;
+    const double length = std::hypot(dir.x(), dir.y());
+    if (length < 1e-6) {
+        painter->restore();
+        return;
+    }
+    dir /= length;
+    const QPointF normal(-dir.y(), dir.x());
+
+    // Короткие прямые концы (крепления), между ними — витки.
+    const double lead = std::min(12.0, length * 0.12);
+    const double body = std::max(1.0, length - 2.0 * lead);
+    const int turns = std::max(3, coils);
+    // Амплитуда витка уменьшается при сильном сжатии: витки «сходятся».
+    const double compress = std::clamp(body / std::max(1.0, length), 0.25, 1.0);
+    const double amp = amplitude * compress;
+
+    QPainterPath path;
+    path.moveTo(from);
+    path.lineTo(from + dir * lead);
+    const int segments = turns * 2;
+    for (int i = 1; i <= segments; ++i) {
+        const double along = lead + body * double(i) / double(segments);
+        const double side = (i % 2 == 1) ? amp : -amp;
+        if (i == segments)
+            path.lineTo(from + dir * along);
+        else
+            path.lineTo(from + dir * along + normal * side);
+    }
+    path.lineTo(to);
+    painter->drawPath(path);
+    painter->restore();
+}
+
+void drawHatchedSurface(QPainter* painter, const QRectF& rect, const QColor& color) {
+    painter->save();
+    painter->setClipRect(rect);
+    painter->setPen(QPen(color, 1.0));
+    const double reach = rect.width() + rect.height();
+    for (double x = rect.left() - reach; x < rect.right() + reach; x += 9.0) {
+        painter->drawLine(QPointF(x, rect.bottom()), QPointF(x + rect.height(), rect.top()));
+    }
+    painter->setClipping(false);
+    painter->setPen(QPen(color.darker(120), 1.4));
+    painter->drawLine(QPointF(rect.left(), rect.top()), QPointF(rect.right(), rect.top()));
+    painter->restore();
+}
+
+void drawFixedSupport(QPainter* painter, const QRectF& rect, const QPointF& hatchDirection,
+                      const QColor& color) {
+    painter->save();
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setPen(QPen(color.darker(140), 1.6));
+    painter->setBrush(color.lighter(150));
+    painter->drawRect(rect);
+
+    // Штриховка наружу от основания — стандартное обозначение неподвижной связи.
+    QPointF dir = hatchDirection;
+    const double len = std::hypot(dir.x(), dir.y());
+    if (len > 1e-6) {
+        dir /= len;
+        const QPointF normal(-dir.y(), dir.x());
+        painter->setClipRect(rect);
+        painter->setPen(QPen(color.darker(115), 1.0));
+        const double reach = rect.width() + rect.height();
+        for (double s = -reach; s < reach; s += 7.0) {
+            const QPointF start = rect.center() + normal * s;
+            painter->drawLine(start - dir * reach, start + dir * reach);
+        }
+        painter->setClipping(false);
+    }
+    // Яркая кромка со стороны крепления.
+    painter->setPen(QPen(color.darker(180), 2.0));
+    painter->drawRect(rect);
+    painter->restore();
+}
+
 }  // namespace lab::primitives
