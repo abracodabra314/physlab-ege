@@ -20,6 +20,7 @@ QColor colorOf(Kind kind) {
         case Kind::Friction:     return QColor(142, 84, 176);     // фиолетовый
         case Kind::Tension:      return QColor(20, 130, 140);     // бирюзовый
         case Kind::Elastic:      return QColor(20, 130, 140);     // бирюзовый (тяга/упругость)
+        case Kind::Pressure:     return QColor(178, 60, 120);     // малиновый (сила давления газа)
         case Kind::Flow:         return style::waterDeep();       // сине-стальной
         case Kind::Current:      return QColor(214, 122, 34);     // оранжевый (ток)
     }

@@ -71,7 +71,9 @@ private:
             {QStringLiteral("Delta"), QStringLiteral("&Delta;")},      // Δ
             {QStringLiteral("alpha"), QStringLiteral("&alpha;")},
             {QStringLiteral("beta"), QStringLiteral("&beta;")},
+            {QStringLiteral("gamma"), QStringLiteral("&gamma;")},
             {QStringLiteral("lambda"), QStringLiteral("&lambda;")},
+            {QStringLiteral("int"), QStringLiteral("&#8747;")},       // ∫
             {QStringLiteral("infty"), QStringLiteral("&infin;")},
             {QStringLiteral("percent"), QStringLiteral("%")},
             {QStringLiteral("degree"), QStringLiteral("&deg;")},
@@ -94,6 +96,14 @@ private:
             // размера не задаём, команды просто пропускаются.
             {QStringLiteral("left"), QStringLiteral("")},
             {QStringLiteral("right"), QStringLiteral("")},
+            // Теплота, работа и символ состояния системы: Q и A пишутся
+            // прямыми буквами, чтобы не путаться с обозначением площади.
+            {QStringLiteral("nu"), QStringLiteral("&#957;")},        // ν
+            {QStringLiteral("tau"), QStringLiteral("&tau;")},
+            {QStringLiteral("uparrow"), QStringLiteral("&#8593;")},
+            {QStringLiteral("downarrow"), QStringLiteral("&#8595;")},
+            {QStringLiteral("pdot"), QStringLiteral("p&#775;")},      // p с точкой: скорость изменения p
+            {QStringLiteral("bar"), QStringLiteral("")},              // содержимое группы печатается как есть
             {QStringLiteral("arcsin"), QStringLiteral("arcsin")},
             {QStringLiteral("arccos"), QStringLiteral("arccos")},
             {QStringLiteral("arctan"), QStringLiteral("arctan")},
@@ -150,9 +160,17 @@ private:
         int start = m_pos;
         while (m_pos < m_src.size() && m_src.at(m_pos).isLetter())
             ++m_pos;
-        if (start == m_pos) {  // \*, \{, \_ — экранирование
+        if (start == m_pos) {  // \*, \{, \, и т. п.
             if (m_pos < m_src.size()) {
-                const QString html = escape(m_src.at(m_pos));
+                const QChar single = m_src.at(m_pos);
+                // Односимвольные команды вида «\,» (тонкий пробел между
+                // множителем и дифференциалом: p\,dV).
+                const auto shortIt = symbolMap().constFind(QString(single));
+                if (shortIt != symbolMap().constEnd()) {
+                    ++m_pos;
+                    return shortIt.value();
+                }
+                const QString html = escape(single);
                 ++m_pos;
                 return html;
             }

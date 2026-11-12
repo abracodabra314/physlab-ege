@@ -19,7 +19,9 @@ add_executable(lab_tests
     test_horizon.cpp
     test_horizon_scene.cpp
     test_sound.cpp
-    test_sound_scene.cpp)
+    test_sound_scene.cpp
+    test_adiabatic.cpp
+    test_adiabatic_scene.cpp)
 
 target_include_directories(lab_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(lab_tests PRIVATE lab_lib GTest::gtest_main)

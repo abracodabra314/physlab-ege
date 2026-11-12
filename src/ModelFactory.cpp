@@ -1,5 +1,6 @@
 #include "ModelFactory.h"
 
+#include "models/AdiabaticModel.h"
 #include "models/BoatModel.h"
 #include "models/HorizonModel.h"
 #include "models/MixtureModel.h"
@@ -12,6 +13,7 @@
 #include "models/WellModel.h"
 #include "models/WorkModel.h"
 
+#include "scenes/AdiabaticScene.h"
 #include "scenes/BoatScene.h"
 #include "scenes/HorizonScene.h"
 #include "scenes/MixtureScene.h"
@@ -67,6 +69,11 @@ LabSetup makeProjectile() {
     return {model, new scenes::ProjectileScene(model)};
 }
 
+LabSetup makeAdiabatic() {
+    auto* model = new models::AdiabaticModel;
+    return {model, new scenes::AdiabaticScene(model)};
+}
+
 LabSetup makeSound() {
     auto* model = new models::SoundModel;
     return {model, new scenes::SoundScene(model)};
@@ -108,6 +115,8 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("d = √(2Rh + h²); s = R·arccos(R/(R + h))"), makeHorizon},
         {QStringLiteral("sound"), QStringLiteral("Гудок судна: распространение звука"),
          QStringLiteral("rₖ = c(t − tₖ) из точки излучения; T′ = T(c − v₁)/(c − v₂)"), makeSound},
+        {QStringLiteral("adiabatic"), QStringLiteral("Адиабатное сжатие газа"),
+         QStringLiteral("pVᵧ = const; A = −ΔU; v = √(3RT/M)"), makeAdiabatic},
     };
 }
 
