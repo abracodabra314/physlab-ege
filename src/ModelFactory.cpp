@@ -5,6 +5,7 @@
 #include "models/MixtureModel.h"
 #include "models/MotionModel.h"
 #include "models/ProjectileModel.h"
+#include "models/SoundModel.h"
 #include "models/SpringHorizontalModel.h"
 #include "models/SpringVerticalModel.h"
 #include "models/TankModel.h"
@@ -16,6 +17,7 @@
 #include "scenes/MixtureScene.h"
 #include "scenes/MotionScene.h"
 #include "scenes/ProjectileScene.h"
+#include "scenes/SoundScene.h"
 #include "scenes/SpringHorizontalScene.h"
 #include "scenes/SpringVerticalScene.h"
 #include "scenes/TankScene.h"
@@ -65,6 +67,11 @@ LabSetup makeProjectile() {
     return {model, new scenes::ProjectileScene(model)};
 }
 
+LabSetup makeSound() {
+    auto* model = new models::SoundModel;
+    return {model, new scenes::SoundScene(model)};
+}
+
 LabSetup makeHorizon() {
     auto* model = new models::HorizonModel;
     return {model, new scenes::HorizonScene(model)};
@@ -99,6 +106,8 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("k·Δl = mg; m·x″ = −kx — трения нет, груз подвешен"), makeSpringVertical},
         {QStringLiteral("horizon"), QStringLiteral("Дальность видимого горизонта"),
          QStringLiteral("d = √(2Rh + h²); s = R·arccos(R/(R + h))"), makeHorizon},
+        {QStringLiteral("sound"), QStringLiteral("Гудок судна: распространение звука"),
+         QStringLiteral("rₖ = c(t − tₖ) из точки излучения; T′ = T(c − v₁)/(c − v₂)"), makeSound},
     };
 }
 

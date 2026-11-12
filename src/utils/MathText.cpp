@@ -75,6 +75,9 @@ private:
             {QStringLiteral("infty"), QStringLiteral("&infin;")},
             {QStringLiteral("percent"), QStringLiteral("%")},
             {QStringLiteral("degree"), QStringLiteral("&deg;")},
+            // Штрих у буквы: t′, T′ — обозначение «то же, но измеренное
+            // наблюдателем».
+            {QStringLiteral("prime"), QStringLiteral("&#8242;")},      // ′
             {QStringLiteral("circ"), QStringLiteral("&deg;")},
             {QStringLiteral("in"), QStringLiteral("&isin;")},
             // Названия функций выводятся прямыми буквами (как в школьной записи).

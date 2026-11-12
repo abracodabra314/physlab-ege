@@ -2,6 +2,7 @@
 
 #include "core/Simulation.h"
 #include "scenes/LabScene.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/VectorArrows.h"
 
 namespace lab::models {
@@ -49,18 +50,12 @@ public:
     };
 
     /**
-     * Подпись чертежа: текст, его центр и габарит «пилюли». Все надписи
-     * собираются в одном месте, поэтому их взаимное расположение можно
-     * проверить (подписи не должны набегать друг на друга).
+     * Подписи чертежа: текст, его центр и габарит «пилюли». Все надписи
+     * собираются в одном месте и разводятся без наложений, поэтому их
+     * взаимное расположение можно проверить (подписи не должны набегать
+     * друг на друга).
      */
-    struct Annotation {
-        QString id;
-        QString text;
-        QPointF anchor;
-        QSizeF size;
-        QColor color = style::ink();          // цвет текста
-        QColor background = QColor(255, 255, 255, 235);
-    };
+    using Annotation = labels::Item;
 
     explicit HorizonScene(Simulation* model, QObject* parent = nullptr);
 

@@ -1,12 +1,12 @@
 #include "scenes/HorizonScene.h"
 
-#include <QFontMetricsF>
 #include <QPainter>
 
 #include <algorithm>
 #include <cmath>
 
 #include "models/HorizonModel.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "utils/MathText.h"
 
@@ -82,101 +82,6 @@ constexpr double kRightReserved = 120.0;
 constexpr double kTopReserved = 40.0;
 /** Зазор между верхней точкой чертежа и полем схемы. */
 constexpr double kTopGap = 10.0;
-
-/**
- * Размерная линия без подписи: подпись рисует вызывающий код через реестр
- * надписей, поэтому порядок отрисовки kontrollируется один — сначала вся
- * геометрия, потом все тексты.
- */
-void drawDimensionLine(QPainter* painter, const QPointF& from, const QPointF& to, const QColor& color,
-                       double offset) {
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setPen(QPen(color, 1.3));
-
-    QPointF dir = to - from;
-    const double length = std::hypot(dir.x(), dir.y());
-    if (length < 1e-6) {
-        painter->restore();
-        return;
-    }
-    dir /= length;
-    const QPointF normal(-dir.y(), dir.x());
-    const QPointF a = from + normal * offset;
-    const QPointF b = to + normal * offset;
-
-    painter->drawLine(a, b);
-    painter->drawLine(a - normal * 5.0, a + normal * 5.0);
-    painter->drawLine(b - normal * 5.0, b + normal * 5.0);
-    const QPointF head = dir * 7.0;
-    painter->drawLine(a, a + head + QPointF(-normal.y(), normal.x()) * 3.4);
-    painter->drawLine(a, a + head + QPointF(normal.y(), -normal.x()) * 3.4);
-    painter->drawLine(b, b - head + QPointF(-normal.y(), normal.x()) * 3.4);
-    painter->drawLine(b, b - head + QPointF(normal.y(), -normal.x()) * 3.4);
-    painter->restore();
-}
-
-/** Центр подписи размерной линии: середина отрезка со смещением на вынос. */
-QPointF dimensionLabelPos(const QPointF& from, const QPointF& to, double offset) {
-    QPointF dir = to - from;
-    const double length = std::hypot(dir.x(), dir.y());
-    if (length < 1e-6)
-        return (from + to) / 2.0;
-    dir /= length;
-    const QPointF normal(-dir.y(), dir.x());
-    return (from + to) / 2.0 + normal * (offset + 12.0);
-}
-
-/** Габарит «пилюли» с текстом: те же припуски, что у LabScene::drawTag. */
-QSizeF tagSize(const QString& text) {
-    static const QFontMetricsF metrics(style::uiFont(9.5, true));
-    const QRectF bounds = metrics.boundingRect(text);
-    return QSizeF(bounds.width() + 16.0, bounds.height() + 8.0);
-}
-
-/** Пересекаются ли две подписи (пересечение меньше пикселя — не считается). */
-bool labelsOverlap(const QRectF& a, const QRectF& b) {
-    const QRectF overlap = a.intersected(b);
-    return overlap.isValid() && overlap.width() > 2.0 && overlap.height() > 2.0;
-}
-
-/**
- * Позиция центра подписи, которая не перекрывается с уже размещёнными
- * надписями и целиком попадает в границы чертежа. Если свободное место не
- * найдено сразу, подпись сдвигается по спирали от своей геометрической
- * точки: она остаётся рядом с величиной, которую описывает, но не
- * наползает на соседей. Перебор детерминирован, поэтому картинка
- * стабильна от кадра к кадру.
- */
-QPointF resolveLabelPosition(const QSizeF& size, const QPointF& preferred, const QVector<QRectF>& occupied,
-                             const QRectF& bounds) {
-    const auto fits = [&](const QPointF& center) {
-        const QRectF box(center.x() - size.width() / 2.0, center.y() - size.height() / 2.0, size.width(),
-                         size.height());
-        if (bounds.isValid() && !bounds.contains(box))
-            return false;
-        for (const QRectF& other : occupied) {
-            if (labelsOverlap(box, other))
-                return false;
-        }
-        return true;
-    };
-
-    if (fits(preferred))
-        return preferred;
-    constexpr double kStep = 10.0;
-    constexpr int kRings = 20;
-    constexpr int kDirections = 16;
-    for (int ring = 1; ring <= kRings; ++ring) {
-        for (int index = 0; index < kDirections; ++index) {
-            const double angle = 2.0 * M_PI * index / double(kDirections);
-            const QPointF candidate = preferred + QPointF(std::cos(angle), std::sin(angle)) * (kStep * ring);
-            if (fits(candidate))
-                return candidate;
-        }
-    }
-    return preferred;
-}
 
 }  // namespace
 
@@ -305,92 +210,66 @@ QVector<HorizonScene::Annotation> HorizonScene::annotations() const {
     const QPointF observer = observerScenePos();
     const double radius = m_planetRadiusPx;
     // Подписи остаются в области чертежа: за её краем их рисовать нельзя.
-    const QRectF bounds = m_worldRect;
+    labels::Planner planner(m_worldRect);
 
     // Сначала размещаются подписи величин, затем пояснения: приоритет у
     // того, что читается из формул.
-    struct Preferred {
-        QString id;
-        QPointF at;
-        QString text;
-        QColor color;
-        QColor background;
-    };
-    QVector<Preferred> wanted;
-
-    auto want = [&wanted](const QString& id, const QPointF& at, const QString& text, const QColor& color,
-                          const QColor& background = QColor(255, 255, 255, 245)) {
-        wanted.push_back({id, at, text, color, background});
-    };
-
     if (angle > 1e-6) {
         // Расстояние по прямой — размерная линия над линией взгляда.
-        want(QStringLiteral("distance"),
-             dimensionLabelPos(observer, horizonScenePos(), -radius * kDistanceOffsetFraction),
-             QStringLiteral("d = %1 км")
-                 .arg(utils::formatNumber(model->horizonDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
-             style::bodyA().darker(150));
+        planner.add(QStringLiteral("distance"),
+                    labels::rulerLabelPos(observer, horizonScenePos(), -radius * kDistanceOffsetFraction),
+                    QStringLiteral("d = %1 км")
+                        .arg(utils::formatNumber(model->horizonDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
+                    style::bodyA().darker(150));
         // Длина дуги поверхности — внутри круга, где нет линий.
-        want(QStringLiteral("arc"), planetPoint(angle * kArcLabelAngleFactor, radius * kArcLabelFraction),
-             QStringLiteral("s = %1 км")
-                 .arg(utils::formatNumber(model->arcDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
-             style::bodyD().darker(150));
+        planner.add(QStringLiteral("arc"), planetPoint(angle * kArcLabelAngleFactor, radius * kArcLabelFraction),
+                    QStringLiteral("s = %1 км")
+                        .arg(utils::formatNumber(model->arcDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
+                    style::bodyD().darker(150));
         // Центральный угол он же угол понижения горизонта.
-        want(QStringLiteral("alpha"), planetPoint(angle * 0.5, radius * kAlphaLabelFraction),
-             QStringLiteral("α = %1°").arg(utils::formatNumber(model->dipAngleAt(m_model->time()), 3)),
-             style::accentWarm().darker(150));
+        planner.add(QStringLiteral("alpha"), planetPoint(angle * 0.5, radius * kAlphaLabelFraction),
+                    QStringLiteral("α = %1°").arg(utils::formatNumber(model->dipAngleAt(m_model->time()), 3)),
+                    style::accentWarm().darker(150));
         // Высота наблюдателя — размерная линия слева от вертикали OA.
-        want(QStringLiteral("height"), dimensionLabelPos(subsatelliteScenePos(), observer, -kHeightOffsetPixels),
-             QStringLiteral("h = %1 м").arg(utils::formatNumber(model->heightAt(m_model->time()), 1)),
-             style::bodyB().darker(160));
+        planner.add(QStringLiteral("height"),
+                    labels::rulerLabelPos(subsatelliteScenePos(), observer, -kHeightOffsetPixels),
+                    QStringLiteral("h = %1 м").arg(utils::formatNumber(model->heightAt(m_model->time()), 1)),
+                    style::bodyB().darker(160));
         // Точка горизонта.
-        want(QStringLiteral("horizon"), planetPoint(angle, radius * kHorizonLabelFraction), QStringLiteral("B"),
-             style::bodyA().darker(170));
+        planner.add(QStringLiteral("horizon"), planetPoint(angle, radius * kHorizonLabelFraction), QStringLiteral("B"),
+                    style::bodyA().darker(170));
     }
     // Масштаб планеты и её центр.
-    want(QStringLiteral("radius"), QPointF(m_center.x() - radius * kRadiusLabelFraction, m_center.y() - 18.0),
-         QStringLiteral("R = %1 км").arg(utils::formatNumber(model->radiusKilometers(), 0)), style::ink());
-    want(QStringLiteral("center"), m_center + QPointF(-24.0, 22.0), QStringLiteral("O"), style::ink(),
-         QColor(255, 255, 255, 240));
-    want(QStringLiteral("observer"), observer + QPointF(-28.0, -16.0), QStringLiteral("A"),
-         style::bodyB().darker(170));
+    planner.add(QStringLiteral("radius"), QPointF(m_center.x() - radius * kRadiusLabelFraction, m_center.y() - 18.0),
+                QStringLiteral("R = %1 км").arg(utils::formatNumber(model->radiusKilometers(), 0)), style::ink());
+    planner.add(QStringLiteral("center"), m_center + QPointF(-24.0, 22.0), QStringLiteral("O"), style::ink(),
+                QColor(255, 255, 255, 240));
+    planner.add(QStringLiteral("observer"), observer + QPointF(-28.0, -16.0), QStringLiteral("A"),
+                style::bodyB().darker(170));
 
     // Пояснения к чертежу: кто есть кто и как читать увеличенный угол.
-    want(QStringLiteral("legend"), QPointF(m_schemeRect.right() - 200.0, m_schemeRect.top() + 12.0),
-         QStringLiteral("A — наблюдатель, B — горизонт, O — центр"), style::inkSoft(), QColor(255, 255, 255, 205));
+    planner.add(QStringLiteral("legend"), QPointF(m_schemeRect.right() - 200.0, m_schemeRect.top() + 12.0),
+                QStringLiteral("A — наблюдатель, B — горизонт, O — центр"), style::inkSoft(),
+                QColor(255, 255, 255, 205));
     const double exaggeration = angleExaggeration();
     if (exaggeration > 1.01) {
-        want(QStringLiteral("exaggeration"), QPointF(m_schemeRect.right() - 215.0, m_schemeRect.top() + 34.0),
-             QStringLiteral("угол α на чертеже увеличен в %1 раз").arg(utils::formatNumber(exaggeration, 1)),
-             style::inkSoft(), QColor(255, 255, 255, 205));
+        planner.add(QStringLiteral("exaggeration"), QPointF(m_schemeRect.right() - 215.0, m_schemeRect.top() + 34.0),
+                    QStringLiteral("угол α на чертеже увеличен в %1 раз").arg(utils::formatNumber(exaggeration, 1)),
+                    style::inkSoft(), QColor(255, 255, 255, 205));
     }
 
     // Итог задачи: подъём завершён, дальность горизонта — как в ответе.
     if (m_model->time() >= model->ascentTime() - 1e-9) {
-        want(QStringLiteral("result"), QPointF(m_schemeRect.center().x(), m_worldRect.bottom() - 4.0),
-             QStringLiteral("h = %1 м: d = %2 км, s = %3 км, видно %4 % поверхности")
-                 .arg(utils::formatNumber(model->maxHeight(), 0),
-                      utils::formatNumber(model->horizonDistance(model->maxHeight()) / kMetersPerKilometer, 3),
-                      utils::formatNumber(model->arcDistance(model->maxHeight()) / kMetersPerKilometer, 3),
-                      utils::formatNumber(100.0 * model->visibleFraction(model->maxHeight()), 5)),
-             style::success().darker(130), QColor(234, 247, 239, 240));
+        planner.add(QStringLiteral("result"), QPointF(m_schemeRect.center().x(), m_worldRect.bottom() - 4.0),
+                    QStringLiteral("h = %1 м: d = %2 км, s = %3 км, видно %4 % поверхности")
+                        .arg(utils::formatNumber(model->maxHeight(), 0),
+                             utils::formatNumber(model->horizonDistance(model->maxHeight()) / kMetersPerKilometer, 3),
+                             utils::formatNumber(model->arcDistance(model->maxHeight()) / kMetersPerKilometer, 3),
+                             utils::formatNumber(100.0 * model->visibleFraction(model->maxHeight()), 5)),
+                    style::success().darker(130), QColor(234, 247, 239, 240));
     }
 
-    QVector<QRectF> occupied;
-    for (const Preferred& item : wanted) {
-        Annotation note;
-        note.id = item.id;
-        note.text = item.text;
-        note.size = tagSize(item.text);
-        note.color = item.color;
-        note.background = item.background;
-        note.anchor = resolveLabelPosition(note.size, item.at, occupied, bounds);
-        const QRectF box(note.anchor.x() - note.size.width() / 2.0, note.anchor.y() - note.size.height() / 2.0,
-                         note.size.width(), note.size.height());
-        occupied.push_back(box);
-        list.push_back(note);
-    }
-    return list;
+    return planner.items();
 }
 
 // ------------------------------------------------------------------
@@ -569,7 +448,7 @@ void HorizonScene::drawSightLines(QPainter* painter) const {
     painter->drawArc(arcBox, startDegrees, int(std::round(angle * 180.0 / M_PI * 16.0)));
 
     // Расстояние по прямой — размерная линия вне круга, над линией взгляда.
-    drawDimensionLine(painter, observer, horizon, style::bodyA(), -m_planetRadiusPx * kDistanceOffsetFraction);
+    labels::drawRulerLine(painter, observer, horizon, style::bodyA(), -m_planetRadiusPx * kDistanceOffsetFraction);
 
     // Точка горизонта B.
     painter->setPen(Qt::NoPen);
@@ -651,7 +530,7 @@ void HorizonScene::drawHeightScale(QPainter* painter) const {
     const QPointF observer = observerScenePos();
     painter->setPen(QPen(style::bodyB(), 1.2, Qt::DashLine));
     painter->drawLine(QPointF(rulerX, observer.y()), QPointF(observer.x() - m_planetRadiusPx * 0.42, observer.y()));
-    drawDimensionLine(painter, subsatelliteScenePos(), observer, style::bodyB(), -kHeightOffsetPixels);
+    labels::drawRulerLine(painter, subsatelliteScenePos(), observer, style::bodyB(), -kHeightOffsetPixels);
 }
 
 void HorizonScene::drawRadiusScale(QPainter* painter) const {
@@ -710,8 +589,7 @@ void HorizonScene::paintScheme(QPainter* painter) {
 
     // Все тексты — последними и по одному реестру: так подписи не набегают
     // друг на друга и не затираются линиями, которые рисуются позже.
-    for (const Annotation& note : annotations())
-        drawTag(painter, note.anchor, note.text, note.background, note.color);
+    labels::drawAll(painter, annotations());
 
     drawPlots(painter);
     painter->restore();
