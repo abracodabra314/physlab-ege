@@ -22,6 +22,8 @@ add_executable(lab_tests
     test_sound_scene.cpp
     test_adiabatic.cpp
     test_adiabatic_scene.cpp
+    test_bacteria.cpp
+    test_bacteria_scene.cpp
     test_decay.cpp
     test_decay_scene.cpp)
 

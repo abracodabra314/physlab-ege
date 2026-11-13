@@ -1,6 +1,7 @@
 #include "ModelFactory.h"
 
 #include "models/AdiabaticModel.h"
+#include "models/BacteriaModel.h"
 #include "models/BoatModel.h"
 #include "models/DecayModel.h"
 #include "models/HorizonModel.h"
@@ -15,6 +16,7 @@
 #include "models/WorkModel.h"
 
 #include "scenes/AdiabaticScene.h"
+#include "scenes/BacteriaScene.h"
 #include "scenes/BoatScene.h"
 #include "scenes/DecayScene.h"
 #include "scenes/HorizonScene.h"
@@ -76,6 +78,11 @@ LabSetup makeAdiabatic() {
     return {model, new scenes::AdiabaticScene(model)};
 }
 
+LabSetup makeBacteria() {
+    auto* model = new models::BacteriaModel;
+    return {model, new scenes::BacteriaScene(model)};
+}
+
 LabSetup makeDecay() {
     auto* model = new models::DecayModel;
     return {model, new scenes::DecayScene(model)};
@@ -126,6 +133,8 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("pVᵧ = const; A = −ΔU; v = √(3RT/M)"), makeAdiabatic},
         {QStringLiteral("decay"), QStringLiteral("Радиоактивный распад ядер"),
          QStringLiteral("N = N₀·2^(−t/T½); λ = ln2/T½; A = λN"), makeDecay},
+        {QStringLiteral("bacteria"), QStringLiteral("Деление бактерий в чашке Петри"),
+         QStringLiteral("N = N₀·2^(t/T_d); n = log₂(N/N₀); N′ = kN"), makeBacteria},
     };
 }
 
