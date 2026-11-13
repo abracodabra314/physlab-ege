@@ -73,6 +73,7 @@ private:
             {QStringLiteral("beta"), QStringLiteral("&beta;")},
             {QStringLiteral("gamma"), QStringLiteral("&gamma;")},
             {QStringLiteral("lambda"), QStringLiteral("&lambda;")},
+            {QStringLiteral("sigma"), QStringLiteral("&sigma;")},
             {QStringLiteral("int"), QStringLiteral("&#8747;")},       // ∫
             {QStringLiteral("infty"), QStringLiteral("&infin;")},
             {QStringLiteral("percent"), QStringLiteral("%")},

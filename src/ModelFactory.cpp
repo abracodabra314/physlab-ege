@@ -2,6 +2,7 @@
 
 #include "models/AdiabaticModel.h"
 #include "models/BoatModel.h"
+#include "models/DecayModel.h"
 #include "models/HorizonModel.h"
 #include "models/MixtureModel.h"
 #include "models/MotionModel.h"
@@ -15,6 +16,7 @@
 
 #include "scenes/AdiabaticScene.h"
 #include "scenes/BoatScene.h"
+#include "scenes/DecayScene.h"
 #include "scenes/HorizonScene.h"
 #include "scenes/MixtureScene.h"
 #include "scenes/MotionScene.h"
@@ -74,6 +76,11 @@ LabSetup makeAdiabatic() {
     return {model, new scenes::AdiabaticScene(model)};
 }
 
+LabSetup makeDecay() {
+    auto* model = new models::DecayModel;
+    return {model, new scenes::DecayScene(model)};
+}
+
 LabSetup makeSound() {
     auto* model = new models::SoundModel;
     return {model, new scenes::SoundScene(model)};
@@ -117,6 +124,8 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("rₖ = c(t − tₖ) из точки излучения; T′ = T(c − v₁)/(c − v₂)"), makeSound},
         {QStringLiteral("adiabatic"), QStringLiteral("Адиабатное сжатие газа"),
          QStringLiteral("pVᵧ = const; A = −ΔU; v = √(3RT/M)"), makeAdiabatic},
+        {QStringLiteral("decay"), QStringLiteral("Радиоактивный распад ядер"),
+         QStringLiteral("N = N₀·2^(−t/T½); λ = ln2/T½; A = λN"), makeDecay},
     };
 }
 
