@@ -40,14 +40,18 @@ jobs:
         shell: bash
         run: rm -rf build
 
+      # В EL8 Qt 6 берём из AppStream — тот же путь, что у РЕД ОС: свой
+      # Python/Qt из action там не запускается из-за glibc 2.28.
       - name: Пакеты контейнера EL8 (для Red OS)
         if: matrix.container != ''
         run: |
-          dnf -y install git cmake gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel \
-              mesa-libGL libxkbcommon libxkbcommon-x11 xcb-util-wm which
+          dnf -y install git cmake qt6-qtbase-devel qt6-qtbase \
+              gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel \
+              mesa-libGL libxkbcommon libxkbcommon-x11 which
           echo "PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH" >> $GITHUB_ENV
 
-      - name: Установить Qt 6
+      - name: Установить Qt 6 (для хостовых job'ов)
+        if: matrix.container == ''
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.3'
@@ -55,7 +59,7 @@ jobs:
       - name: Сборка (CMake + Qt)
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DLAB_BUILD_TESTS=ON
-          cmake --build build --config Release -j
+          cmake --build build --config Release -j 2
 
       - name: Модульные тесты
         run: ctest --test-dir build --output-on-failure
