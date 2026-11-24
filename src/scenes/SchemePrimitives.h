@@ -52,8 +52,10 @@ void drawPier(QPainter* painter, double x, double waterY, double height, const Q
 void drawCurrentArrow(QPainter* painter, const QRectF& area, const QColor& waterColor, const QString& text);
 
 /** Градуированная шкала объёма/длины справа от прямоугольника. */
+/// Шкала-линейка. При showValues = false остаётся штриховой — без числовых
+/// подписей (для сцен, где на рисунке величин быть не должно).
 void drawScale(QPainter* painter, const QRectF& rect, int majorSteps, const QString& unit,
-               double maxValue, const QColor& color);
+               double maxValue, const QColor& color, bool showValues = true);
 
 /**
  * Пружина между точками from и to (работает для любого направления):

@@ -443,11 +443,9 @@ void SoundScene::drawTemperatureBar(QPainter* painter) const {
     painter->setFont(style::uiFont(7.5));
     for (const double value : {kTemperatureMin, 0.0, 20.0, kTemperatureMax}) {
         const double x = temperatureBarX(value);
+        Q_UNUSED(value);
         painter->setPen(QPen(style::inkSoft(), 1.0));
-        painter->drawLine(QPointF(x, bar.bottom()), QPointF(x, bar.bottom() + 5.0));
-        painter->setPen(style::inkSoft());
-        painter->drawText(QRectF(x - 26.0, bar.bottom() + 5.0, 52.0, 13), Qt::AlignHCenter,
-                          QStringLiteral("%1°").arg(utils::formatNumber(value, 0)));
+        painter->drawLine(QPointF(x, bar.bottom()), QPointF(x, bar.bottom() + 5.0));  // штрих без числа
     }
 
     const double currentX = temperatureBarX(model->temperatureCelsius());

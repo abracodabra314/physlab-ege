@@ -402,20 +402,13 @@ void ProjectileScene::paintScheme(QPainter* painter) {
         const QPointF tick = scenePointOf(value, 0.0);
         painter->setPen(QPen(value == 0.0 ? style::ink() : style::inkSoft(), value == 0.0 ? 1.6 : 1.0));
         painter->drawLine(tick, tick + QPointF(0.0, 7.0));
-        if (value > 0.0) {
-            painter->setPen(style::inkSoft());
-            painter->drawText(QRectF(tick.x() - 30.0, tick.y() + 8.0, 60.0, 13), Qt::AlignHCenter,
-                              utils::formatNumber(value, std::abs(xStep) < 1.0 ? 1 : 0));
-        }
+        Q_UNUSED(value);  // деления осей — штрихи без чисел
     }
     for (double value = yStep; value <= m_worldYMax + 1e-9; value += yStep) {
         const QPointF tick = scenePointOf(0.0, value);
+        Q_UNUSED(value);
         painter->setPen(QPen(style::inkSoft(), 1.0));
-        painter->drawLine(tick, tick + QPointF(-7.0, 0.0));
-        painter->setPen(style::inkSoft());
-        painter->drawText(QRectF(m_schemeRect.left(), tick.y() - 7.0, m_worldRect.left() - m_schemeRect.left() - 10.0, 14),
-                          Qt::AlignRight | Qt::AlignVCenter,
-                          utils::formatNumber(value, std::abs(yStep) < 1.0 ? 1 : 0));
+        painter->drawLine(tick, tick + QPointF(-7.0, 0.0));  // штрих без числа
     }
     // Начало координат.
     painter->setPen(style::ink());

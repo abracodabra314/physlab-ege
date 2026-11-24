@@ -299,14 +299,14 @@ void drawCurrentArrow(QPainter* painter, const QRectF& area, const QColor& water
 }
 
 void drawScale(QPainter* painter, const QRectF& rect, int majorSteps, const QString& unit,
-               double maxValue, const QColor& color) {
+               double maxValue, const QColor& color, bool showValues) {
     painter->save();
     painter->setPen(QPen(color, 1.0));
     painter->setFont(style::uiFont(8.0));
     const int labelEvery = majorSteps >= 8 ? majorSteps / 4 : 1;
     for (int i = 0; i <= majorSteps; ++i) {
         const double y = rect.bottom() - rect.height() * i / majorSteps;
-        const bool labeled = (i % labelEvery) == 0;
+        const bool labeled = showValues && (i % labelEvery) == 0;
         painter->drawLine(QPointF(rect.right(), y), QPointF(rect.right() + (labeled ? 9.0 : 4.0), y));
         if (labeled) {
             painter->drawText(QRectF(rect.right() + 12, y - 7, 84, 14), Qt::AlignLeft | Qt::AlignVCenter,

@@ -191,8 +191,7 @@ void MotionScene::paintScheme(QPainter* painter) {
         const bool isOrigin = std::abs(km) < 1e-9;
         painter->setPen(QPen(isOrigin ? style::ink() : style::inkSoft(), isOrigin ? 1.8 : 1.0));
         painter->drawLine(QPointF(x, axisY - (isOrigin ? 7 : 4)), QPointF(x, axisY + (isOrigin ? 7 : 4)));
-        painter->setPen(isOrigin ? style::ink() : style::inkSoft());
-        painter->drawText(QRectF(x - 30, axisY + 7, 60, 13), Qt::AlignHCenter, utils::formatNumber(km, 0));
+        // Деления дороги без чисел: расстояния подписаны размерными линиями.
     }
     painter->setPen(style::inkSoft());
     painter->drawText(QRectF(m_viewArea.right() - 60, axisY - 18, 60, 13), Qt::AlignRight,

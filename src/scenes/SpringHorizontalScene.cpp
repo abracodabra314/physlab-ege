@@ -144,11 +144,8 @@ void SpringHorizontalScene::paintScheme(QPainter* painter) {
         const bool major = (i % 2) == 0;
         painter->setPen(QPen(major ? style::inkSoft() : style::grid(), major ? 1.1 : 0.8));
         painter->drawLine(QPointF(px, rulerY), QPointF(px, rulerY - (major ? 9.0 : 5.0)));
-        if (major) {
-            painter->setPen(style::inkSoft());
-            painter->drawText(QRectF(px - 26.0, rulerY + 2.0, 52.0, 13), Qt::AlignHCenter,
-                              utils::formatNumber(value, 2));
-        }
+        Q_UNUSED(value);
+        Q_UNUSED(major);  // линейка координат — штрихи без чисел
     }
 
     // Положение равновесия.

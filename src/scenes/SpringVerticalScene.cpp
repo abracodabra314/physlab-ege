@@ -244,11 +244,9 @@ void SpringVerticalScene::paintScheme(QPainter* painter) {
         if (value < m_elongationMin - 1e-9 || value > m_elongationMax + 1e-9)
             continue;
         const double py = sceneYOfElongation(value);
+        Q_UNUSED(value);
         painter->setPen(QPen(style::inkSoft(), 1.0));
-        painter->drawLine(QPointF(rulerX, py), QPointF(rulerX + 9.0, py));
-        painter->setPen(style::inkSoft());
-        painter->drawText(QRectF(rulerX + 12.0, py - 7.0, 78.0, 14), Qt::AlignLeft | Qt::AlignVCenter,
-                          QStringLiteral("Δl = %1").arg(utils::formatNumber(value, 2)));
+        painter->drawLine(QPointF(rulerX, py), QPointF(rulerX + 9.0, py));  // штрих Δl без числа
     }
 
     // ---- положение равновесия ----

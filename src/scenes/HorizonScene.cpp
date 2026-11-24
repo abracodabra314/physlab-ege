@@ -525,12 +525,9 @@ void HorizonScene::drawHeightScale(QPainter* painter) const {
     for (int i = 0; i <= kHeightTicks; ++i) {
         const double height = model->maxHeight() * i / double(kHeightTicks);
         const double y = surfaceY - liftForHeight(height);
+        Q_UNUSED(height);
         painter->setPen(QPen(style::inkSoft(), i == 0 ? 1.5 : 1.0));
-        painter->drawLine(QPointF(rulerX - 6.0, y), QPointF(rulerX + 6.0, y));
-        painter->setPen(style::inkSoft());
-        painter->drawText(QRectF(m_worldRect.left(), y - 7.0, rulerX - m_worldRect.left() - 10.0, 14),
-                          Qt::AlignRight | Qt::AlignVCenter,
-                          QStringLiteral("%1 м").arg(utils::formatNumber(height, height < 10.0 ? 1 : 0)));
+        painter->drawLine(QPointF(rulerX - 6.0, y), QPointF(rulerX + 6.0, y));  // штрих без числа: величины — на панелях
     }
     painter->setPen(style::inkSoft());
     painter->drawText(QRectF(m_worldRect.left(), topY - 18.0, rulerX - m_worldRect.left() + 8.0, 14), Qt::AlignRight,
@@ -558,11 +555,9 @@ void HorizonScene::drawRadiusScale(QPainter* painter) const {
     painter->setFont(style::uiFont(7.5));
     for (const double value : kRadiusMarks) {
         const double x = radiusBarX(value);
+        Q_UNUSED(value);
         painter->setPen(QPen(style::inkSoft(), 1.0));
-        painter->drawLine(QPointF(x, bar.bottom()), QPointF(x, bar.bottom() + 5.0));
-        painter->setPen(style::inkSoft());
-        painter->drawText(QRectF(x - 44.0, bar.bottom() + 5.0, 88.0, 13), Qt::AlignHCenter,
-                          utils::formatNumber(value, 0));
+        painter->drawLine(QPointF(x, bar.bottom()), QPointF(x, bar.bottom() + 5.0));  // отметка без числа
     }
 
     const double currentX = radiusBarX(model->radiusKilometers());

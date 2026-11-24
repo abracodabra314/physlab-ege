@@ -442,12 +442,9 @@ void AdiabaticScene::drawStrokeScale(QPainter* painter) const {
     for (int i = 0; i <= 4; ++i) {
         const double height = m_maxHeight * i / 4.0;
         const double y = m_bottomY - pixelsForHeight(height);
+        Q_UNUSED(height);
         painter->setPen(QPen(style::inkSoft(), 1.0));
-        painter->drawLine(QPointF(rulerX - 5.0, y), QPointF(rulerX + 5.0, y));
-        painter->setPen(style::inkSoft());
-        // Линейка подписана в миллиметрах: доли метра читать неудобно.
-        painter->drawText(QRectF(m_band.left() - 6.0, y - 7.0, kRulerWidth, 14), Qt::AlignRight,
-                          utils::formatNumber(height * 1000.0, m_maxHeight < 0.05 ? 2 : 1));
+        painter->drawLine(QPointF(rulerX - 5.0, y), QPointF(rulerX + 5.0, y));  // штрих без числа: миллиметры — на панели
     }
 
     // Отметки V₁ и V₂ и путь поршня между ними.

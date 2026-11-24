@@ -207,7 +207,7 @@ void MixtureScene::paintScheme(QPainter* painter) {
                               QColor(255, 255, 255, 205), liquid.darker(220));
         }
         primitives::drawScale(painter, vessel.adjusted(4, 0, 4, 0), 8, QStringLiteral("л"), capacityLiters,
-                              style::inkSoft());
+                              style::inkSoft(), false);  // на чертеже — только штрихи вместимости
     }
 
     // ---- Полоски массы вещества m = V·C ----
