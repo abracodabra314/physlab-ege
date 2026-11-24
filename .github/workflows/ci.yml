@@ -24,16 +24,13 @@ jobs:
           - name: Linux (ubuntu)
             id: ubuntu
             os: ubuntu-latest
-            qtarch: linux-desktop-linux-x86_64-gnu
           - name: Red OS (EL8)
             id: redos
             os: ubuntu-latest
-            qtarch: linux-desktop-linux-x86_64-gnu
             container: rockylinux/rockylinux:8
           - name: Windows (msvc)
             id: windows
             os: windows-latest
-            qtarch: windows-win64-msvc2022_64
 
     steps:
       - uses: actions/checkout@v4
@@ -53,8 +50,7 @@ jobs:
       - name: Установить Qt 6
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.7.*'
-          arch: ${{ matrix.qtarch }}
+          version: '6.7.3'
           modules: qtbase
 
       - name: Сборка (CMake + Qt)
@@ -113,8 +109,7 @@ jobs:
       - name: Установить Qt 6
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.7.*'
-          arch: macos-universal
+          version: '6.7.3'
           modules: qtbase
 
       - name: Сборка (CMake + Qt)
