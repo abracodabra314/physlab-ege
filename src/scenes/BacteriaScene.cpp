@@ -268,7 +268,7 @@ QVector<BacteriaScene::ColonyCell> BacteriaScene::cellsFor(double t) const {
     const int places = std::max(1, drawnSlots());
     const double per = std::max(1.0, m_cellsPerCell);
     const double fill = model->overflowFactorAt(t);
-    const long double needed = std::ceill(static_cast<long double>(counted) / static_cast<long double>(per));
+    const long double needed = std::ceil(static_cast<long double>(counted) / static_cast<long double>(per));
     const long double capacity = static_cast<long double>(places);
 
     /*
@@ -282,9 +282,9 @@ QVector<BacteriaScene::ColonyCell> BacteriaScene::cellsFor(double t) const {
     const bool completed = model->countingIntervalBefore(t, left, right);
     const double before = completed ? model->countedCellsAt(left) : std::numeric_limits<double>::quiet_NaN();
     const long double previous =
-        std::isfinite(before) ? std::ceill(static_cast<long double>(before) / static_cast<long double>(per))
+        std::isfinite(before) ? std::ceil(static_cast<long double>(before) / static_cast<long double>(per))
                               : static_cast<long double>(0.0);
-    const long double layers = std::ceill(needed / capacity);
+    const long double layers = std::ceil(needed / capacity);
     const long double total = std::min(layers * capacity, needed);
     /*
      * До первого подсчёта делений не было: посев весь на месте, и помечать
@@ -296,7 +296,7 @@ QVector<BacteriaScene::ColonyCell> BacteriaScene::cellsFor(double t) const {
         const double finished = model->countedCellsAt(right);
         const long double upto =
             std::isfinite(finished)
-                ? std::ceill(static_cast<long double>(finished) / static_cast<long double>(per))
+                ? std::ceil(static_cast<long double>(finished) / static_cast<long double>(per))
                 : total;
         first = std::min(total, previous);
         // Правый край метки — конец завершённого подсчёта, а не текущий момент.
