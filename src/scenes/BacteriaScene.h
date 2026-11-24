@@ -159,7 +159,6 @@ private:
 
     void drawDish(QPainter* painter, const QVector<ColonyCell>& cells) const;
     void drawColonyBoundary(QPainter* painter) const;
-    void drawCracks(QPainter* painter) const;
     void drawStrip(QPainter* painter) const;
     void drawGrowthBand(QPainter* painter) const;
     void drawPlots(QPainter* painter) const;

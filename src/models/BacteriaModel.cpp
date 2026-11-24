@@ -201,7 +201,7 @@ QVector<ParamSpec> BacteriaModel::paramSpecs() const {
                                           "столбцы прироста и среднюю скорость ΔN/Δt")));
 
     specs.push_back(slider(QStringLiteral("target"), QStringLiteral("Целевое число клеток N"), QStringLiteral("шт"),
-                           1.0, 100000000.0, 1.0, 0, false, 32000.0, process,
+                           1.0, 100000000.0, 1.0, 0, false, 16000.0, process,
                            QStringLiteral("Отметка на шкале: момент, когда клеток станет столько, ищут как "
                                           "t = T_d·log₂(N/N₀)")));
     return specs;
@@ -251,11 +251,15 @@ ValidationResult BacteriaModel::validate() const {
      * нанести на шкалу: 10^9 клеток — тот предел, при котором колония уже
      * давно легла бы сплошным слоем.
      */
-    if (theoryCellsAt(observationTime()) > kMaxReadableCells) {
+    // Читаемость проверяем по «наивной» формуле, до плато: делений-то
+    // наблюдатель насчитал именно столько, сколько прошло.
+    const double rawDivisions = observationTime() / doublingTime();
+    const double rawCells = initialCells() * std::exp(kLnTwo * rawDivisions);
+    if (rawCells > kMaxReadableCells) {
         check.ok = false;
         check.message = QStringLiteral("За %1 клеток стало бы %2: закон верен, но такое число не помещается "
                            "ни на шкалу, ни в чашку")
-                .arg(durationText(observationTime()), cellsText(theoryCellsAt(observationTime())));
+                .arg(durationText(observationTime()), cellsText(rawCells));
         check.hint = QStringLiteral("Сократите наблюдение, возьмите N₀ меньше или задайте T_d побольше");
         return check;
     }
@@ -332,7 +336,11 @@ double BacteriaModel::observationTime() const {
 
 double BacteriaModel::observationInterval() const { return param(QStringLiteral("step")); }
 
-double BacteriaModel::targetCells() const { return param(QStringLiteral("target")); }
+double BacteriaModel::targetCells() const {
+    // Цель выше вместимости чашки физически недостижима: больше N_мест
+    // клеток не бывает никогда. Показываем цель, обрезанную по чашке.
+    return std::min(param(QStringLiteral("target")), dishCapacity());
+}
 
 // ------------------------------------------------------------------
 // Время показа
@@ -360,20 +368,24 @@ double BacteriaModel::theoryCellsAt(double t) const {
         return std::numeric_limits<double>::quiet_NaN();
     const double divisions = t / doublingTime();
     // 2^(t/T_d) считают через exp от ln2: так показательная степень остаётся
-    // точной и при дробном числе делений.
-    return initialCells() * std::exp(kLnTwo * divisions);
+    // точной и при дробном числе делений. Доросли до N_мест — дальше делиться
+    // некуда: питательный слой один, колония прекращает рост.
+    const double grown = initialCells() * std::exp(kLnTwo * divisions);
+    return std::min(grown, dishCapacity());
 }
 
 double BacteriaModel::theoryCellsByRate(double t) const {
     if (!std::isfinite(t))
         return std::numeric_limits<double>::quiet_NaN();
-    return initialCells() * std::exp(growthRate() * t);
+    // Та же колония в записи через e^(kt): и здесь рост встаёт у N_мест.
+    return std::min(initialCells() * std::exp(growthRate() * t), dishCapacity());
 }
 
 double BacteriaModel::divisionsElapsedAt(double t) const {
     if (!std::isfinite(t))
         return std::numeric_limits<double>::quiet_NaN();
-    return t / doublingTime();
+    // После заполнения чашки новые деления не идут — счётчик замирает.
+    return std::min(std::max(t, 0.0), fullTime()) / doublingTime();
 }
 
 double BacteriaModel::completedDivisionsAt(double t) const {
@@ -435,6 +447,8 @@ double BacteriaModel::growthInLastStepAt(double t) const {
 }
 
 double BacteriaModel::growthRateOfCellsAt(double t) const {
+    if (std::isfinite(t) && t >= fullTime())
+        return 0.0;  // чашка заполнена — прироста нет
     const double cells = theoryCellsAt(t);
     return std::isfinite(cells) ? growthRate() * cells : cells;
 }
@@ -487,13 +501,23 @@ double BacteriaModel::divisionsToTarget() const {
 double BacteriaModel::dishCapacity() const {
     /*
      * Вместимость поля зрения — число клеток, которые лежат в кадре слоем
-     * в одну клетку. Посев покрывает площадь S = N·s₀, поэтому кадр
+     * в одну клетку. Посев покрывает площадь S = N·s₀, поэтому чашка
      * заполняется, когда N достигает N_мест = S_кадра/s₀: это фиксированное
-     * число, не зависящее от посевного материала. Всё, что выше, колония
-     * кладёт «вторым слоем»: чашка трескается от переполнения, а удвоение
-     * идёт по-прежнему — рост задаёт T_d, а не теснота кадра.
+     * число, не зависящее от посевного материала. До этого момента клетки
+     * лежат и вторым слоем — но как только чашка заполнена, деления
+     * прекращаются: расти втесноте нечем, кривая выходит на плато.
      */
     return kDishCapacity;
+}
+
+double BacteriaModel::fullTime() const {
+    const double capacity = dishCapacity();
+    const double start = initialCells();
+    if (!std::isfinite(capacity) || !std::isfinite(start) || start <= 0.0)
+        return std::numeric_limits<double>::quiet_NaN();
+    if (capacity <= start)
+        return 0.0;
+    return doublingTime() * std::log2(capacity / start);
 }
 
 double BacteriaModel::overflowFactorAt(double t) const {
@@ -541,7 +565,7 @@ SimState BacteriaModel::stateAt(double t) const {
     dish.position = overflowFactorAt(t);                     // во сколько раз кадр переполнен
     dish.value1 = dishCapacity();
     dish.value2 = growthRateOfCellsAt(t);                    // N′ = kN
-    dish.active = overflowFactorAt(t) > 1.0;
+    dish.active = overflowFactorAt(t) >= 1.0;  // чашка полна — рост остановлен
     dish.variant = 2;
     state.entities.push_back(dish);
 

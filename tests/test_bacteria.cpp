@@ -72,12 +72,14 @@ TEST(Bacteria, DoublingTimeExactlyDoublesTheColony) {
     BacteriaModel model;
     configure(model);
 
-    // Через каждый период удвоения клеток ровно вдвое больше.
+    // Через каждый период удвоения клеток ровно вдвое больше — до N_мест,
+    // а после заполнения чашки рост встаёт.
     for (int n = 1; n <= 5; ++n) {
         const double t = model.doublingTime() * double(n);
-        EXPECT_NEAR(model.theoryCellsAt(t), model.initialCells() * std::exp2(double(n)), 1e-9)
-            << "делений " << n;
-        EXPECT_NEAR(model.multiplicationFactorAt(t), std::exp2(double(n)), 1e-9);
+        const double grown = model.initialCells() * std::exp2(double(n));
+        const double expected = std::min(grown, model.dishCapacity());
+        EXPECT_NEAR(model.theoryCellsAt(t), expected, 1e-9) << "делений " << n;
+        EXPECT_NEAR(model.multiplicationFactorAt(t), expected / model.initialCells(), 1e-9);
     }
 }
 
@@ -87,8 +89,12 @@ TEST(Bacteria, ColonyGrowsMonotonically) {
 
     double previous = 0.0;
     for (double fraction = 0.0; fraction <= 1.001; fraction += 0.05) {
-        const double cells = model.theoryCellsAt(model.observationTime() * fraction);
-        EXPECT_GT(cells, previous) << "доля времени " << fraction;
+        const double t = model.observationTime() * fraction;
+        const double cells = model.theoryCellsAt(t);
+        if (t < model.fullTime())
+            EXPECT_GT(cells, previous) << "доля времени " << fraction;
+        else
+            EXPECT_NEAR(cells, model.dishCapacity(), 1e-9);  // деления прекратились
         previous = cells;
     }
 }
@@ -172,10 +178,12 @@ TEST(Bacteria, TargetTimeIsDoublingTimesLogarithm) {
     BacteriaModel model;
     configure(model);
 
-    // t = T_d·log₂(N/N₀) — логарифм от отношения чисел клеток.
-    const double expected = 2.0 * std::log2(32000.0 / 1000.0);
+    // t = T_d·log₂(N/N₀). Цель по постановке (32000) больше чашки, а больше
+    // N_мест не бывает: эффективная цель — вместимость, и момент — полный.
+    EXPECT_NEAR(model.targetCells(), model.dishCapacity(), 1e-12);
+    const double expected = 2.0 * std::log2(model.dishCapacity() / 1000.0);
     EXPECT_NEAR(model.targetTime(), expected, 1e-9);
-    EXPECT_NEAR(model.divisionsToTarget(), std::log2(32.0), 1e-12);
+    EXPECT_NEAR(model.divisionsToTarget(), std::log2(model.dishCapacity() / 1000.0), 1e-12);
     // Подстановка момента в закон даёт именно целевое число.
     EXPECT_NEAR(model.theoryCellsAt(model.targetTime()), model.targetCells(), 1e-6);
 }
@@ -189,7 +197,7 @@ TEST(Bacteria, TargetTimeScalesWithDoublingTime) {
     model.setParam(QStringLiteral("doubling"), 4.0);
     EXPECT_NEAR(model.targetTime(), 2.0 * base, 1e-9);
     // Число делений до цели от скорости не зависит.
-    EXPECT_NEAR(model.divisionsToTarget(), std::log2(32.0), 1e-12);
+    EXPECT_NEAR(model.divisionsToTarget(), std::log2(model.dishCapacity() / 1000.0), 1e-12);
 }
 
 TEST(Bacteria, TargetBelowSeedNeedsNoDivisions) {
@@ -210,9 +218,13 @@ TEST(Bacteria, InstantaneousGrowthIsProportionalToColony) {
     BacteriaModel model;
     configure(model);
 
-    // N′ = kN: скорость пропорциональна текущему числу клеток.
+    // N′ = kN: скорость пропорциональна числу клеток, пока чашка не полна.
     for (double fraction = 0.05; fraction <= 1.001; fraction += 0.15) {
         const double t = model.observationTime() * fraction;
+        if (t >= model.fullTime()) {
+            EXPECT_DOUBLE_EQ(model.growthRateOfCellsAt(t), 0.0) << "момент " << t;
+            continue;
+        }
         EXPECT_NEAR(model.growthRateOfCellsAt(t), model.growthRate() * model.theoryCellsAt(t), 1e-9)
             << "момент " << t;
     }
@@ -243,8 +255,18 @@ TEST(Bacteria, AverageGrowthOverIntervalIsBelowInstantaneous) {
      * интервал число клеток выросло, и прирост «нарастал» внутри него.
      */
     for (double t = model.observationInterval(); t <= model.observationTime(); t += model.observationInterval()) {
-        EXPECT_LT(model.averageGrowthAt(t), model.growthRateOfCellsAt(t)) << "момент " << t;
-        EXPECT_GT(model.averageGrowthAt(t), 0.0);
+        if (t <= model.fullTime()) {
+            EXPECT_LT(model.averageGrowthAt(t), model.growthRateOfCellsAt(t)) << "момент " << t;
+            EXPECT_GT(model.averageGrowthAt(t), 0.0);
+        } else if (t - model.observationInterval() >= model.fullTime()) {
+            // Интервал целиком на плато: и средняя, и мгновенная — нули.
+            EXPECT_NEAR(model.averageGrowthAt(t), 0.0, 1e-9) << "момент " << t;
+            EXPECT_NEAR(model.growthRateOfCellsAt(t), 0.0, 1e-9);
+        } else {  // интервал переходит через момент заполнения
+            EXPECT_GT(model.averageGrowthAt(t), 0.0) << "момент " << t;
+            EXPECT_LE(model.averageGrowthAt(t),
+                      model.growthRate() * model.dishCapacity());
+        }
     }
 }
 
@@ -264,11 +286,15 @@ TEST(Bacteria, GrowthPerIntervalGrowsWithTime) {
     BacteriaModel model;
     configure(model);
 
-    // Прирост за одно и то же время растёт: клеток становится больше.
+    // Прирост за одно и то же время растёт, пока чашка не полна; встав,
+    // обнуляется — делений больше нет.
     double previous = 0.0;
     for (double t = model.observationInterval(); t <= model.observationTime(); t += model.observationInterval()) {
         const double growth = model.growthInLastStepAt(t);
-        EXPECT_GT(growth, previous) << "момент " << t;
+        if (t <= model.fullTime())
+            EXPECT_GT(growth, previous) << "момент " << t;
+        else
+            EXPECT_LE(growth, previous) << "момент " << t;  // интервал с плато и дальше — нуль
         previous = growth;
     }
 }
@@ -315,32 +341,33 @@ TEST(Bacteria, OverflowFactorReachesOneAtCapacity) {
         const double t = model.observationTime() * fraction;
         EXPECT_NEAR(model.overflowFactorAt(t), model.theoryCellsAt(t) / model.dishCapacity(), 1e-12);
     }
-    // Посев кадр ещё не заполняет, а к концу наблюдения он переполнен.
+    // Посев кадр ещё не заполняет, а к концу наблюдения полон ровно:
+    // переполнения не бывает, рост встаёт на N_мест.
     EXPECT_LT(model.overflowFactorAt(0.0), 1.0);
-    EXPECT_GT(model.overflowFactorAt(model.observationTime()), 1.0);
+    EXPECT_NEAR(model.overflowFactorAt(model.fullTime()), 1.0, 1e-9);
+    EXPECT_NEAR(model.overflowFactorAt(model.observationTime()), 1.0, 1e-9);
 }
 
-TEST(Bacteria, GrowthContinuesAfterTheDishOverflows) {
+TEST(Bacteria, GrowthStopsWhenTheDishIsFull) {
     BacteriaModel model;
     configure(model);
 
     /*
-     * Теснота кадра на закон не влияет: после переполнения число клеток
-     * по-прежнему удваивается через каждый T_d, а не замирает.
+     * До заполнения чашки закон чист: каждое T_d удваивает колонию. После
+     * того как чашка полна, деления прекращаются: число клеток стоит.
      */
-    const double moment = model.observationTime();
-    ASSERT_GT(model.overflowFactorAt(moment), 1.0);
-    for (double t = 0.0; t <= moment; t += model.doublingTime()) {
-        const double later = std::min(moment, t + model.doublingTime());
-        if (later <= t)
-            break;
-        EXPECT_NEAR(model.theoryCellsAt(later) / model.theoryCellsAt(t), std::exp2((later - t) / model.doublingTime()),
-                    1e-9)
-            << "момент " << t;
+    const double full = model.fullTime();
+    ASSERT_GT(full, 0.0);
+    ASSERT_LT(full, model.observationTime());
+    for (double t = 0.0; t + model.doublingTime() <= full; t += model.doublingTime()) {
+        const double later = t + model.doublingTime();
+        EXPECT_NEAR(model.theoryCellsAt(later) / model.theoryCellsAt(t), 2.0, 1e-9) << "момент " << t;
     }
-    // Модель ничего не «обрезает» по вместимости.
-    EXPECT_GT(model.theoryCellsAt(moment), model.dishCapacity());
-    EXPECT_NEAR(model.multiplicationFactorAt(moment), std::exp2(model.divisionsElapsedAt(moment)), 1e-9);
+    // После плато ничего не растёт, а множитель совпадает с числом делений.
+    const double after = model.observationTime();
+    EXPECT_NEAR(model.theoryCellsAt(after), model.dishCapacity(), 1e-9);
+    EXPECT_DOUBLE_EQ(model.growthRateOfCellsAt(after), 0.0);
+    EXPECT_NEAR(model.multiplicationFactorAt(after), std::exp2(model.divisionsElapsedAt(after)), 1e-9);
 }
 
 // ------------------------------------------------------------------
@@ -388,7 +415,7 @@ TEST(Bacteria, DefaultSetupShowsSeveralDivisions) {
     ASSERT_FALSE(isInvalid(model));
     // Постановка по умолчанию: её видно при первом открытии модели.
     EXPECT_GT(model.observationTime(), 3.0 * model.doublingTime());
-    EXPECT_GE(model.divisionsElapsedAt(model.observationTime()), 5.0);
+    EXPECT_GE(model.divisionsElapsedAt(model.observationTime()), 4.0);
     EXPECT_GT(model.targetCells(), model.initialCells());
     EXPECT_LE(model.targetTime(), model.observationTime());
 }
@@ -459,27 +486,43 @@ TEST(Bacteria, LogarithmSeriesIsAStraightLineWithSlopeK) {
     BacteriaModel model;
     configure(model);
 
-    // ln N = ln N₀ + kt: ряд логарифма — прямая, её наклон и есть k.
+    // ln N = ln N₀ + kt — прямая с наклоном k, пока чашка не полна;
+    // после — горизонталь на ln N_мест (деления прекратились).
     const QVector<QPointF> series = model.logarithmSeries();
     ASSERT_GE(series.size(), 10);
-    EXPECT_NEAR(seriesSlope(series), model.growthRate(), 1e-6);
     EXPECT_NEAR(series.first().y(), std::log(model.initialCells()), 1e-9);
+    QVector<QPointF> rising;
     for (const QPointF& point : series) {
-        EXPECT_NEAR(point.y(), std::log(model.initialCells()) + model.growthRate() * point.x(), 1e-9);
+        if (point.x() < model.fullTime()) {
+            EXPECT_NEAR(point.y(), std::log(model.initialCells()) + model.growthRate() * point.x(), 1e-9);
+            rising.push_back(point);
+        } else {
+            EXPECT_NEAR(point.y(), std::log(model.dishCapacity()), 1e-9);
+        }
     }
+    ASSERT_GE(rising.size(), 2);
+    EXPECT_NEAR(seriesSlope(rising), model.growthRate(), 1e-6);
 }
 
 TEST(Bacteria, GrowthVersusCellsIsAStraightLineThroughOrigin) {
     BacteriaModel model;
     configure(model);
 
-    // N′(N) = kN — прямая, идущая из начала координат: по её наклону и судят
-    // о том, что скорость пропорциональна самой колонии.
+    // N′(N) = kN — прямая из начала координат, пока чашка не полна;
+    // на плато точки ложатся на ось N: скорость нулевая.
     const QVector<QPointF> series = model.growthVersusCells();
     ASSERT_GE(series.size(), 10);
-    EXPECT_NEAR(seriesSlope(series), model.growthRate(), 1e-6);
-    for (const QPointF& point : series)
-        EXPECT_NEAR(point.y(), model.growthRate() * point.x(), 1e-9);
+    QVector<QPointF> rising;
+    for (const QPointF& point : series) {
+        if (point.x() < model.dishCapacity()) {
+            EXPECT_NEAR(point.y(), model.growthRate() * point.x(), 1e-9);
+            rising.push_back(point);
+        } else {
+            EXPECT_DOUBLE_EQ(point.y(), 0.0);
+        }
+    }
+    ASSERT_GE(rising.size(), 2);
+    EXPECT_NEAR(seriesSlope(rising), model.growthRate(), 1e-6);
 }
 
 TEST(Bacteria, DivisionsSeriesIsAStraightLineOfSlopeOneOverDoubling) {
@@ -488,8 +531,16 @@ TEST(Bacteria, DivisionsSeriesIsAStraightLineOfSlopeOneOverDoubling) {
 
     const QVector<QPointF> series = model.divisionsSeries();
     ASSERT_GE(series.size(), 10);
-    EXPECT_NEAR(seriesSlope(series), 1.0 / model.doublingTime(), 1e-9);
     EXPECT_NEAR(series.first().y(), 0.0, 1e-12);
+    QVector<QPointF> rising;
+    for (const QPointF& point : series) {
+        if (point.x() < model.fullTime())
+            rising.push_back(point);
+        else
+            EXPECT_NEAR(point.y(), model.fullTime() / model.doublingTime(), 1e-9);  // счётчик встал
+    }
+    ASSERT_GE(rising.size(), 2);
+    EXPECT_NEAR(seriesSlope(rising), 1.0 / model.doublingTime(), 1e-9);
 }
 
 TEST(Bacteria, PerStepGrowthSeriesHasOneBarPerInterval) {
@@ -501,9 +552,14 @@ TEST(Bacteria, PerStepGrowthSeriesHasOneBarPerInterval) {
     EXPECT_EQ(series.size(), expected);
     ASSERT_FALSE(series.isEmpty());
     // Столбцы идут по возрастанию времени и их heights растут.
+    const double halfStep = 0.5 * model.observationInterval();
     for (int i = 1; i < series.size(); ++i) {
         EXPECT_GT(series.at(i).x(), series.at(i - 1).x());
-        EXPECT_GT(series.at(i).y(), series.at(i - 1).y());
+        const double right = series.at(i).x() + halfStep;
+        if (right <= model.fullTime())
+            EXPECT_GT(series.at(i).y(), series.at(i - 1).y());
+        else
+            EXPECT_LE(series.at(i).y(), series.at(i - 1).y());  // чашка полна — прирост гаснет
     }
     // Первый столбец — прирост за первый интервал учёта.
     EXPECT_NEAR(series.first().y(), model.countedCellsAt(model.observationInterval()) -
@@ -519,8 +575,16 @@ TEST(Bacteria, AverageGrowthSeriesFollowsDifferences) {
     const double step = model.observationInterval();
     EXPECT_NEAR(series.first().y(),
                 (model.theoryCellsAt(step) - model.theoryCellsAt(0.0)) / step, 1e-9);
-    for (int i = 1; i < series.size(); ++i)
-        EXPECT_GT(series.at(i).y(), series.at(i - 1).y());
+    for (int i = 1; i < series.size(); ++i) {
+        const double right = series.at(i).x() + 0.5 * step;
+        const double left = series.at(i).x() - 0.5 * step;
+        if (right <= model.fullTime())
+            EXPECT_GT(series.at(i).y(), series.at(i - 1).y());
+        else if (left >= model.fullTime())
+            EXPECT_DOUBLE_EQ(series.at(i).y(), 0.0);  // интервал целиком на плато
+        else
+            EXPECT_LE(series.at(i).y(), series.at(i - 1).y());  // пересечение плато
+    }
 }
 
 TEST(Bacteria, GrowthSeriesStartsAtZero) {
@@ -894,7 +958,7 @@ TEST(Bacteria, HandleValuesTrackTheModel) {
         if (handle.id == QLatin1String("doubling"))
             EXPECT_NEAR(handle.value, 5.0, 1e-12);
         if (handle.id == QLatin1String("target"))
-            EXPECT_NEAR(handle.value, 64000.0, 1e-12);
+            EXPECT_NEAR(handle.value, model.targetCells(), 1e-12);  // цель не больше N_мест
         if (handle.id == QLatin1String("n0"))
             EXPECT_NEAR(handle.value, model.initialCells(), 1e-12);
         if (handle.id == QLatin1String("window"))

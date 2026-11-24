@@ -57,7 +57,6 @@ constexpr int kPerCellSteps[] = {1,    2,    4,    5,    8,    10,   20,   25,  
  */
 QColor cellFill() { return style::bodyC(); }
 QColor cellEdge() { return style::bodyC().darker(170); }
-QColor crackColor() { return style::danger().darker(110); }
 
 /** Теория и ступенька: их различают по цвету и стилю. */
 QColor theoryColor() { return style::bodyB(); }
@@ -148,8 +147,11 @@ void BacteriaScene::reconfigure(const QRectF& area) {
     const double dishRadius = dishSize * 0.5;
     const double effectiveRadius = std::max(8.0, dishRadius - 6.0);
     const double budget = M_PI * effectiveRadius * effectiveRadius / kCellFootprint;
-    int per = cellsPerDrawnCellFor(m_capacityCells, budget);
+    // Пол роста — два слоя: первым слоем чашка заполняется к половине N_мест,
+    // вторым — к N_мест, где деления и прекращаются.
+    int per = cellsPerDrawnCellFor(m_capacityCells * 0.5, budget);
     int places = int(std::llround(m_capacityCells / double(per)));
+    places = std::max(places, 2 * int(std::llround(m_capacityCells * 0.5 / double(per))));
     places = std::clamp(places, kMinDrawnSlots, kMaxDrawnSlots);
     // Размер точки — по шагу укладки: при таком числе мест клетки ровно
     // покрывают круг и не налезают друг на друга.
@@ -217,14 +219,16 @@ double BacteriaScene::colonyRadiusPx(double overflow) const {
 }
 
 int BacteriaScene::drawnSlots() const {
-    const int places = int(std::llround(m_capacityCells / std::max(1.0, m_cellsPerCell)));
+    // Мест первого слоя — ровно на половину вместимости: второй слой
+    // добирает чашку до N_мест, где рост встаёт.
+    const int places = int(std::llround(m_capacityCells * 0.5 / std::max(1.0, m_cellsPerCell)));
     return std::clamp(places, 1, kMaxDrawnSlots * 4);
 }
 
 int BacteriaScene::occupiedSlots(double cells) const {
     if (!std::isfinite(cells) || cells <= 0.0)
         return 0;
-    return std::clamp(int(std::ceil(cells / std::max(1.0, m_cellsPerCell))), 0, drawnSlots());
+    return std::clamp(int(std::ceil(cells / std::max(1.0, m_cellsPerCell))), 0, drawnSlots() * kMaxLayers);
 }
 
 double BacteriaScene::cellsAxisTop() const { return m_cellsTop; }
@@ -350,7 +354,6 @@ void BacteriaScene::paintScheme(QPainter* painter) {
     const QVector<ColonyCell> cells = cellsFor(m_model->time());
     drawDish(painter, cells);
     drawColonyBoundary(painter);
-    drawCracks(painter);
     drawStrip(painter);
     drawGrowthBand(painter);
 
@@ -420,39 +423,6 @@ void BacteriaScene::drawColonyBoundary(QPainter* painter) const {
     painter->restore();
 }
 
-void BacteriaScene::drawCracks(QPainter* painter) const {
-    auto* model = qobject_cast<models::BacteriaModel*>(m_model);
-    if (!model || !model->validate().ok)
-        return;
-
-    const double overflow = model->overflowFactorAt(m_model->time());
-    if (!(overflow > 1.0))
-        return;
-
-    /*
-     * Слой толще одного-двух клеток — и колония уже не лежит на стекле
-     * плоско: по агру идут трещины. Их число растёт вместе с толщиной слоя,
-     * поэтому переполнение видно без единого числа на рисунке.
-     */
-    const int cracks = std::clamp(int(std::ceil(3.0 * (overflow - 1.0))), 1, 8);
-    const double radius = m_dish.width() * 0.5 - 3.0;
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setPen(QPen(crackColor(), 1.1));
-    painter->setBrush(Qt::NoBrush);
-    for (int index = 0; index < cracks; ++index) {
-        const double base = double(index) * (2.0 * M_PI / double(cracks)) + 0.4;
-        QPainterPath crack;
-        crack.moveTo(m_dish.center() + QPointF(std::cos(base), std::sin(base)) * (radius * 0.22));
-        for (int part = 1; part <= 3; ++part) {
-            const double along = 0.22 + 0.26 * double(part);
-            const double turn = base + 0.30 * std::sin(double(index * 3 + part) * 1.7);
-            crack.lineTo(m_dish.center() + QPointF(std::cos(turn), std::sin(turn)) * (radius * along));
-        }
-        painter->drawPath(crack);
-    }
-    painter->restore();
-}
 
 void BacteriaScene::drawStrip(QPainter* painter) const {
     auto* model = qobject_cast<models::BacteriaModel*>(m_model);
@@ -731,14 +701,14 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
               : QStringLiteral("ΔN · N′ = kN"),
         style::bodyD().darker(160), QColor(255, 255, 255, 220));
 
-    // Переполнение кадра: рост от тесноты не останавливается.
+    // Заполнение чашки: после него деления прекращаются.
     planner.addFirstFree(
         QStringLiteral("overflow"), {QPointF(m_growthBand.center().x() + 126.0, m_growthBand.bottom() + 14.0)},
-        overflow > 1.0
-            ? QStringLiteral("кадр заполнен — рост продолжается")
-            : roomy ? QStringLiteral("в кадр умещается N_мест клеток")
+        overflow >= 1.0
+            ? QStringLiteral("чашка заполнена — деления прекращаются")
+            : roomy ? QStringLiteral("второй слой — к N_мест, там рост встаёт")
                     : QStringLiteral("N_мест"),
-        overflow > 1.0 ? style::danger().darker(120) : style::inkSoft(), QColor(255, 255, 255, 220));
+        overflow >= 1.0 ? style::success().darker(130) : style::inkSoft(), QColor(255, 255, 255, 220));
 
     // Ответ задачи после конца наблюдения.
     if (t >= model->observationTime() - 1e-9) {

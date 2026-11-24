@@ -223,7 +223,8 @@ TEST(BacteriaScene, CellCountFollowsWholeCellCountNotTheSmoothCurve) {
     // Число клеток в одной клетке рисунка целое, и оно точно подписано.
     EXPECT_GE(per, 1.0);
     EXPECT_EQ(per, std::round(per));
-    EXPECT_NEAR(double(scene.drawnSlots()) * per, geometry.capacityCells, per);
+    // Мест одного слоя — на половину вместимости, вторым слоем чашка добирается до N_мест.
+    EXPECT_NEAR(double(scene.drawnSlots()) * 2.0 * per, geometry.capacityCells, 2.0 * per);
 }
 
 TEST(BacteriaScene, CellsOnlyAppearAsTimeGrows) {
@@ -323,11 +324,12 @@ TEST(BacteriaScene, FilledDishMatchesTheCapacityRadius) {
     prepare(scene, model, 0.0);
 
     const BacteriaScene::SchemeGeometry geometry = scene.schemeGeometry();
-    // При N = N_мест кадр заполнен: радиус доходит до края, мест ровно вместимость.
+    // Половина вместимости — полный первый слой, вся вместимость — два слоя;
+    // радиус при N_мест доходит до края и выше не растёт.
     EXPECT_NEAR(scene.colonyRadiusPx(1.0), geometry.dishRadius - 6.0, 1e-9);
     EXPECT_NEAR(scene.colonyRadiusPx(4.0), scene.colonyRadiusPx(1.0), 1e-9);
-    EXPECT_EQ(scene.occupiedSlots(geometry.capacityCells), scene.drawnSlots());
-    EXPECT_EQ(scene.occupiedSlots(geometry.capacityCells * 3.0), scene.drawnSlots());
+    EXPECT_EQ(scene.occupiedSlots(geometry.capacityCells * 0.5), scene.drawnSlots());
+    EXPECT_EQ(scene.occupiedSlots(geometry.capacityCells), 2 * scene.drawnSlots());
     EXPECT_EQ(scene.occupiedSlots(0.0), 0);
 
     // Посев занимает лишь часть кадра: радиус колонии меньше края.
@@ -339,34 +341,35 @@ TEST(BacteriaScene, FilledDishMatchesTheCapacityRadius) {
     EXPECT_NEAR(model.overflowFactorAt(moment), 1.0, 1e-9);
     prepare(scene, model, moment);
     EXPECT_NEAR(scene.schemeGeometry().colonyRadius, scene.colonyRadiusPx(1.0), 1e-9);
-    EXPECT_EQ(scene.schemeGeometry().occupiedCells, scene.drawnSlots());
+    EXPECT_EQ(scene.schemeGeometry().occupiedCells, 2 * scene.drawnSlots());
 }
 
-TEST(BacteriaScene, OverflowAddsLayersWithoutStoppingTheCount) {
+TEST(BacteriaScene, FilledDishAddsLayersAndStopsTheCount) {
     BacteriaModel model;
     configure(model);
     BacteriaScene scene(&model);
     prepare(scene, model, model.observationTime());
 
     const double t = model.time();
-    ASSERT_GT(model.overflowFactorAt(t), 1.0);
+    ASSERT_NEAR(model.overflowFactorAt(t), 1.0, 1e-9);
 
     const QVector<BacteriaScene::ColonyCell> cells = scene.cellsFor(t);
     int layers[4] = {0, 0, 0, 0};
     for (const BacteriaScene::ColonyCell& cell : cells)
         layers[std::min(cell.layer, 3)] += 1;
 
-    // Кадр заполнен — клетки ложатся вторым и третьим слоем.
+    // К концу опыта чашка полна: первым слоем легла половина вместимости,
+    // вторым — остальное. Больше слоёв не требуется, рост встал.
     EXPECT_GT(layers[0], 0);
     EXPECT_GT(layers[1], 0);
     EXPECT_EQ(layers[0], scene.drawnSlots());
     EXPECT_NEAR(scene.schemeGeometry().layers, model.theoryCellsAt(t) / scene.schemeGeometry().capacityCells, 1e-9);
 
-    // Число клеток модели при этом продолжает удваиваться: теснота рост не
-    // останавливает.
+    // Число клеток за последний период удвоения не изменилось: чашка
+    // заполнена — деления прекратились.
     const double earlier = model.observationTime() - model.doublingTime();
-    EXPECT_NEAR(model.theoryCellsAt(t) / model.theoryCellsAt(earlier), 2.0, 1e-9);
-    EXPECT_GT(model.overflowFactorAt(t), model.overflowFactorAt(earlier));
+    EXPECT_NEAR(model.theoryCellsAt(t), model.theoryCellsAt(earlier), 1.0);
+    EXPECT_NEAR(model.overflowFactorAt(t), model.overflowFactorAt(earlier), 1e-9);
 }
 
 TEST(BacteriaScene, DividingCellsMatchTheLastCompletedIntervalGrowth) {
@@ -595,18 +598,18 @@ TEST(BacteriaScene, AnnotationsCarryModelNumbers) {
         EXPECT_FALSE(carriesValue(annotation.text)) << annotation.id.toUtf8().constData();
 }
 
-TEST(BacteriaScene, AnnotationsSayThatOverflowDoesNotStopGrowth) {
+TEST(BacteriaScene, AnnotationsSayThatGrowthStopsWhenFull) {
     BacteriaModel model;
     configure(model);
     BacteriaScene scene(&model);
     prepare(scene, model, model.observationTime());
-    ASSERT_GT(model.overflowFactorAt(model.time()), 1.0);
+    ASSERT_NEAR(model.overflowFactorAt(model.time()), 1.0, 1e-9);
 
     QString all;
     for (const BacteriaScene::Annotation& annotation : scene.annotations())
         all += annotation.text;
-    // Переполнение описано словами: рост не останавливается, числа — в панели.
-    EXPECT_TRUE(all.contains(QStringLiteral("рост")));
+    // Заполнение описано словами: деления прекращаются, числа — в панели.
+    EXPECT_TRUE(all.contains(QStringLiteral("деления прекращаются")));
 }
 
 TEST(BacteriaScene, NarrowSchemeKeepsAnnotationsSeparate) {
@@ -705,13 +708,22 @@ TEST(BacteriaScene, DraggingTargetHandleMovesTheTargetLevel) {
     prepare(scene, model, 0.0);
 
     const double before = scene.schemeGeometry().targetLevelPy;
+
+    // Цель вниз от полки — уровень уезжает ниже по шкале.
+    const double half = 0.5 * model.dishCapacity();
+    model.setHandleValue(QStringLiteral("target"), half);
+    scene.reconfigure(QRectF(20.0, kViewTop, kWidth - 40.0, kViewHeight));
+    EXPECT_NEAR(scene.schemeGeometry().targetLevelPy, scene.sceneYForCells(half), 1e-6);
+    EXPECT_GT(scene.schemeGeometry().targetLevelPy, before);
+
+    // Цель выше чашки не бывает: больше N_мест клеток не растёт, и уровень
+    // встаёт на полке вместимости — там, где был при заданной цели 32000.
     model.setHandleValue(QStringLiteral("target"), 64000.0);
     scene.reconfigure(QRectF(20.0, kViewTop, kWidth - 40.0, kViewHeight));
-
-    // Цель выше по шкале: делений нужно больше, момент дальше вперёд.
-    EXPECT_NEAR(scene.schemeGeometry().targetLevelPy, scene.sceneYForCells(64000.0), 1e-6);
-    EXPECT_LT(scene.schemeGeometry().targetLevelPy, before);
-    EXPECT_NEAR(model.targetTime(), model.doublingTime() * 6.0, 1e-9);
+    EXPECT_NEAR(scene.schemeGeometry().targetLevelPy, scene.sceneYForCells(model.dishCapacity()), 1e-6);
+    EXPECT_NEAR(scene.schemeGeometry().targetLevelPy, before, 1e-6);
+    EXPECT_NEAR(model.targetTime(),
+                model.doublingTime() * std::log2(model.dishCapacity() / model.initialCells()), 1e-9);
 }
 
 TEST(BacteriaScene, DraggingSeedHandleKeepsTheColonyConsistent) {
@@ -771,12 +783,12 @@ TEST(BacteriaScene, OverflowCracksAppearOnlyWhenTheDishIsFull) {
     const int bottom = int(empty.dish.bottom()) + 1;
     const int dryRed = countColor(before, lab::style::danger(), top, bottom, left, right, 34);
 
-    // После заполнения стекло трескается: красных пикселей заметно больше.
+    // Рост встаёт, не разрывая стекло: чашка цела и на полном заполнении.
     prepare(scene, model, model.observationTime());
-    ASSERT_GT(model.overflowFactorAt(model.time()), 1.0);
+    ASSERT_NEAR(model.overflowFactorAt(model.time()), 1.0, 1e-9);
     const QImage after = renderFrame(scene);
     const int wetRed = countColor(after, lab::style::danger(), top, bottom, left, right, 34);
-    EXPECT_GT(wetRed, dryRed + 20);
+    EXPECT_LE(wetRed, dryRed + 20);
 }
 
 TEST(BacteriaScene, FourPanelsAreDrawnBelowScheme) {
@@ -940,6 +952,6 @@ TEST(BacteriaScene, DefaultSetupIsTheTeachingCase) {
     EXPECT_GT(geometry.doublingPx, geometry.startPx);
     EXPECT_LT(geometry.doublingPx * 2.0, geometry.endPx + geometry.startPx);
     EXPECT_FALSE(scene.cellsFor(0.0).empty());
-    // За наблюдение кадр успевает переполниться: слои видны на опыте.
-    EXPECT_GT(model.overflowFactorAt(model.observationTime()), 1.0);
+    // За наблюдение чашка успевает заполниться: второй слой виден на опыте.
+    EXPECT_NEAR(model.overflowFactorAt(model.observationTime()), 1.0, 1e-9);
 }
