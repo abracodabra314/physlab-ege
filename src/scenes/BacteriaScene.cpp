@@ -51,15 +51,12 @@ constexpr int kPerCellSteps[] = {1,    2,    4,    5,    8,    10,   20,   25,  
                                  125,  200,  250,  400,  500,  625,  800,  1000, 1250, 2000, 2500, 4000};
 
 /**
- * Цвета рисунка. Колония — зелёный: это цвет живых клеток в препаратах.
- * Клетки второго и третьего слоёв темнее, поэтому переполнение кадра видно
- * как затемнение, а не как новую figure. Оранжевым помечены клетки,
- * разделившиеся на текущем интервале учёта: по ним видно, что рост идёт
- * делением «одна-на-две».
+ * Цвета рисунка. Колония — одного зелёного цвета: это цвет живых клеток
+ * в препаратах. Ни слоёв, ни «свежих» делений цветом не выделяем — деление
+ * видно по полосе учёта под чашкой и по ступеньке графика.
  */
 QColor cellFill() { return style::bodyC(); }
 QColor cellEdge() { return style::bodyC().darker(170); }
-QColor dividingFill() { return style::accentWarm(); }
 QColor crackColor() { return style::danger().darker(110); }
 
 /** Теория и ступенька: их различают по цвету и стилю. */
@@ -386,26 +383,14 @@ void BacteriaScene::drawDish(QPainter* painter, const QVector<ColonyCell>& cells
         return;
     }
 
-    // Клетки: точки, уложенные по спирали (золотой угол). Верхние слои
-    // рисуют темнее, поэтому переполнение кадра видно как затемнение колонии.
-    for (int layer = kMaxLayers - 1; layer >= 0; --layer) {
-        for (const ColonyCell& cell : cells) {
-            if (cell.layer != layer)
-                continue;
-            // Диаметр точки — по шагу укладки, чтобы точки ровно покрывали круг.
-            const double dotRadius = std::max(0.9, 0.38 * cell.length);
-            if (cell.dividing) {
-                painter->setPen(Qt::NoPen);
-                painter->setBrush(dividingFill());
-            } else {
-                QColor fill = cellFill();
-                if (layer > 0)
-                    fill = fill.darker(140 + 40 * layer);
-                painter->setPen(QPen(cellEdge(), 0.5));
-                painter->setBrush(fill);
-            }
-            painter->drawEllipse(cell.center, dotRadius, dotRadius);
-        }
+    // Клетки: точки одного цвета, уложенные по спирали (золотой угол).
+    // Деление видно по полосе учёта под чашкой, а не по цвету точки.
+    for (const ColonyCell& cell : cells) {
+        // Диаметр точки — по шагу укладки, чтобы точки ровно покрывали круг.
+        const double dotRadius = std::max(0.9, 0.38 * cell.length);
+        painter->setPen(QPen(cellEdge(), 0.5));
+        painter->setBrush(cellFill());
+        painter->drawEllipse(cell.center, dotRadius, dotRadius);
     }
     painter->restore();
 }
