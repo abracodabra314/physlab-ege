@@ -29,11 +29,10 @@ constexpr double kBlockGap = 16.0;
 
 /**
  * Плотность укладки клеток рисунка: сколько квадратных пикселей занимает
- * одна палочка с припуском. По этому бюджету подбирают число мест в чашке,
- * а уже по нему — размер палочки, поэтому клетки никогда не слипаются.
+ * одна точка с припуском. По этому бюджету подбирают число мест в чашке,
+ * а уже по нему — размер точки, поэтому клетки никогда не слипаются.
  */
 constexpr double kCellFootprint = 44.0;
-constexpr double kCellRadius = 1.2;
 /** Границы числа мест: меньше — рост не виден по клеткам, больше — каша. */
 constexpr int kMaxDrawnSlots = 900;
 constexpr int kMinDrawnSlots = 160;
@@ -155,7 +154,7 @@ void BacteriaScene::reconfigure(const QRectF& area) {
     int per = cellsPerDrawnCellFor(m_capacityCells, budget);
     int places = int(std::llround(m_capacityCells / double(per)));
     places = std::clamp(places, kMinDrawnSlots, kMaxDrawnSlots);
-    // Размер палочки — по шагу укладки: при таком числе мест клетки ровно
+    // Размер точки — по шагу укладки: при таком числе мест клетки ровно
     // покрывают круг и не налезают друг на друга.
     const double spacing = 2.0 * effectiveRadius / std::sqrt(double(places));
     m_cellLength = std::clamp(0.95 * spacing, 3.0, 14.0);
@@ -387,29 +386,25 @@ void BacteriaScene::drawDish(QPainter* painter, const QVector<ColonyCell>& cells
         return;
     }
 
-    // Клетки: палочки, повёрнутые по спирали. Верхние слои рисуют темнее,
-    // поэтому переполнение кадра видно как затемнение колонии.
+    // Клетки: точки, уложенные по спирали (золотой угол). Верхние слои
+    // рисуют темнее, поэтому переполнение кадра видно как затемнение колонии.
     for (int layer = kMaxLayers - 1; layer >= 0; --layer) {
         for (const ColonyCell& cell : cells) {
             if (cell.layer != layer)
                 continue;
-            painter->save();
-            painter->translate(cell.center);
-            painter->rotate(cell.angle * 180.0 / M_PI);
-            const QRectF rod(-cell.length * 0.5, -cell.width * 0.5, cell.length, cell.width);
+            // Диаметр точки — по шагу укладки, чтобы точки ровно покрывали круг.
+            const double dotRadius = std::max(0.9, 0.38 * cell.length);
             if (cell.dividing) {
                 painter->setPen(Qt::NoPen);
                 painter->setBrush(dividingFill());
-                painter->drawRoundedRect(rod, kCellRadius, kCellRadius);
             } else {
                 QColor fill = cellFill();
                 if (layer > 0)
                     fill = fill.darker(140 + 40 * layer);
                 painter->setPen(QPen(cellEdge(), 0.5));
                 painter->setBrush(fill);
-                painter->drawRoundedRect(rod, kCellRadius, kCellRadius);
             }
-            painter->restore();
+            painter->drawEllipse(cell.center, dotRadius, dotRadius);
         }
     }
     painter->restore();
