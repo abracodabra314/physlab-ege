@@ -1,0 +1,132 @@
+# Сборка и тесты лаборатории: Linux и Windows на каждый пуш,
+# macOS — отдельным job'ом только по кнопке «Run workflow»
+# (минуты macOS в приватном репозитории тарифицируются ×10).
+name: build-and-test
+
+on:
+  push:
+    branches: [main, sketch-style, remove-circuit]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    # Для Red OS — контейнер EL8 (РЕД ОС 7.3/8 ≈ RHEL 8, glibc 2.28),
+    # чтобы бинарь запускался на РЕД ОС без правок.
+    container: ${{ matrix.container || null }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux (ubuntu)
+            id: ubuntu
+            os: ubuntu-latest
+            qtarch: linux-desktop-linux-x86_64-gnu
+          - name: Red OS (EL8)
+            id: redos
+            os: ubuntu-latest
+            qtarch: linux-desktop-linux-x86_64-gnu
+            container: rockylinux/rockylinux:8
+          - name: Windows (msvc)
+            id: windows
+            os: windows-latest
+            qtarch: windows-win64-msvc2022_64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # build/ отслеживается в репозитории (macOS-кэш) — в CI собираем с нуля.
+      - name: Очистка пришедшего build/
+        shell: bash
+        run: rm -rf build
+
+      - name: Пакеты контейнера EL8 (для Red OS)
+        if: matrix.container != ''
+        run: |
+          dnf -y install git cmake gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel \
+              mesa-libGL libxkbcommon libxkbcommon-x11 xcb-util-wm which
+          echo "PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Установить Qt 6
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.*'
+          arch: ${{ matrix.qtarch }}
+          modules: qtbase
+
+      - name: Сборка (CMake + Qt)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DLAB_BUILD_TESTS=ON
+          cmake --build build --config Release -j
+
+      - name: Модульные тесты
+        run: ctest --test-dir build --output-on-failure
+
+      - name: QA-рендер сцен (offscreen)
+        if: runner.os == 'Linux'
+        run: ./build/physlab --shots qa-shots
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+      - name: QA-рендер сцен (offscreen, Windows)
+        if: runner.os == 'Windows'
+        run: .\build\Release\physlab.exe --shots qa-shots
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+      - name: Windows — разложить Qt DLL рядом с exe
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          for /f "delims=" %%i in ('dir /b /s build\physlab.exe') do windeployqt "%%i" --release
+
+      - name: Сохранить сборку
+        uses: actions/upload-artifact@v4
+        with:
+          name: physlab-${{ matrix.id }}
+          path: |
+            build/physlab
+            build/Release/physlab.exe
+            build/Release/*.dll
+            build/physlab.app
+            build/bin/physlab*
+          if-no-files-found: warn
+
+      - name: Сохранить скриншоты сцен
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-shots-${{ matrix.id }}
+          path: qa-shots
+          if-no-files-found: ignore
+
+  # macOS — только вручную (Workflow Dispatch), чтобы не жечь ×10 минут.
+  macos-manual:
+    name: macOS (по кнопке)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Установить Qt 6
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.*'
+          arch: macos-universal
+          modules: qtbase
+
+      - name: Сборка (CMake + Qt)
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DLAB_BUILD_TESTS=ON
+          cmake --build build -j
+
+      - name: Модульные тесты
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Сохранить сборку
+        uses: actions/upload-artifact@v4
+        with:
+          name: physlab-macos-manual
+          path: build/physlab.app
+          if-no-files-found: warn
