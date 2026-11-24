@@ -50,7 +50,8 @@ jobs:
         if: matrix.container != ''
         run: |
           dnf -y install git cmake python3.11 python3.11-pip \
-              mesa-libGL mesa-libGL-devel libxkbcommon libxkbcommon-x11 which \
+              mesa-libGL mesa-libGL-devel libxkbcommon libxkbcommon-x11 \
+              freetype-devel fontconfig-devel which \
               gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel
           python3.11 -m pip install --quiet aqtinstall
           python3.11 -m aqt install-qt linux desktop 6.7.3 -O /opt/Qt
