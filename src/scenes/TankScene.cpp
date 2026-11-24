@@ -166,7 +166,7 @@ void TankScene::paintScheme(QPainter* painter) {
                                       QPointF(x, std::max(tankArea.top() + 6.0, streamBottom)),
                                       QString(), color, open, t);
             LabScene::drawTag(painter, QPointF(x, tankArea.top() - 96.0),
-                              QStringLiteral("%1 · %2 л/мин").arg(tap.label).arg(utils::formatNumber(rate, 0)),
+                              QStringLiteral("%1 л/мин").arg(utils::formatNumber(rate, 0)),
                               QColor(255, 255, 255, 230), open ? color.darker(120) : QColor(150, 155, 162));
         } else {
             // Сливной патрубок у дна справа; поток — наружу.
@@ -179,8 +179,7 @@ void TankScene::paintScheme(QPainter* painter) {
             primitives::drawFlowArrow(painter, QPointF(tankArea.right() + 72.0, y),
                                       QPointF(tankArea.right() + 150.0, y),
                                       QStringLiteral("%1 л/мин").arg(utils::formatNumber(rate, 0)), color, open, t);
-            LabScene::drawTag(painter, QPointF(tankArea.right() + 110.0, y - 30.0), tap.label,
-                              QColor(255, 255, 255, 230), open ? color.darker(120) : QColor(150, 155, 162));
+            Q_UNUSED(tap.label);  // у кранов подписей-названий нет: поток уже подписан
         }
     }
 

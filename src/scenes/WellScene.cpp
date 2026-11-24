@@ -91,9 +91,7 @@ void WellScene::drawObserver(QPainter* painter, const QPointF& groundPos) {
     // Ноги.
     painter->drawLine(QPointF(groundPos.x(), groundPos.y() - 22.0), QPointF(groundPos.x() - 7.0, groundPos.y()));
     painter->drawLine(QPointF(groundPos.x(), groundPos.y() - 22.0), QPointF(groundPos.x() + 7.0, groundPos.y()));
-    painter->restore();
-    LabScene::drawTag(painter, QPointF(groundPos.x(), groundPos.y() - 74.0), QStringLiteral("наблюдатель"),
-                      QColor(255, 255, 255, 225), style::inkSoft());
+    painter->restore();  // подписи «наблюдатель» на чертеже нет — фигура видна у края
 }
 
 void WellScene::paintScheme(QPainter* painter) {
@@ -239,9 +237,7 @@ void WellScene::paintScheme(QPainter* painter) {
         painter->drawArc(QRectF(shaft.center().x() - 20.0, waterY - 14.0, 40.0, 20.0), 200 * 16, 140 * 16);
         painter->restore();
     }
-    // Подпись камня — над ним, чтобы не перекрывать стрелки.
-    LabScene::drawTag(painter, QPointF(shaft.center().x(), stoneY - 26.0), QStringLiteral("камень"),
-                      QColor(255, 255, 255, 220), style::inkSoft());
+    // Подписи камня на чертеже нет: снаряд виден по штриховой траектории.
 
     // ---- Звуковая волна (после удара, движение вверх к устью) ----
     if (state.entities.at(1).active) {

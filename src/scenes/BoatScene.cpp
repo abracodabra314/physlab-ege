@@ -150,10 +150,10 @@ void BoatScene::paintScheme(QPainter* painter) {
         painter->drawRoundedRect(QRectF(xB - 30, river.top() - 22, 60, 30), 6, 6);
     painter->restore();
 
-    LabScene::drawTag(painter, QPointF(xA, river.top() - 58.0), QStringLiteral("Пристань А (x = 0)"),
+    LabScene::drawTag(painter, QPointF(xA, river.top() - 58.0), QStringLiteral("x = 0"),
                       QColor(255, 255, 255, 235), QColor(90, 70, 50));
     LabScene::drawTag(painter, QPointF(xB, river.top() - 58.0),
-                      QStringLiteral("Пристань Б (x = %1 км)").arg(utils::formatNumber(L, 0)),
+                      QStringLiteral("x = %1 км").arg(utils::formatNumber(L, 0)),
                       QColor(255, 255, 255, 235), QColor(90, 70, 50));
 
     // ---- Размерная линия расстояния между пристанями ----
@@ -183,8 +183,7 @@ void BoatScene::paintScheme(QPainter* painter) {
                              entity.active, headingRight);
         painter->restore();
 
-        LabScene::drawTag(painter, QPointF(x, laneY - 74.0 * s), entity.label,
-                          QColor(255, 255, 255, 235), style::variantColor(entity.variant).darker(120));
+        Q_UNUSED(entity.label);  // названий судов на чертеже нет — они различимы цветом
 
         const double own = boat->ownSpeedOf(index);
         const double shore = entity.value1;   // скорость относительно берега (знакованная)

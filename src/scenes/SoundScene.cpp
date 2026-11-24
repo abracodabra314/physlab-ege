@@ -522,16 +522,16 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
                 QStringLiteral("L(t) = %1 м").arg(utils::formatNumber(model->gapAt(t), 0)),
                 style::bodyB().darker(160));
 
-    // Кто есть кто: источник звука и наблюдатель (подписи под судами).
+    // Координаты судов: названий объектов не подписываем — суда различимы цветом.
     planner.addFirstFree(QStringLiteral("source"),
                          {sourcePointAt(t) + QPointF(0.0, 34.0), sourcePointAt(t) + QPointF(0.0, 60.0),
                           sourcePointAt(t) + QPointF(90.0, 34.0)},
-                         QStringLiteral("гудок: x₁ = %1 м").arg(utils::formatNumber(model->sourcePositionAt(t), 0)),
+                         QStringLiteral("x₁ = %1 м").arg(utils::formatNumber(model->sourcePositionAt(t), 0)),
                          style::bodyA().darker(160));
     planner.addFirstFree(QStringLiteral("observer"),
                          {observerPointAt(t) + QPointF(0.0, 34.0), observerPointAt(t) + QPointF(0.0, 60.0),
                           observerPointAt(t) + QPointF(-90.0, 34.0)},
-                         QStringLiteral("наблюдатель: x₂ = %1 м")
+                         QStringLiteral("x₂ = %1 м")
                              .arg(utils::formatNumber(model->observerPositionAt(t), 0)),
                          style::bodyC().darker(160));
 

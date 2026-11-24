@@ -193,9 +193,6 @@ void MixtureScene::paintScheme(QPainter* painter) {
 
         primitives::drawVessel(painter, vessel, entity.position, QColor(96, 104, 116), liquid, 2.4);
 
-        LabScene::drawTag(painter, QPointF(vessel.center().x(), vessel.top() - (i < 2 ? 52.0 : 66.0)),
-                          i < 2 ? QStringLiteral("Раствор %1").arg(i + 1) : QStringLiteral("Смеситель"),
-                          QColor(255, 255, 255, 235), style::ink());
         LabScene::drawTag(painter, QPointF(vessel.center().x(), vessel.top() - (i < 2 ? 30.0 : 44.0)),
                           QStringLiteral("V = %1 л из %2").arg(utils::formatNumber(litersInVessel, 1),
                                                                utils::formatNumber(capacityLiters, 0)),

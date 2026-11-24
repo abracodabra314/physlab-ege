@@ -134,8 +134,7 @@ void MotionScene::drawCar(QPainter* painter, const QPointF& center, double dir, 
     }
     painter->restore();
 
-    LabScene::drawTag(painter, QPointF(center.x(), center.y() - 44.0 * carScale()), label,
-                      QColor(255, 255, 255, 235), color.darker(120));
+    Q_UNUSED(label);  // подписи-названий на чертеже нет: машины видны и так
 }
 
 void MotionScene::paintScheme(QPainter* painter) {

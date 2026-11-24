@@ -558,10 +558,10 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
     // которому считают опыт.
     planner.addFirstFree(
         QStringLiteral("sample-title"), {QPointF(m_sample.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("образец: %1 ядер, 1 клетка = %2")
+        roomy ? QStringLiteral("посев: %1 ядер, 1 клетка = %2")
                     .arg(models::DecayModel::nucleiText(model->initialNuclei()),
                          models::DecayModel::nucleiText(double(m_cellsPerNucleus)))
-              : QStringLiteral("образец: %1 ядер").arg(models::DecayModel::nucleiText(model->initialNuclei())),
+              : QStringLiteral("посев: %1 ядер").arg(models::DecayModel::nucleiText(model->initialNuclei())),
         style::ink());
     planner.addFirstFree(
         QStringLiteral("law"), {QPointF(m_strip.center().x(), m_band.top() + kBandPadding + 8.0)},

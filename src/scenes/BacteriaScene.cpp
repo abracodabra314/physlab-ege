@@ -680,13 +680,13 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
      */
     const bool roomy = m_band.width() >= 700.0;
 
-    // Верхняя строка: заголовок чашки (с расшифровкой клетки) и закон роста.
+    // Верхняя строка: состав посева (с расшифровкой клетки) и закон роста.
     planner.addFirstFree(
         QStringLiteral("dish-title"), {QPointF(m_dish.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("чашка: посев %1, 1 клетка = %2")
+        roomy ? QStringLiteral("посев: %1, 1 клетка = %2")
                     .arg(models::BacteriaModel::cellsText(model->initialCells()),
                          models::BacteriaModel::cellsText(m_cellsPerCell))
-              : QStringLiteral("чашка: посев %1").arg(models::BacteriaModel::cellsText(model->initialCells())),
+              : QStringLiteral("посев: %1").arg(models::BacteriaModel::cellsText(model->initialCells())),
         style::ink());
     planner.addFirstFree(
         QStringLiteral("law"), {QPointF(m_strip.center().x(), m_band.top() + kBandPadding + 8.0)},

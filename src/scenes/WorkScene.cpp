@@ -190,8 +190,7 @@ void WorkScene::paintScheme(QPainter* painter) {
             statusColor = style::danger();
         }
         LabScene::drawTag(painter, QPointF(x, baseY - 168.0),
-                          QStringLiteral("%1 · %2 %/мин").arg(machine.label)
-                              .arg(utils::formatNumber(machine.value1 * 100.0, 1)),
+                          QStringLiteral("%1 %/мин").arg(utils::formatNumber(machine.value1 * 100.0, 1)),
                           QColor(255, 255, 255, 235),
                           machine.visible && machine.active ? color.darker(120) : QColor(150, 155, 162));
         LabScene::drawTag(painter, QPointF(x + 6.0, baseY - 190.0), status, QColor(255, 255, 255, 225), statusColor);
@@ -207,9 +206,7 @@ void WorkScene::paintScheme(QPainter* painter) {
     painter->restore();
     primitives::drawFlowArrow(painter, QPointF(belt.left() + 6.0, belt.center().y()),
                               QPointF(belt.left() + std::min(120.0, belt.width() * 0.24), belt.center().y()),
-                              QStringLiteral("конвейер"), vectors::colorOf(vectors::Kind::Flow), true, t);
-    LabScene::drawTag(painter, QPointF(belt.right() - 70.0, belt.center().y() - 20.0),
-                      QStringLiteral("заготовка →"), QColor(255, 255, 255, 220), style::inkSoft());
+                              QString(), vectors::colorOf(vectors::Kind::Flow), true, t);
 
     // ---- Общая шкала готовности работы ----
     const double barY = belt.bottom() + 26.0;
