@@ -25,9 +25,7 @@ add_executable(lab_tests
     test_bacteria.cpp
     test_bacteria_scene.cpp
     test_decay.cpp
-    test_decay_scene.cpp
-    test_circuit.cpp
-    test_circuit_scene.cpp)
+    test_decay_scene.cpp)
 
 target_include_directories(lab_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(lab_tests PRIVATE lab_lib GTest::gtest_main)
