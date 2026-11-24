@@ -86,7 +86,9 @@ jobs:
 
       - name: QA-рендер сцен (offscreen, Windows)
         if: runner.os == 'Windows'
-        run: .\build\Release\physlab.exe --shots qa-shots
+        # GUI-подсистема (WIN32_EXECUTABLE): PowerShell не ждёт такие
+        # процессы сам — ждём явно, иначе артефакт снимет половину кадров.
+        run: Start-Process -FilePath .\build\Release\physlab.exe -ArgumentList '--shots','qa-shots' -Wait
         env:
           QT_QPA_PLATFORM: offscreen
 
@@ -108,9 +110,8 @@ jobs:
           name: physlab-${{ matrix.id }}
           path: |
             build/physlab
-            build/Release/physlab.exe
-            build/Release/*.dll
-            build/physlab.app
+            build/Release/**
+            build/physlab.app/**
             build/bin/physlab*
           if-no-files-found: warn
 
