@@ -1,0 +1,6 @@
+build/
+build-*/
+build_warn/
+.DS_Store
+*.o
+*.dSYM/
