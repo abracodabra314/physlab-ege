@@ -5,7 +5,8 @@ name: build-and-test
 
 on:
   push:
-    branches: [main, sketch-style, remove-circuit]
+    # Рабочая ветка одна — собираем только её (и PR в неё).
+    branches: [sketch-style]
   pull_request:
   workflow_dispatch:
 
