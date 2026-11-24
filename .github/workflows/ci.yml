@@ -51,7 +51,6 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.3'
-          modules: qtbase
 
       - name: Сборка (CMake + Qt)
         run: |
@@ -110,7 +109,6 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.3'
-          modules: qtbase
 
       - name: Сборка (CMake + Qt)
         run: |
