@@ -52,14 +52,19 @@ jobs:
           dnf -y install git cmake python3.11 python3.11-pip mesa-libGL \
               libxkbcommon libxkbcommon-x11 which \
               gcc-toolset-13-gcc-c++ gcc-toolset-13-libstdc++-devel
-          echo "PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH" >> $GITHUB_ENV
           python3.11 -m pip install --quiet aqtinstall
           python3.11 -m aqt install-qt linux desktop 6.7.3 -O /opt/Qt
           echo "CMAKE_PREFIX_PATH=/opt/Qt/6.7.3/gcc_64" >> $GITHUB_ENV
-          echo "PATH=/opt/Qt/6.7.3/gcc_64/bin:$PATH" >> $GITHUB_ENV
+          echo "PATH=/opt/Qt/6.7.3/gcc_64/bin:/opt/rh/gcc-toolset-13/root/usr/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Qt 6 из Homebrew (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install qt
+          echo "CMAKE_PREFIX_PATH=$(brew --prefix qt)" >> $GITHUB_ENV
 
       - name: Установить Qt 6 (для хостовых job'ов)
-        if: matrix.container == ''
+        if: runner.os != 'macOS' && matrix.container == ''
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.3'
