@@ -33,7 +33,7 @@ jobs:
             os: windows-latest
           - name: macOS (clang)
             id: macos
-            os: macos-latest
+            os: macos-14  # общий пул macos-latest сейчас стабильно снимается 15-минутным таймаутом очереди
 
     steps:
       - uses: actions/checkout@v4
