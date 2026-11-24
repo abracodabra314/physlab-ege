@@ -3,6 +3,7 @@
 #include "models/AdiabaticModel.h"
 #include "models/BacteriaModel.h"
 #include "models/BoatModel.h"
+#include "models/CircuitModel.h"
 #include "models/DecayModel.h"
 #include "models/HorizonModel.h"
 #include "models/MixtureModel.h"
@@ -18,6 +19,7 @@
 #include "scenes/AdiabaticScene.h"
 #include "scenes/BacteriaScene.h"
 #include "scenes/BoatScene.h"
+#include "scenes/CircuitScene.h"
 #include "scenes/DecayScene.h"
 #include "scenes/HorizonScene.h"
 #include "scenes/MixtureScene.h"
@@ -78,6 +80,11 @@ LabSetup makeAdiabatic() {
     return {model, new scenes::AdiabaticScene(model)};
 }
 
+LabSetup makeCircuit() {
+    auto* model = new models::CircuitModel;
+    return {model, new scenes::CircuitScene(model)};
+}
+
 LabSetup makeBacteria() {
     auto* model = new models::BacteriaModel;
     return {model, new scenes::BacteriaScene(model)};
@@ -135,6 +142,9 @@ QVector<ModelDescriptor> allDescriptors() {
          QStringLiteral("N = N₀·2^(−t/T½); λ = ln2/T½; A = λN"), makeDecay},
         {QStringLiteral("bacteria"), QStringLiteral("Деление бактерий в чашке Петри"),
          QStringLiteral("N = N₀·2^(t/T_d); n = log₂(N/N₀); N′ = kN"), makeBacteria},
+        {QStringLiteral("circuit"), QStringLiteral("Конструктор электрической цепи"),
+         QStringLiteral("Метод узловых потенциалов: φ₁ − φ₂ = U, ΣI = 0; переходные процессы RC и RL"),
+         makeCircuit},
     };
 }
 
