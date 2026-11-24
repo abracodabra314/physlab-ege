@@ -8,6 +8,7 @@
 
 #include "models/WorkModel.h"
 #include "scenes/SchemePrimitives.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "scenes/VectorArrows.h"
 #include "utils/MathText.h"
@@ -177,7 +178,7 @@ void WorkScene::paintScheme(QPainter* painter) {
         if (!machine.visible) {
             status = QStringLiteral("выключен");
         } else if (t <= machine.value2 + 1e-9) {
-            status = QStringLiteral("включится через %1 мин").arg(utils::formatNumber(machine.value2 - t, 2));
+            status = QStringLiteral("ждёт (tᵢ)");
             statusColor = style::accentWarm();
         } else if (running) {
             status = QStringLiteral("работает");
@@ -190,8 +191,7 @@ void WorkScene::paintScheme(QPainter* painter) {
             statusColor = style::danger();
         }
         LabScene::drawTag(painter, QPointF(x, baseY - 168.0),
-                          QStringLiteral("%1 · %2 %/мин").arg(machine.label)
-                              .arg(utils::formatNumber(machine.value1 * 100.0, 1)),
+                          QStringLiteral("%1 · p").arg(machine.label),
                           QColor(255, 255, 255, 235),
                           machine.visible && machine.active ? color.darker(120) : QColor(150, 155, 162));
         LabScene::drawTag(painter, QPointF(x + 6.0, baseY - 190.0), status, QColor(255, 255, 255, 225), statusColor);
@@ -241,8 +241,7 @@ void WorkScene::paintScheme(QPainter* painter) {
     }
     painter->setPen(style::ink());
     painter->setFont(style::uiFont(10.0, true));
-    painter->drawText(bar, Qt::AlignCenter,
-                      QStringLiteral("Выполнено %1 % работы").arg(utils::formatNumber(progress * 100.0, 1)));
+    painter->drawText(bar, Qt::AlignCenter, QStringLiteral("работа A(t)"));
     painter->restore();
 
     painter->save();
@@ -267,10 +266,11 @@ void WorkScene::paintScheme(QPainter* painter) {
         LabScene::drawPlot(painter, plotRect, QStringLiteral("Выполненная работа A(t), доля"),
                            QStringLiteral("мин"), series, duration, t, m_model->eventTime());
         QString starts = QStringLiteral("включения: ");
+        const QString subscripts = QStringLiteral("₀₁₂₃₄₅₆₇₈₉");
         for (int i = 0; i < 3; ++i) {
             if (!work->enabled(i))
                 continue;
-            starts += QStringLiteral("№%1 — %2 мин; ").arg(i + 1).arg(utils::formatNumber(work->startTimeOf(i), 2));
+            starts += QStringLiteral("№%1 — t%2; ").arg(i + 1).arg(subscripts.at(i + 1));
         }
         LabScene::drawTag(painter, QPointF(plotRect.center().x(), plotRect.bottom() + 22.0), starts,
                           QColor(255, 255, 255, 230), style::inkSoft());
@@ -280,12 +280,13 @@ void WorkScene::paintScheme(QPainter* painter) {
     const double total = work->completionTime();
     if (std::isfinite(total)) {
         LabScene::drawTag(painter, QPointF(zone.center().x(), m_viewArea.bottom() - 22.0),
-                          QStringLiteral("A = Σ pᵢ·(t − tᵢ) ⇒ t = %1 мин").arg(utils::formatNumber(total, 2)),
+                          QStringLiteral("A = Σ pᵢ·(t − tᵢ)"),
                           QColor(255, 255, 255, 235), style::ink());
     }
 
     if (!state.eventLabel.isEmpty()) {
-        LabScene::drawTag(painter, QPointF(zone.center().x(), zone.top() - 12.0), state.eventLabel,
+        LabScene::drawTag(painter, QPointF(zone.center().x(), zone.top() - 12.0),
+                          lab::labels::stripValues(state.eventLabel),
                           QColor(234, 247, 239, 240), style::success().darker(130));
     }
 }

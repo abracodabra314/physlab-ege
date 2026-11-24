@@ -254,11 +254,12 @@ TEST(SpringHorizontalVectors, CategoriesToggledIndependently) {
     ASSERT_NE(findArrow(scene.vectorsFor(t), Kind::Velocity), nullptr);
     ASSERT_NE(findArrow(scene.vectorsFor(t), Kind::Acceleration), nullptr);
 
+    // Силы динамической модели показываем всегда: переключатель их не скрывает.
     model.setShowsForces(false);
     const QVector<Arrow> withoutForces = scene.vectorsFor(t);
-    EXPECT_EQ(findArrow(withoutForces, Kind::Gravity), nullptr);
-    EXPECT_EQ(findArrow(withoutForces, Kind::Normal), nullptr);
-    EXPECT_EQ(findArrow(withoutForces, Kind::Friction), nullptr);
+    EXPECT_NE(findArrow(withoutForces, Kind::Gravity), nullptr);
+    EXPECT_NE(findArrow(withoutForces, Kind::Normal), nullptr);
+    EXPECT_NE(findArrow(withoutForces, Kind::Friction), nullptr);
     EXPECT_NE(findArrow(withoutForces, Kind::Velocity), nullptr);
     EXPECT_NE(findArrow(withoutForces, Kind::Acceleration), nullptr);
 

@@ -475,9 +475,10 @@ TEST(AdiabaticVectors, ForcesAndSpeedToggleIndependently) {
     ASSERT_NE(findForce(scene.vectorsFor(t), QStringLiteral("F = pS")), nullptr);
     model.setShowsForces(false);
     const QVector<Arrow> withoutForces = scene.vectorsFor(t);
-    EXPECT_EQ(find(withoutForces, Kind::Pressure), nullptr);
-    EXPECT_EQ(find(withoutForces, Kind::Elastic), nullptr);
-    // Скорость поршня — отдельная категория, она осталась.
+    // Силы динамической модели — часть чертежа, переключатель их не прячет.
+    EXPECT_NE(find(withoutForces, Kind::Pressure), nullptr);
+    EXPECT_NE(find(withoutForces, Kind::Elastic), nullptr);
+    // Скорость поршня — отдельная категория, она под переключателем.
     EXPECT_NE(find(withoutForces, Kind::Velocity), nullptr);
 
     model.setShowsForces(true);
@@ -607,25 +608,13 @@ TEST(AdiabaticLabels, LabelsCarryModelNumbers) {
     prepare(scene, model, model.processTime() * 0.5);
     const double t = model.time();
 
+    // На чертеже — только обозначения и формулы: чисел на рисунке нет.
+    Q_UNUSED(t);
     QHash<QString, QString> expected;
-    expected.insert(QStringLiteral("state"),
-                    QStringLiteral("V = %1 л, p = %2 кПа, T = %3 К")
-                        .arg(lab::utils::formatNumber(model.volumeAt(t) * 1e3, 2),
-                             lab::utils::formatNumber(model.pressureAt(t) / 1e3, 1),
-                             lab::utils::formatNumber(model.temperatureAt(t), 1)));
-    expected.insert(QStringLiteral("finish"),
-                    QStringLiteral("V₂ = %1 л, T₂ = %2 К")
-                        .arg(lab::utils::formatNumber(model.finalVolume() * 1e3, 2),
-                             lab::utils::formatNumber(model.finalTemperature(), 1)));
-    expected.insert(QStringLiteral("forces"),
-                    QStringLiteral("F = pS = %1 Н, F₀ = p₀S = %2 Н, Fвнеш = %3 Н")
-                        .arg(lab::utils::formatNumber(model.gasForceAt(t), 0),
-                             lab::utils::formatNumber(model.outsideForce(), 0),
-                             lab::utils::formatNumber(std::abs(model.externalForceAt(t)), 0)));
-    expected.insert(QStringLiteral("molecules"),
-                    QStringLiteral("v = √(3RT/M) = %1 м/с при M = %2 г/моль")
-                        .arg(lab::utils::formatNumber(model.rmsSpeedAtTime(t), 0),
-                             lab::utils::formatNumber(model.molarMass() * 1e3, 1)));
+    expected.insert(QStringLiteral("state"), QStringLiteral("V, p, T"));
+    expected.insert(QStringLiteral("finish"), QStringLiteral("V₂, T₂"));
+    expected.insert(QStringLiteral("forces"), QStringLiteral("F = pS, F₀ = p₀S, Fвнеш"));
+    expected.insert(QStringLiteral("molecules"), QStringLiteral("v = √(3RT/M)"));
 
     const QVector<AdiabaticScene::Annotation> notes = scene.annotations();
     int matched = 0;
@@ -635,8 +624,24 @@ TEST(AdiabaticLabels, LabelsCarryModelNumbers) {
             ++matched;
         }
     }
-    // Подписи берут числа из формул модели, а не «на глаз» по рисунку.
+    // На подписях-формулах допустимы лишь однозначные константы (3RT, Q = 0):
+    // многозначных чисел и величин с десятичной запятой на рисунке нет.
+    auto carriesValue = [](const QString& text) {
+        int run = 0;
+        for (const QChar symbol : text) {
+            if (symbol.unicode() >= '0' && symbol.unicode() <= '9') {
+                ++run;
+                if (run >= 2)
+                    return true;
+            } else if (symbol != QLatin1Char(',')) {
+                run = 0;
+            }
+        }
+        return false;
+    };
     EXPECT_GE(matched, 4);
+    for (const AdiabaticScene::Annotation& note : notes)
+        EXPECT_FALSE(carriesValue(note.text)) << note.id.toUtf8().constData();
 }
 
 TEST(AdiabaticLabels, ResultAppearsOnlyAfterProcessEnds) {
@@ -656,8 +661,8 @@ TEST(AdiabaticLabels, ResultAppearsOnlyAfterProcessEnds) {
         if (note.id != QLatin1String("result"))
             continue;
         shownAfter = true;
-        EXPECT_TRUE(note.text.contains(lab::utils::formatNumber(model.finalPressure() / 1e3, 1)));
-        EXPECT_TRUE(note.text.contains(lab::utils::formatNumber(model.finalTemperature(), 1)));
+        EXPECT_TRUE(note.text.contains(QStringLiteral("p₂")));
+        EXPECT_TRUE(note.text.contains(QStringLiteral("T₂")));
     }
     EXPECT_TRUE(shownAfter);
 }

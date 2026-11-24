@@ -413,16 +413,25 @@ TEST(DecayScene, AnnotationsCarryModelNumbers) {
     for (const DecayScene::Annotation& annotation : scene.annotations())
         all += annotation.id + QStringLiteral(" ") + annotation.text;
 
-    // Постоянная распада, период полураспада, момент доли и число ядер.
-    EXPECT_TRUE(all.contains(model.decayConstantText()));
-    EXPECT_TRUE(all.contains(DecayModel::durationText(model.halfLife())));
-    EXPECT_TRUE(all.contains(DecayModel::durationText(model.targetTime())));
-    EXPECT_TRUE(all.contains(DecayModel::nucleiText(model.countedNucleiAt(model.time()))));
-    EXPECT_TRUE(all.contains(DecayModel::nucleiText(model.theoryNucleiAt(model.time()))));
-    EXPECT_TRUE(all.contains(DecayModel::durationText(model.sampleInterval())));
-    EXPECT_TRUE(all.contains(model.stepProbabilityText()));
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.activityAt(model.time()), 1)));
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.expectedDeviationAt(model.time()), 1)));
+        // Чертеж несёт обозначения распада; величины остались на панелях.
+    EXPECT_TRUE(all.contains(QStringLiteral("T½")));
+    EXPECT_TRUE(all.contains(QStringLiteral("Δp = λΔt")));
+    EXPECT_TRUE(all.contains(QStringLiteral("A = λN")));
+    EXPECT_TRUE(all.contains(QStringLiteral("√N")));
+    for (const DecayScene::Annotation& annotation : scene.annotations()) {
+        int run = 0;
+        bool carriesValue = false;
+        for (const QChar symbol : annotation.text) {
+            if (symbol.unicode() >= '0' && symbol.unicode() <= '9') {
+                ++run;
+                if (run >= 2)
+                    carriesValue = true;
+            } else if (symbol != QLatin1Char(',')) {
+                run = 0;
+            }
+        }
+        EXPECT_FALSE(carriesValue) << annotation.id.toUtf8().constData();
+    }
 }
 
 TEST(DecayScene, AnnotationsUseOnlyModelQuantities) {
@@ -431,16 +440,12 @@ TEST(DecayScene, AnnotationsUseOnlyModelQuantities) {
     DecayScene scene(&model);
     prepare(scene, model, model.halfLife());
 
-    // Заданная доля и её момент показаны так же, как их считает модель.
-    QString all;
+        QString all;
     for (const DecayScene::Annotation& annotation : scene.annotations())
         all += annotation.text;
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.targetFraction() * 100.0, 0) + QStringLiteral(" %")));
-    EXPECT_TRUE(all.contains(DecayModel::nucleiText(model.theoryNucleiAt(model.targetTime()))));
-
-    // Счёт и теория показаны раздельно: их числа различаются.
-    EXPECT_TRUE(all.contains(DecayModel::nucleiText(std::round(model.countedNucleiAt(model.time())))));
-    EXPECT_TRUE(all.contains(DecayModel::nucleiText(std::round(model.theoryNucleiAt(model.time())))));
+    // Доля и её момент обозначены на чертеже словами: величин на рисунке нет.
+    EXPECT_TRUE(all.contains(QStringLiteral("d")));
+    EXPECT_TRUE(all.contains(QStringLiteral("N")));
 }
 
 // ------------------------------------------------------------------

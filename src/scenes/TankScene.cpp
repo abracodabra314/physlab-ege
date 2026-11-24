@@ -8,6 +8,7 @@
 
 #include "models/TankModel.h"
 #include "scenes/SchemePrimitives.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "utils/MathText.h"
 
@@ -116,14 +117,14 @@ void TankScene::paintScheme(QPainter* painter) {
                       QPointF(tankArea.right() + 14.0, tankArea.top()));
     painter->restore();
     LabScene::drawTag(painter, QPointF(tankArea.right() + 66.0, tankArea.top() - 14.0),
-                      QStringLiteral("Vmax = %1 л").arg(utils::formatNumber(tank->capacity(), 0)),
+                      QStringLiteral("Vmax"),
                       QColor(255, 246, 245, 235), style::danger().darker(115));
 
     // Подпись объёма в воде.
     if (levelFraction > 0.06) {
         const double waterMiddle = (waterTop + tankArea.bottom()) / 2.0;
         LabScene::drawTag(painter, QPointF(tankArea.center().x(), waterMiddle),
-                          QStringLiteral("V = %1 л").arg(utils::formatNumber(state.secondary, 0)),
+                          QStringLiteral("V"),
                           QColor(255, 255, 255, 215), style::waterDeep().darker(140));
     }
 
@@ -166,7 +167,7 @@ void TankScene::paintScheme(QPainter* painter) {
                                       QPointF(x, std::max(tankArea.top() + 6.0, streamBottom)),
                                       QString(), color, open, t);
             LabScene::drawTag(painter, QPointF(x, tankArea.top() - 96.0),
-                              QStringLiteral("%1 · %2 л/мин").arg(tap.label).arg(utils::formatNumber(rate, 0)),
+                              QStringLiteral("%1 · q%2").arg(tap.label).arg(tap.lane + 1),
                               QColor(255, 255, 255, 230), open ? color.darker(120) : QColor(150, 155, 162));
         } else {
             // Сливной патрубок у дна справа; поток — наружу.
@@ -178,7 +179,7 @@ void TankScene::paintScheme(QPainter* painter) {
             primitives::drawTap(painter, QPointF(tankArea.right() + 52.0, y), color, open);
             primitives::drawFlowArrow(painter, QPointF(tankArea.right() + 72.0, y),
                                       QPointF(tankArea.right() + 150.0, y),
-                                      QStringLiteral("%1 л/мин").arg(utils::formatNumber(rate, 0)), color, open, t);
+                                      QStringLiteral("q"), color, open, t);
             LabScene::drawTag(painter, QPointF(tankArea.right() + 110.0, y - 30.0), tap.label,
                               QColor(255, 255, 255, 230), open ? color.darker(120) : QColor(150, 155, 162));
         }
@@ -186,22 +187,21 @@ void TankScene::paintScheme(QPainter* painter) {
 
     // ---- Размерные линии: уровень, высота, сторона основания ----
     LabScene::drawDimension(painter, QPointF(tankArea.left(), waterTop), QPointF(tankArea.right(), waterTop),
-                            QStringLiteral("h = %1 м").arg(utils::formatNumber(state.primary, 2)),
+                            QStringLiteral("h"),
                             style::waterDeep(), -18.0);
     LabScene::drawDimension(painter, QPointF(tankArea.left(), tankArea.top()),
                             QPointF(tankArea.left(), tankArea.bottom()),
-                            QStringLiteral("H = %1 м").arg(utils::formatNumber(tank->height(), 2)),
+                            QStringLiteral("H"),
                             style::inkSoft(), -34.0);
     LabScene::drawDimension(painter, QPointF(tankArea.left(), tankArea.bottom()),
                             QPointF(tankArea.right(), tankArea.bottom()),
-                            QStringLiteral("a = %1 м").arg(utils::formatNumber(tank->width(), 2)),
+                            QStringLiteral("a"),
                             style::inkSoft(), 22.0);
 
     // ---- Итоговая производительность потоков ----
     const double net = tank->netRate();
-    const QString netText = net >= 0.0
-                                ? QStringLiteral("Q = Σqᵢ = +%1 л/мин").arg(utils::formatNumber(net, 1))
-                                : QStringLiteral("Q = Σqᵢ = −%1 л/мин").arg(utils::formatNumber(std::abs(net), 1));
+    const QString netText = QStringLiteral("Q = Σqᵢ");
+    Q_UNUSED(net);
     LabScene::drawTag(painter, QPointF(tankArea.center().x(), tankArea.bottom() + 62.0), netText,
                       QColor(255, 255, 255, 235), net > 0.0 ? style::bodyC().darker(120)
                                                             : (net < 0.0 ? style::danger().darker(115)
@@ -223,13 +223,13 @@ void TankScene::paintScheme(QPainter* painter) {
                            QStringLiteral("Объём воды V(t), л"), QStringLiteral("мин"), series, duration,
                            m_model->time(), m_model->eventTime());
         LabScene::drawTag(painter, QPointF(plotRect.center().x(), plotRect.bottom() + 20.0),
-                          QStringLiteral("V(t) = %1 + (%2)·t").arg(utils::formatNumber(tank->initialVolume(), 0),
-                                                                   utils::formatNumber(net, 1)),
+                          QStringLiteral("V(t) = V₀ + Q·t"),
                           QColor(255, 255, 255, 235), style::ink());
     }
 
     if (!state.eventLabel.isEmpty()) {
-        LabScene::drawTag(painter, QPointF(tankArea.center().x(), m_viewArea.top() + 14.0), state.eventLabel,
+        LabScene::drawTag(painter, QPointF(tankArea.center().x(), m_viewArea.top() + 14.0),
+                          lab::labels::stripValues(state.eventLabel),
                           QColor(234, 247, 239, 240), style::success().darker(130));
     }
 }

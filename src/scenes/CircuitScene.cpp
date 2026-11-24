@@ -334,16 +334,12 @@ void CircuitScene::drawParts(QPainter* painter, const circuit::Solution& solutio
         const QPointF center = symbolCenter(part);
         const QPointF offset = part.horizontal ? QPointF(0.0, -m_sheet.cell * 0.78)
                                                : QPointF(m_sheet.cell * 0.86, 0.0);
-        if (part.type == circuit::PartType::Ammeter && conducting)
-            planner.add(QStringLiteral("A%1").arg(part.id), center + offset,
-                        models::CircuitModel::currentText(value->current), partColor(part.type));
-        else if (part.type == circuit::PartType::Voltmeter && conducting)
-            planner.add(QStringLiteral("V%1").arg(part.id), center + offset,
-                        models::CircuitModel::voltageText(value->voltage), partColor(part.type));
-        else if (part.type != circuit::PartType::Switch)
-            planner.add(QStringLiteral("p%1").arg(part.id), center + offset,
-                        QStringLiteral("%1 = %2").arg(part.name, model->partValueText(part.id)),
+        // На листе прибор и элемент подписаны только именами: чисел на
+        // рисунке нет, показания — в колонке справа и на панелях.
+        if (part.type != circuit::PartType::Switch)
+            planner.add(QStringLiteral("p%1").arg(part.id), center + offset, part.name,
                         conducting ? partColor(part.type) : style::inkSoft());
+        Q_UNUSED(value);
 
         // Ток ветви подписывают у символа только когда он есть: ноль на каждой
         // ветви превратил бы чертёж в таблицу.
@@ -546,7 +542,7 @@ void CircuitScene::drawReadouts(QPainter* painter) const {
 QVector<vectors::Arrow> CircuitScene::vectorsFor(double t) const {
     QVector<vectors::Arrow> arrows;
     auto* model = circuitModel();
-    if (!model || !m_model->showsForces())
+    if (!model)  // стрелки тока — часть чертежа, их не прячут
         return arrows;
     const circuit::Solution solution = model->solutionAt(t);
     double scale = 0.0;

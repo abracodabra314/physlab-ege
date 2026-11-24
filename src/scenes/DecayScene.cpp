@@ -558,15 +558,13 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
     // которому считают опыт.
     planner.addFirstFree(
         QStringLiteral("sample-title"), {QPointF(m_sample.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("образец: %1 ядер, 1 клетка = %2")
-                    .arg(models::DecayModel::nucleiText(model->initialNuclei()),
-                         models::DecayModel::nucleiText(double(m_cellsPerNucleus)))
-              : QStringLiteral("образец: %1 ядер").arg(models::DecayModel::nucleiText(model->initialNuclei())),
+        roomy ? QStringLiteral("образец: посев N₀, 1 клетка — несколько ядер")
+              : QStringLiteral("образец: посев N₀"),
         style::ink());
     planner.addFirstFree(
         QStringLiteral("law"), {QPointF(m_strip.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("ход опыта: N = N₀·2^(−t/T½), λ = ln2/T½ = %1 ч⁻¹").arg(model->decayConstantText())
-              : QStringLiteral("N = N₀·2^(−t/T½), λ = %1 ч⁻¹").arg(model->decayConstantText()),
+        roomy ? QStringLiteral("ход опыта: N = N₀·2^(−t/T½), λ = ln2/T½")
+              : QStringLiteral("N = N₀·2^(−t/T½)"),
         theoryColor().darker(160));
 
     if (!model->validate().ok) {
@@ -575,15 +573,14 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
         return planner.items();
     }
 
-    const double counted = model->countedNucleiAt(t);
-    const double theory = model->theoryNucleiAt(t);
+    Q_UNUSED(model->countedNucleiAt(t));  // числа — на панелях, на рисунке обозначения
+    Q_UNUSED(model->theoryNucleiAt(t));
     const double total = model->duration();
 
     // Под образцом: два счёта рядом — целый опыт и гладкая теория.
     planner.addFirstFree(
         QStringLiteral("counts"), {QPointF(m_sample.center().x(), m_sample.bottom() + kCaptionRow * 0.5)},
-        QStringLiteral("счёт: %1\nтеория: %2").arg(models::DecayModel::nucleiText(counted),
-                                                   models::DecayModel::nucleiText(theory)),
+        QStringLiteral("счёт N и теория N(t) — два счёта"),
         style::ink(), QColor(255, 255, 255, 220));
 
     // Искомый момент: доля d и её пересечение с кривой.
@@ -594,10 +591,7 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
             {QPointF(sceneXForTime(moment) + 116.0,
                      sceneYForNuclei(model->targetFraction() * model->initialNuclei()) - 14.0),
              QPointF(m_strip.center().x(), m_strip.top() + 36.0), QPointF(m_strip.center().x(), m_strip.center().y())},
-            QStringLiteral("d = %1: t = %2, N = %3")
-                .arg(utils::formatNumber(model->targetFraction() * 100.0, 0) + QStringLiteral(" %"),
-                     models::DecayModel::durationText(moment),
-                     models::DecayModel::nucleiText(model->theoryNucleiAt(moment))),
+            QStringLiteral("цель d: время t, число N"),
             style::bodyD().darker(160), QColor(255, 255, 255, 225));
     }
 
@@ -606,43 +600,31 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
     if (life <= total) {
         planner.addFirstFree(
             QStringLiteral("half"), {QPointF(m_strip.center().x(), m_rulerY)},
-            roomy ? QStringLiteral("T½ = %1 — за это время распадается ровно половина ядер")
-                        .arg(models::DecayModel::durationText(life))
-                  : QStringLiteral("T½ = %1 — половина ядер").arg(models::DecayModel::durationText(life)),
+            roomy ? QStringLiteral("T½ — распадается ровно половина ядер")
+                  : QStringLiteral("T½ — половина ядер"),
             style::bodyB().darker(150), QColor(255, 255, 255, 220));
     } else {
         // Долгоживущий изотоп: периода полураспада на шкале не видно, поэтому
         // подпись говорит, какая доля ядер распадается за время опыта.
-        const QString percent =
-            utils::formatNumber(100.0 * (1.0 - model->survivingFractionAt(model->observationTime())), 3);
         planner.addFirstFree(
             QStringLiteral("half"), {QPointF(m_strip.center().x(), m_rulerY)},
-            roomy ? QStringLiteral("T½ = %1 — за опыт распадается %2 % ядер")
-                        .arg(models::DecayModel::durationText(life), percent)
-                  : QStringLiteral("T½ = %1, распад %2 %").arg(models::DecayModel::durationText(life), percent),
+            roomy ? QStringLiteral("T½ — больше времени опыта: доля распавшихся — в панели")
+                  : QStringLiteral("T½ — вне шкалы"),
             style::bodyB().darker(150), QColor(255, 255, 255, 220));
     }
 
     // Показания счётчика: длительность шага, число распадов и его вероятность.
     planner.addFirstFree(
         QStringLiteral("counter"), {QPointF(m_counterBand.center().x() - 110.0, m_counterBand.bottom() + 14.0)},
-        roomy ? QStringLiteral("шаг Δt = %1: %2 · Δp = λΔt = %3")
-                    .arg(models::DecayModel::durationText(model->sampleInterval()),
-                         models::DecayModel::nucleiText(model->decaysInLastStepAt(t)), model->stepProbabilityText())
-              : QStringLiteral("Δt = %1: %2 · Δp = %3")
-                    .arg(models::DecayModel::durationText(model->sampleInterval()),
-                         models::DecayModel::nucleiText(model->decaysInLastStepAt(t)), model->stepProbabilityText()),
+        roomy ? QStringLiteral("шаг Δt: распады ΔN · Δp = λΔt")
+              : QStringLiteral("Δt: ΔN · Δp = λΔt"),
         style::bodyD().darker(160), QColor(255, 255, 255, 220));
 
     // Активность и расхождение счёта с теорией.
     planner.addFirstFree(
         QStringLiteral("deviation"), {QPointF(m_counterBand.center().x() + 120.0, m_counterBand.bottom() + 14.0)},
-        roomy ? QStringLiteral("A = λN = %1 · расхождение счёта с теорией %2 %")
-                    .arg(utils::formatNumber(model->activityAt(t), 1),
-                         utils::formatNumber(model->relativeDeviationAt(t), 2))
-              : QStringLiteral("A = %1 · расхождение %2 %")
-                    .arg(utils::formatNumber(model->activityAt(t), 1),
-                         utils::formatNumber(model->relativeDeviationAt(t), 2)),
+        roomy ? QStringLiteral("A = λN · расхождение счёта с теорией")
+              : QStringLiteral("A = λN · расхождение"),
         std::abs(model->relativeDeviationAt(t)) <=
                 300.0 * model->expectedDeviationAt(t) / model->initialNuclei()
             ? style::success().darker(130)
@@ -655,17 +637,16 @@ QVector<DecayScene::Annotation> DecayScene::annotations() const {
             QStringLiteral("result"),
             {QPointF(m_strip.center().x(), m_strip.bottom() - 14.0),
              QPointF(m_strip.center().x(), m_strip.top() + 36.0), QPointF(m_strip.center().x(), m_strip.center().y())},
-            QStringLiteral("конец опыта: осталось %1, распалось %2")
-                .arg(models::DecayModel::nucleiText(counted), models::DecayModel::nucleiText(model->countedDecaysAt(t))),
+            QStringLiteral("конец опыта: N и ΔN — в панели"),
             style::success().darker(130), QColor(234, 247, 239, 240));
     }
 
     // Пояснения рисунка: они добавляются только там, где для них есть место.
     planner.tryAdd(QStringLiteral("corridor"), {QPointF(m_strip.right() - 92.0, m_strip.top() + 14.0)},
-                   QStringLiteral("коридор ±√N = ±%1").arg(utils::formatNumber(model->expectedDeviationAt(t), 1)),
+                   QStringLiteral("коридор ±√N"),
                    style::inkSoft(), QColor(255, 255, 255, 210));
     planner.tryAdd(QStringLiteral("window"), {QPointF(m_strip.right() - 92.0, m_strip.bottom() - 14.0)},
-                   QStringLiteral("T = %1").arg(models::DecayModel::durationText(model->observationTime())),
+                   QStringLiteral("T — время опыта"),
                    style::ink(), QColor(255, 255, 255, 220));
     planner.tryAdd(QStringLiteral("legend"), {QPointF(m_strip.center().x(), m_strip.top() + 14.0)},
                    QStringLiteral("ступенька — целые ядра опыта, кривая — теория"), style::inkSoft(),

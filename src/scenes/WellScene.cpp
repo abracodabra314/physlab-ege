@@ -7,6 +7,7 @@
 
 #include "models/WellModel.h"
 #include "scenes/SchemePrimitives.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "scenes/VectorArrows.h"
 #include "utils/MathText.h"
@@ -105,6 +106,7 @@ void WellScene::paintScheme(QPainter* painter) {
     const double groundY = shaft.top();
     const double waterY = shaft.bottom();
     const double depthValue = well->depth();
+    Q_UNUSED(depthValue);  // глубина — на рисунке линейкой, числом не подписываем
     const double releaseY = depthToY(well->releaseDepth());
 
     // ---- Грунт вокруг шахты ----
@@ -185,7 +187,7 @@ void WellScene::paintScheme(QPainter* painter) {
         painter->drawLine(QPointF(shaft.left() + 4.0, releaseY), QPointF(shaft.right() - 4.0, releaseY));
         painter->restore();
         LabScene::drawTag(painter, QPointF(shaft.right() + 96.0, releaseY),
-                          QStringLiteral("отпуск: %1 м").arg(utils::formatNumber(well->releaseDepth(), 1)),
+                          QStringLiteral("отпуск h₀"),
                           QColor(255, 255, 255, 215), style::inkSoft());
     }
 
@@ -197,7 +199,7 @@ void WellScene::paintScheme(QPainter* painter) {
     const QPointF stoneCenter(shaft.center().x(), stoneY);
 
     // Сила тяжести действует и до начала движения: точка приложения — центр камня.
-    if (m_model->showsForces()) {
+    if (true) {  // силы в динамической модели показываем всегда, в отличие от v и a
         vectors::Arrow weight;
         weight.from = stoneCenter + QPointF(0.0, 10.0);
         weight.to = weight.from + QPointF(0.0, vectors::visualLength(g, forceScale, 30.0, 90.0));
@@ -267,16 +269,18 @@ void WellScene::paintScheme(QPainter* painter) {
 
     // ---- Размерная линия глубины ----
     LabScene::drawDimension(painter, QPointF(shaft.left() - 40.0, groundY), QPointF(shaft.left() - 40.0, waterY),
-                            QStringLiteral("h = %1 м").arg(utils::formatNumber(depthValue, 2)), style::ink(), -40.0);
+                            QStringLiteral("h"), style::ink(), -40.0);
 
     // ---- Подписки этапов у шахты ----
     const double tf = well->fallTime();
     const double ts = well->soundTime();
+    Q_UNUSED(ts);  // формула t₂ = h/c осталась на сцене, число — в панели
+    // Формулы этапов — без подставленных чисел: значения смотрят на панели.
     LabScene::drawTag(painter, QPointF(shaft.center().x(), m_viewArea.top() + 26.0),
-                      QStringLiteral("t₁ = √(2(h−h₀)/g) = %1 с").arg(utils::formatNumber(tf, 3)),
+                      QStringLiteral("t₁ = √(2(h−h₀)/g)"),
                       QColor(255, 255, 255, 232), style::bodyC().darker(130));
     LabScene::drawTag(painter, QPointF(shaft.center().x(), groundBottom + 24.0),
-                      QStringLiteral("t₂ = h/c = %1 с").arg(utils::formatNumber(ts, 3)),
+                      QStringLiteral("t₂ = h/c"),
                       QColor(255, 255, 255, 232), style::bodyD().darker(130));
 
     // ---- Диаграмма времени T ----
@@ -302,9 +306,9 @@ void WellScene::paintScheme(QPainter* painter) {
     painter->setPen(style::ink());
     painter->setFont(style::uiFont(8.5, true));
     painter->drawText(QRectF(barRect.left(), barRect.top() + 11, fallWidth, 16), Qt::AlignCenter,
-                      QStringLiteral("t₁ = %1 с").arg(utils::formatNumber(tf, 3)));
+                      QStringLiteral("t₁"));
     painter->drawText(QRectF(barRect.left() + fallWidth, barRect.top() + 11, barRect.width() - fallWidth, 16),
-                      Qt::AlignCenter, QStringLiteral("t₂ = %1 с").arg(utils::formatNumber(ts, 3)));
+                      Qt::AlignCenter, QStringLiteral("t₂"));
 
     // Маркер текущего момента времени.
     const double progressX = barRect.left() + std::clamp(t / std::max(event, 1e-9), 0.0, 1.0) * barRect.width();
@@ -313,14 +317,15 @@ void WellScene::paintScheme(QPainter* painter) {
     painter->restore();
 
     LabScene::drawTag(painter, QPointF(barRect.center().x(), barRect.top() - 34.0),
-                      QStringLiteral("T = t₁ + t₂ = %1 с").arg(utils::formatNumber(tf + ts, 3)),
+                      QStringLiteral("T = t₁ + t₂"),
                       QColor(255, 255, 255, 235), style::ink());
     LabScene::drawTag(painter, QPointF(barRect.center().x(), barRect.bottom() + 30.0),
-                      QStringLiteral("сейчас t = %1 с").arg(utils::formatNumber(t, 3)),
+                      QStringLiteral("сейчас"),
                       QColor(255, 255, 255, 235), style::danger().darker(120));
 
     if (!state.eventLabel.isEmpty()) {
-        LabScene::drawTag(painter, QPointF(barRect.center().x(), m_viewArea.top() + 54.0), state.eventLabel,
+        LabScene::drawTag(painter, QPointF(barRect.center().x(), m_viewArea.top() + 54.0),
+                          lab::labels::stripValues(state.eventLabel),
                           QColor(234, 247, 239, 240), style::success().darker(130));
     }
 }

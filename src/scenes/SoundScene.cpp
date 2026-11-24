@@ -477,8 +477,9 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
     for (const FrontItem& front : fronts) {
         if (!front.emitted)
             continue;
-        const QString text = QStringLiteral("r%1 = %2 м").arg(front.index + 1)
-                                 .arg(utils::formatNumber(front.radiusMeters, 0));
+        const QString subscripts = QStringLiteral("₀₁₂₃₄₅₆₇₈₉");
+        const QString text = QStringLiteral("r%1").arg(front.index < 10 ? subscripts.at(front.index + 1)
+                                                                       : QString::number(front.index + 1));
         // Большие фронты выходит за рамку рисунка, поэтому подпись ставится
         // у той точки окружности, которая обращена к центру полосы: именно
         // там дуга видна на схеме.
@@ -506,8 +507,11 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
                                                    : QPointF(m_band.center().x(), m_waterY);
         // Подпись короткая: длинные тексты в узкой полосе схемы неизбежно
         // сталкиваются, а смысл подсказывает цвет (зелёный — уже принят).
-        const QString text = QStringLiteral("t′%1 = %2 с%3").arg(index + 1).arg(utils::formatNumber(arrival, 2))
-                                 .arg(arrived ? QString() : QStringLiteral(" ?"));
+        const QString subscripts = QStringLiteral("₀₁₂₃₄₅₆₇₈₉");
+        const QString text =
+            QStringLiteral("t′%1%2")
+                .arg(index < 10 ? subscripts.at(index + 1) : QString::number(index + 1))
+                .arg(arrived ? QString() : QStringLiteral(" — ещё в пути"));
         planner.addFirstFree(QStringLiteral("arrival_%1").arg(index + 1),
                              {mark + QPointF(0.0, 34.0), mark + QPointF(0.0, -58.0), mark - QPointF(120.0, 34.0),
                               mark + QPointF(120.0, 34.0)},
@@ -519,20 +523,19 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
     planner.add(QStringLiteral("gap"),
                 labels::rulerLabelPos(sourcePointAt(t) - QPointF(0.0, lift), observerPointAt(t) - QPointF(0.0, lift),
                                       0.0),
-                QStringLiteral("L(t) = %1 м").arg(utils::formatNumber(model->gapAt(t), 0)),
+                QStringLiteral("L(t)"),
                 style::bodyB().darker(160));
 
     // Кто есть кто: источник звука и наблюдатель (подписи под судами).
     planner.addFirstFree(QStringLiteral("source"),
                          {sourcePointAt(t) + QPointF(0.0, 34.0), sourcePointAt(t) + QPointF(0.0, 60.0),
                           sourcePointAt(t) + QPointF(90.0, 34.0)},
-                         QStringLiteral("гудок: x₁ = %1 м").arg(utils::formatNumber(model->sourcePositionAt(t), 0)),
+                         QStringLiteral("гудок x₁"),
                          style::bodyA().darker(160));
     planner.addFirstFree(QStringLiteral("observer"),
                          {observerPointAt(t) + QPointF(0.0, 34.0), observerPointAt(t) + QPointF(0.0, 60.0),
                           observerPointAt(t) + QPointF(-90.0, 34.0)},
-                         QStringLiteral("наблюдатель: x₂ = %1 м")
-                             .arg(utils::formatNumber(model->observerPositionAt(t), 0)),
+                         QStringLiteral("наблюдатель x₂"),
                          style::bodyC().darker(160));
 
     // Скорость звука и её связь с температурой — рядом с линейкой температуры.
@@ -540,7 +543,7 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
                          {QPointF(temperatureBarRect().right() + 150.0, temperatureBarRect().center().y()),
                           QPointF(temperatureBarRect().right() + 150.0, temperatureBarRect().bottom() + 24.0),
                           QPointF(temperatureBarRect().right() + 150.0, temperatureBarRect().top() - 20.0)},
-                         QStringLiteral("c = %1 м/с").arg(utils::formatNumber(model->soundSpeed(), 1)),
+                         QStringLiteral("c"),
                          style::ink());
 
     // О чертеже: главное, что нужно увидеть на схеме.
@@ -556,7 +559,7 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
     planner.addFirstFree(QStringLiteral("period"),
                          {QPointF(m_band.right() - 200.0, m_band.bottom() - 16.0),
                           QPointF(m_band.right() - 200.0, m_band.bottom() - 36.0)},
-                         QStringLiteral("T′ = %1 с").arg(utils::formatNumber(model->receptionPeriod(), 3)),
+                         QStringLiteral("T′"),
                          style::accentWarm().darker(150), QColor(255, 255, 255, 215));
 
     // Ключевое событие: принят последний сигнал — ответ задачи на схеме.
@@ -565,9 +568,7 @@ QVector<SoundScene::Annotation> SoundScene::annotations() const {
                              {QPointF(m_band.center().x(), m_band.bottom() - 34.0),
                               QPointF(m_band.center().x(), m_band.bottom() - 56.0),
                               QPointF(m_band.center().x(), m_band.top() + 40.0)},
-                             QStringLiteral("приняты все сигналы: последний в t′ = %1 с, T′ = %2 с")
-                                 .arg(utils::formatNumber(model->arrivalTime(models::SoundModel::signalCount() - 1), 2),
-                                      utils::formatNumber(model->receptionPeriod(), 3)),
+                             QStringLiteral("приняты все сигналы (t′ и T′ — в панели)"),
                              style::success().darker(130), QColor(234, 247, 239, 240));
     }
 

@@ -214,9 +214,9 @@ void MotionScene::paintScheme(QPainter* painter) {
     const double x1 = toSceneX(state.entities.first().position);
     const double x2 = toSceneX(state.entities.at(1).position);
     if (state.primary > 1e-6) {
+        // Размерная линия — только с обозначением: числа живут на панелях.
         LabScene::drawDimension(painter, QPointF(x1, y - 92.0), QPointF(x2, y - 92.0),
-                                QStringLiteral("s = %1 км").arg(utils::formatNumber(state.primary, 1)),
-                                style::ink());
+                                QStringLiteral("s"), style::ink());
     }
 
     // ---- Векторы скоростей (общая подсистема) ----
@@ -258,8 +258,8 @@ void MotionScene::paintScheme(QPainter* painter) {
         painter->drawEllipse(QPointF(meetX, y), 7.0, 7.0);
         painter->restore();
         LabScene::drawTag(painter, QPointF(meetX, m_viewArea.top() + 12.0),
-                          QStringLiteral("встреча: t = %1 ч").arg(utils::formatNumber(event, 2)),
-                          QColor(234, 247, 239, 235), style::success().darker(120));
+                          QStringLiteral("встреча"), style::success().darker(120).lighter(160),
+                          style::success().darker(120));
     }
 
     // ---- График x(t) и расстояния ----

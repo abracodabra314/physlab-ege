@@ -7,6 +7,7 @@
 
 #include "models/BoatModel.h"
 #include "scenes/SchemePrimitives.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "scenes/VectorArrows.h"
 #include "utils/MathText.h"
@@ -150,15 +151,14 @@ void BoatScene::paintScheme(QPainter* painter) {
         painter->drawRoundedRect(QRectF(xB - 30, river.top() - 22, 60, 30), 6, 6);
     painter->restore();
 
-    LabScene::drawTag(painter, QPointF(xA, river.top() - 58.0), QStringLiteral("Пристань А (x = 0)"),
-                      QColor(255, 255, 255, 235), QColor(90, 70, 50));
-    LabScene::drawTag(painter, QPointF(xB, river.top() - 58.0),
-                      QStringLiteral("Пристань Б (x = %1 км)").arg(utils::formatNumber(L, 0)),
-                      QColor(255, 255, 255, 235), QColor(90, 70, 50));
+    LabScene::drawTag(painter, QPointF(xA, river.top() - 58.0), QStringLiteral("Пристань А"),
+                      QColor(255, 255, 255, 235), style::ink());
+    LabScene::drawTag(painter, QPointF(xB, river.top() - 58.0), QStringLiteral("Пристань Б"),
+                      QColor(255, 255, 255, 235), style::ink());
 
     // ---- Размерная линия расстояния между пристанями ----
     LabScene::drawDimension(painter, QPointF(xA, m_viewArea.top() + 12.0), QPointF(xB, m_viewArea.top() + 12.0),
-                            QStringLiteral("S = %1 км").arg(utils::formatNumber(L, 0)), style::ink());
+                            QStringLiteral("S"), style::ink());
 
     // ---- Векторы: собственная скорость + скорость течения = скорость относительно берега ----
     const double u = boat->currentSpeed();
@@ -239,8 +239,7 @@ void BoatScene::paintScheme(QPainter* painter) {
 
         if (!departed) {
             LabScene::drawTag(painter, QPointF(x, laneY + 22.0 * s),
-                              QStringLiteral("отправление через %1 ч")
-                                  .arg(utils::formatNumber(entity.value2 - m_model->time(), 2)),
+                              QStringLiteral("ждёт отправления (t₀)"),
                               QColor(255, 250, 235, 235), style::accentWarm());
         } else if (entity.active && std::abs(shore) < 1e-9) {
             LabScene::drawTag(painter, QPointF(x, laneY + 22.0 * s), QStringLiteral("стоит на месте"),
@@ -253,8 +252,7 @@ void BoatScene::paintScheme(QPainter* painter) {
     const double x2 = toSceneX(state.entities.at(1).position);
     if (state.primary > 1e-6) {
         LabScene::drawDimension(painter, QPointF(x1, riverBottom + 30.0), QPointF(x2, riverBottom + 30.0),
-                                QStringLiteral("s = %1 км").arg(utils::formatNumber(state.primary, 1)),
-                                style::inkSoft());
+                                QStringLiteral("s"), style::inkSoft());
     }
 
     // ---- Масштабный ряд отметок пути на нижней бровке ----
@@ -269,7 +267,9 @@ void BoatScene::paintScheme(QPainter* painter) {
     painter->restore();
 
     if (!state.eventLabel.isEmpty()) {
-        LabScene::drawTag(painter, QPointF(m_viewArea.center().x(), riverBottom + 52.0), state.eventLabel,
+        // Числа события — на панели; на рисунке остаётся словесная часть.
+        LabScene::drawTag(painter, QPointF(m_viewArea.center().x(), riverBottom + 52.0),
+                          lab::labels::stripValues(state.eventLabel),
                           QColor(234, 247, 239, 240), style::success().darker(130));
     }
 }

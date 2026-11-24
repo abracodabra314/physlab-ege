@@ -138,7 +138,7 @@ QVector<vectors::Arrow> SpringVerticalScene::vectorsFor(double t) const {
     const double v = model->velocityAt(t);
     const QRectF block = blockRectOfElongation(model->elongationAt(t));
 
-    if (m_model->showsForces()) {
+    if (true) {  // силы в динамической модели показываем всегда, в отличие от v и a
         // Сила тяжести — из центра груза вниз.
         vectors::Arrow gravityArrow;
         gravityArrow.from = block.center();
@@ -264,12 +264,12 @@ void SpringVerticalScene::paintScheme(QPainter* painter) {
     if (elongation > 1e-6) {
         drawDimension(painter, QPointF(m_anchorX + 40.0, m_supportRect.bottom()),
                       QPointF(m_anchorX + 40.0, block.top()),
-                      QStringLiteral("Δl = %1 м").arg(utils::formatNumber(elongation, 3)), style::inkSoft(), 0.0);
+                      QStringLiteral("Δl"), style::inkSoft(), 0.0);
     }
     // Смещение относительно равновесия.
     if (std::abs(x) > 1e-6) {
         drawDimension(painter, QPointF(m_anchorX - 46.0, equilibriumY), QPointF(m_anchorX - 46.0, block.center().y()),
-                      QStringLiteral("x = %1 м").arg(utils::formatNumber(x, 3)), style::accent(), 0.0);
+                      QStringLiteral("x"), style::accent(), 0.0);
     }
 
     drawForces(painter, vectorsFor(m_model->time()));

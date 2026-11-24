@@ -349,17 +349,15 @@ TEST(HorizonGeometry, LabelsCarryModelNumbers) {
     HorizonScene scene(&model);
     prepare(scene, model, model.ascentTime() * 0.5);
 
-    // Подписи берут числа из формул модели: сверяем каждую.
+    // Чертеж подписан обозначениями: чисел на рисунке нет, они на панелях.
     const double t = model.time();
+    Q_UNUSED(t);
     QHash<QString, QString> expected;
-    expected.insert(QStringLiteral("height"), QStringLiteral("h = %1 м").arg(lab::utils::formatNumber(model.heightAt(t), 1)));
-    expected.insert(QStringLiteral("distance"),
-                    QStringLiteral("d = %1 км").arg(lab::utils::formatNumber(model.horizonDistanceAt(t) / 1000.0, 3)));
-    expected.insert(QStringLiteral("arc"),
-                    QStringLiteral("s = %1 км").arg(lab::utils::formatNumber(model.arcDistanceAt(t) / 1000.0, 3)));
-    expected.insert(QStringLiteral("alpha"),
-                    QStringLiteral("α = %1°").arg(lab::utils::formatNumber(model.dipAngleAt(t), 3)));
-    expected.insert(QStringLiteral("radius"), QStringLiteral("R = 6371 км"));
+    expected.insert(QStringLiteral("height"), QStringLiteral("h"));
+    expected.insert(QStringLiteral("distance"), QStringLiteral("d"));
+    expected.insert(QStringLiteral("arc"), QStringLiteral("s"));
+    expected.insert(QStringLiteral("alpha"), QStringLiteral("α"));
+    expected.insert(QStringLiteral("radius"), QStringLiteral("R"));
 
     const QVector<HorizonScene::Annotation> notes = scene.annotations();
     for (const HorizonScene::Annotation& note : notes) {
@@ -390,12 +388,12 @@ TEST(HorizonVectors, OnlyAscentVelocityIsShown) {
     ASSERT_NE(velocity, nullptr);
     EXPECT_EQ(velocity->symbol, QStringLiteral("v"));
 
-    // Сил в модели нет: подъём задан кинематически, сила подъёмника
-    // в расчёт не входит. Ускорения тоже нет — скорость постоянна.
-    EXPECT_EQ(find(arrows, Kind::Gravity), nullptr);
+    // Подъём равномерный: на наблюдателя действуют две равные силы —
+    // тяжесть mg и подъёмная F. Ускорения нет — скорость постоянна.
+    EXPECT_NE(find(arrows, Kind::Gravity), nullptr);
+    EXPECT_NE(find(arrows, Kind::Tension), nullptr);
     EXPECT_EQ(find(arrows, Kind::Normal), nullptr);
     EXPECT_EQ(find(arrows, Kind::Friction), nullptr);
-    EXPECT_EQ(find(arrows, Kind::Tension), nullptr);
     EXPECT_EQ(find(arrows, Kind::Elastic), nullptr);
     EXPECT_EQ(find(arrows, Kind::Acceleration), nullptr);
     // Стрелок скорости не может быть больше одной.
@@ -418,7 +416,8 @@ TEST(HorizonVectors, VelocityArrowPointsUpFromObserver) {
     ASSERT_NE(velocity, nullptr);
 
     const QPointF observer = scene.schemeGeometry().observer;
-    EXPECT_NEAR(velocity->from.x(), observer.x(), 1e-9);
+    // Стрелка скорости отложена в сторону от вертикальной пары сил mg и F.
+    EXPECT_NEAR(velocity->from.x(), observer.x() + 46.0, 1e-9);
     EXPECT_NEAR(velocity->from.y(), observer.y(), 1e-9);
     // Подъём: стрелка вверх (в координатах сцены — в сторону уменьшения y).
     EXPECT_NEAR(velocity->to.x(), velocity->from.x(), 1e-9);
@@ -432,8 +431,10 @@ TEST(HorizonVectors, NoVelocityAfterAscentFinishes) {
     HorizonScene scene(&model);
     prepare(scene, model, model.duration());
 
-    // Наблюдатель остановился: вектора скорости нет.
-    EXPECT_TRUE(scene.vectorsFor(model.time()).isEmpty());
+    // Наблюдатель остановился: вектора скорости нет, силы остались.
+    const QVector<Arrow> arrows = scene.vectorsFor(model.time());
+    EXPECT_EQ(find(arrows, Kind::Velocity), nullptr);
+    EXPECT_NE(find(arrows, Kind::Gravity), nullptr);
 }
 
 TEST(HorizonVectors, VelocityScalesWithAscentSpeed) {
@@ -468,7 +469,9 @@ TEST(HorizonVectors, VelocitiesToggleIndependently) {
     ASSERT_FALSE(scene.vectorsFor(t).isEmpty());
     model.setShowsVelocities(false);
     const QVector<Arrow> hidden = scene.vectorsFor(t);
-    EXPECT_TRUE(hidden.isEmpty());
+    // Скорость скрылась, а уравновешенные силы — часть чертежа, они остались.
+    EXPECT_EQ(find(hidden, Kind::Velocity), nullptr);
+    EXPECT_NE(find(hidden, Kind::Gravity), nullptr);
     model.setShowsVelocities(true);
     const QVector<Arrow> shown = scene.vectorsFor(t);
     EXPECT_NE(find(shown, Kind::Velocity), nullptr);

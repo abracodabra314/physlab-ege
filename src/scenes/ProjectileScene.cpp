@@ -210,7 +210,7 @@ QVector<vectors::Arrow> ProjectileScene::vectorsFor(double t) const {
         arrows.push_back(velocity);
     }
 
-    if (m_model->showsForces()) {
+    if (true) {  // силы в динамической модели показываем всегда, в отличие от v и a
         // Единственная сила, которая действует на снаряд после вылета, —
         // сила тяжести. Силы сопротивления в модели нет, поэтому других
         // стрелок на схеме не появляется.
@@ -308,7 +308,7 @@ void ProjectileScene::drawAngleArc(QPainter* painter) const {
     painter->drawLine(muzzle, muzzle + QPointF(radius * 1.2, 0.0));
 
     drawTag(painter, muzzle + QPointF(std::cos(radians / 2.0), -std::sin(radians / 2.0)) * (radius * 1.55),
-            QStringLiteral("θ = %1°").arg(utils::formatNumber(angle, 1)), QColor(255, 255, 255, 225),
+            QStringLiteral("θ"), QColor(255, 255, 255, 225),
             style::accent().darker(120));
 }
 
@@ -330,7 +330,7 @@ void ProjectileScene::drawProjections(QPainter* painter, const QPointF& shell) c
     painter->setBrush(style::paper());
     painter->drawEllipse(onXAxis, 5.0, 5.0);
     drawTag(painter, QPointF(onXAxis.x(), m_groundY + 12.0),
-            QStringLiteral("x = %1 м").arg(utils::formatNumber(x, 1)), QColor(255, 255, 255, 225),
+            QStringLiteral("x"), QColor(255, 255, 255, 225),
             style::bodyA().darker(160));
 
     // Проекция на ось Y: горизонтальный пунктир до оси ординат.
@@ -340,7 +340,7 @@ void ProjectileScene::drawProjections(QPainter* painter, const QPointF& shell) c
     painter->setBrush(style::paper());
     painter->drawEllipse(onYAxis, 5.0, 5.0);
     drawTag(painter, QPointF(onYAxis.x() - 4.0, onYAxis.y()),
-            QStringLiteral("y = %1 м").arg(utils::formatNumber(y, 1)), QColor(255, 255, 255, 225),
+            QStringLiteral("y"), QColor(255, 255, 255, 225),
             style::bodyC().darker(150));
 }
 
@@ -440,7 +440,7 @@ void ProjectileScene::paintScheme(QPainter* painter) {
         Q_UNUSED(radians);
     }
     drawTag(painter, QPointF(origin.x() + 60.0, muzzle.y() - 22.0),
-            QStringLiteral("y₀ = %1 м").arg(utils::formatNumber(model->launchHeight(), 1)),
+            QStringLiteral("y₀"),
             QColor(255, 255, 255, 225), style::ink());
 
     // ---- точка падения: ключевое событие задачи ----
@@ -452,13 +452,12 @@ void ProjectileScene::paintScheme(QPainter* painter) {
         painter->drawLine(landing + QPointF(-8.0, 8.0), landing + QPointF(8.0, -8.0));
         if (m_model->time() >= flight - 1e-9) {
             drawTag(painter, QPointF(landing.x(), m_groundY - 26.0),
-                    QStringLiteral("падение: t = %1 с, L = %2 м")
-                        .arg(utils::formatNumber(flight, 2), utils::formatNumber(model->range(), 1)),
+                    QStringLiteral("падение: t, L"),
                     QColor(234, 247, 239, 235), style::success().darker(120));
         }
         // Дальность полёта — размерная линия вдоль горизонта.
         drawDimension(painter, QPointF(muzzle.x(), m_groundY - 8.0), landing,
-                      QStringLiteral("L = %1 м").arg(utils::formatNumber(model->range(), 1)), style::inkSoft(), 24.0);
+                      QStringLiteral("L"), style::inkSoft(), 24.0);
     }
 
     // ---- наибольшая высота ----
@@ -468,7 +467,7 @@ void ProjectileScene::paintScheme(QPainter* painter) {
         painter->setPen(QPen(style::accentWarm(), 1.2, Qt::DashLine));
         painter->drawLine(QPointF(top.x() - 26.0, top.y()), QPointF(top.x() + 26.0, top.y()));
         drawTag(painter, QPointF(top.x(), top.y() - 14.0),
-                QStringLiteral("H = %1 м").arg(utils::formatNumber(model->maxHeight(), 1)),
+                QStringLiteral("H"),
                 QColor(255, 255, 255, 225), style::accentWarm().darker(140));
     }
 

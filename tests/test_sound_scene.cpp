@@ -489,15 +489,15 @@ TEST(SoundLabels, LabelsCarryModelNumbers) {
     prepare(scene, model, model.arrivalTime(0) + 0.5);
     const double t = model.time();
 
+    // Рисунок несёт обозначения, а не числа: они остались на панелях.
+    Q_UNUSED(t);
+    const QString subscripts = QStringLiteral("₀₁₂₃₄₅₆₇₈₉");
     QHash<QString, QString> expected;
-    expected.insert(QStringLiteral("gap"),
-                    QStringLiteral("L(t) = %1 м").arg(lab::utils::formatNumber(model.gapAt(t), 0)));
-    expected.insert(QStringLiteral("period"),
-                    QStringLiteral("T′ = %1 с").arg(lab::utils::formatNumber(model.receptionPeriod(), 3)));
+    expected.insert(QStringLiteral("gap"), QStringLiteral("L(t)"));
+    expected.insert(QStringLiteral("period"), QStringLiteral("T′"));
     for (int index = 0; index < SoundModel::signalCount(); ++index) {
         expected.insert(QStringLiteral("front_%1").arg(index + 1),
-                        QStringLiteral("r%1 = %2 м").arg(index + 1)
-                            .arg(lab::utils::formatNumber(model.frontRadius(index, t), 0)));
+                        QStringLiteral("r%1").arg(subscripts.at(index + 1)));
     }
 
     const QVector<SoundScene::Annotation> notes = scene.annotations();

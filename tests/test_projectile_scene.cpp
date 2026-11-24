@@ -246,7 +246,8 @@ TEST(ProjectileVectors, CategoriesToggledIndependently) {
     model.setShowsVelocities(true);
     model.setShowsForces(false);
     const QVector<Arrow> withoutForces = scene.vectorsFor(t);
-    EXPECT_EQ(find(withoutForces, Kind::Gravity), nullptr);
+    // После вылета на снаряд действует только тяжесть — она на чертеже всегда.
+    EXPECT_NE(find(withoutForces, Kind::Gravity), nullptr);
     EXPECT_NE(find(withoutForces, Kind::Velocity), nullptr);
 
     model.setShowsForces(true);

@@ -332,9 +332,10 @@ TEST(SpringVerticalVectors, CategoriesToggledIndependently) {
     ASSERT_NE(find(scene.vectorsFor(t), Kind::Velocity), nullptr);
     ASSERT_NE(find(scene.vectorsFor(t), Kind::Acceleration), nullptr);
 
+    // Силы маятника — всегда: их две, mg и Fупр, переключатель их не скрывает.
     model.setShowsForces(false);
-    EXPECT_EQ(find(scene.vectorsFor(t), Kind::Gravity), nullptr);
-    EXPECT_EQ(find(scene.vectorsFor(t), Kind::Elastic), nullptr);
+    EXPECT_NE(find(scene.vectorsFor(t), Kind::Gravity), nullptr);
+    EXPECT_NE(find(scene.vectorsFor(t), Kind::Elastic), nullptr);
     EXPECT_NE(find(scene.vectorsFor(t), Kind::Velocity), nullptr);
 
     model.setShowsForces(true);

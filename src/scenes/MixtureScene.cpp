@@ -7,6 +7,7 @@
 
 #include "models/MixtureModel.h"
 #include "scenes/SchemePrimitives.h"
+#include "scenes/SchemeLabels.h"
 #include "scenes/Style.h"
 #include "scenes/VectorArrows.h"
 #include "utils/MathText.h"
@@ -189,6 +190,7 @@ void MixtureScene::paintScheme(QPainter* painter) {
         const double concentration = entity.value1;   // проценты
         const QColor liquid = liquidColor(concentration);
         const double litersInVessel = i < 2 ? entity.value2 * entity.position : entity.value2;
+        Q_UNUSED(litersInVessel);  // объём показан шкалой, число — на панели
         const double capacityLiters = i < 2 ? std::max(1.0, entity.value2) : std::max(1.0, mix->totalVolume());
 
         primitives::drawVessel(painter, vessel, entity.position, QColor(96, 104, 116), liquid, 2.4);
@@ -197,12 +199,11 @@ void MixtureScene::paintScheme(QPainter* painter) {
                           i < 2 ? QStringLiteral("Раствор %1").arg(i + 1) : QStringLiteral("Смеситель"),
                           QColor(255, 255, 255, 235), style::ink());
         LabScene::drawTag(painter, QPointF(vessel.center().x(), vessel.top() - (i < 2 ? 30.0 : 44.0)),
-                          QStringLiteral("V = %1 л из %2").arg(utils::formatNumber(litersInVessel, 1),
-                                                               utils::formatNumber(capacityLiters, 0)),
+                          QStringLiteral("V"),
                           QColor(255, 255, 255, 225), style::inkSoft());
         if (entity.position > 0.10) {
             LabScene::drawTag(painter, QPointF(vessel.center().x(), vessel.center().y()),
-                              QStringLiteral("C = %1 %").arg(utils::formatNumber(concentration, 1)),
+                              QStringLiteral("C"),
                               QColor(255, 255, 255, 205), liquid.darker(220));
         }
         primitives::drawScale(painter, vessel.adjusted(4, 0, 4, 0), 8, QStringLiteral("л"), capacityLiters,
@@ -238,8 +239,7 @@ void MixtureScene::paintScheme(QPainter* painter) {
         painter->drawRoundedRect(QRectF(barLeft, y, std::max(2.0, w), 17.0), 4, 4);
         painter->setPen(style::ink());
         painter->setFont(style::uiFont(9.0, true));
-        painter->drawText(QRectF(barLeft, y - 17, barWidth, 15), Qt::AlignLeft,
-                          QStringLiteral("%1 = %2 л").arg(bar.name).arg(utils::formatNumber(bar.solute, 2)));
+        painter->drawText(QRectF(barLeft, y - 17, barWidth, 15), Qt::AlignLeft, bar.name);
         painter->restore();
     }
 
@@ -252,6 +252,7 @@ void MixtureScene::paintScheme(QPainter* painter) {
     painter->drawRoundedRect(gauge, 6, 6);
     const double cNow = state.primary * 100.0;
     const double cFinal = mix->finalConcentration() * 100.0;
+    Q_UNUSED(cFinal);  // итоговая концентрация — в панели
     for (int i = 0; i <= 100; i += 2) {
         const double x = gauge.left() + 4 + (gauge.width() - 8) * i / 100.0;
         painter->setPen(QPen(liquidColor(i), 2.2));
@@ -267,12 +268,11 @@ void MixtureScene::paintScheme(QPainter* painter) {
                       QStringLiteral("100 %"));
     painter->restore();
     LabScene::drawTag(painter, QPointF(mixer.center().x(), gauge.bottom() + 24.0),
-                      QStringLiteral("C смеси = %1 % (итог %2 %)")
-                          .arg(utils::formatNumber(cNow, 1), utils::formatNumber(cFinal, 2)),
+                      QStringLiteral("C смеси"),
                       QColor(255, 255, 255, 235), style::ink());
 
     LabScene::drawTag(painter, QPointF(mixer.center().x(), mixer.top() - 22.0),
-                      QStringLiteral("V смеси = %1 л").arg(utils::formatNumber(state.secondary, 1)),
+                      QStringLiteral("V смеси"),
                       QColor(255, 255, 255, 235), style::inkSoft());
 
     // План работы насосов: зависит от состояния кранов и выбранного режима.
@@ -282,22 +282,17 @@ void MixtureScene::paintScheme(QPainter* painter) {
         for (int i = 0; i < 2; ++i) {
             if (!mix->tapOpen(i))
                 continue;
-            parts << QStringLiteral("раствор %1 — 0…%2 мин").arg(i + 1)
-                         .arg(utils::formatNumber(mix->pumpDuration(i), 2));
+            parts << QStringLiteral("раствор %1 — 0…t%2").arg(i + 1).arg(QString::fromUtf8(i == 0 ? "₁" : "₂"));
         }
         schedule = parts.isEmpty() ? QStringLiteral("оба крана закрыты")
                                    : QStringLiteral("оба крана открыты: %1").arg(parts.join(QStringLiteral(", ")));
     } else {
         if (mix->tapOpen(0) && mix->tapOpen(1))
-            schedule = QStringLiteral("насос: раствор 1 — 0…%1 мин, раствор 2 — %1…%2 мин")
-                           .arg(utils::formatNumber(mix->pumpSwitchTime(), 2),
-                                utils::formatNumber(mix->eventTime(), 2));
+            schedule = QStringLiteral("насос: раствор 1 — 0…tₚ, раствор 2 — tₚ…T");
         else if (mix->tapOpen(0))
-            schedule = QStringLiteral("насос: раствор 1 — 0…%1 мин, линия 2 закрыта")
-                           .arg(utils::formatNumber(mix->pumpDuration(0), 2));
+            schedule = QStringLiteral("насос: раствор 1 — 0…T, линия 2 закрыта");
         else if (mix->tapOpen(1))
-            schedule = QStringLiteral("насос: раствор 2 — 0…%1 мин, линия 1 закрыта")
-                           .arg(utils::formatNumber(mix->pumpDuration(1), 2));
+            schedule = QStringLiteral("насос: раствор 2 — 0…T, линия 1 закрыта");
         else
             schedule = QStringLiteral("оба крана закрыты");
     }
@@ -305,7 +300,8 @@ void MixtureScene::paintScheme(QPainter* painter) {
                       QColor(255, 255, 255, 230), style::inkSoft());
 
     if (!state.eventLabel.isEmpty()) {
-        LabScene::drawTag(painter, QPointF(m_viewArea.center().x(), m_viewArea.top() + 12.0), state.eventLabel,
+        LabScene::drawTag(painter, QPointF(m_viewArea.center().x(), m_viewArea.top() + 12.0),
+                          lab::labels::stripValues(state.eventLabel),
                           QColor(234, 247, 239, 240), style::success().darker(130));
     }
 }

@@ -325,9 +325,9 @@ TEST(CircuitSceneVectors, CurrentArrowsAppearOnlyOnConductingBranches) {
         EXPECT_TRUE(std::abs(delta.x()) < 1e-6 || std::abs(delta.y()) < 1e-6);
     }
 
-    // С выключенными векторами тока чертёж остаётся без стрелок.
+    // Стрелки тока — часть чертежа: переключатель их не прячет.
     model.setShowsForces(false);
-    EXPECT_TRUE(scene.vectorsFor(1.0).isEmpty());
+    EXPECT_GT(scene.vectorsFor(1.0).size(), 0);
 }
 
 TEST(CircuitSceneVectors, BrokenCircuitHasNoArrows) {

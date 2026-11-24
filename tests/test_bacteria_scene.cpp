@@ -574,15 +574,25 @@ TEST(BacteriaScene, AnnotationsCarryModelNumbers) {
     for (const BacteriaScene::Annotation& annotation : scene.annotations())
         all += annotation.id + QStringLiteral(" ") + annotation.text;
 
-    // Постоянная роста, период удвоения, момент цели и число клеток.
-    EXPECT_TRUE(all.contains(model.ratioText(model.growthRate())));
-    EXPECT_TRUE(all.contains(BacteriaModel::durationText(model.doublingTime())));
-    EXPECT_TRUE(all.contains(BacteriaModel::durationText(model.targetTime())));
-    EXPECT_TRUE(all.contains(BacteriaModel::cellsText(std::round(model.countedCellsAt(model.time())))));
-    EXPECT_TRUE(all.contains(BacteriaModel::durationText(model.observationInterval())));
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.growthRateOfCellsAt(model.time()), 1)));
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.divisionsElapsedAt(model.time()), 3)));
-    EXPECT_TRUE(all.contains(BacteriaModel::cellsText(model.targetCells())));
+    // На чертеже — обозначения и формулы деления; чисел-величин нет.
+    EXPECT_TRUE(all.contains(QStringLiteral("N = N₀·2")));
+    EXPECT_TRUE(all.contains(QStringLiteral("T_d")));
+    EXPECT_TRUE(all.contains(QStringLiteral("N_мест")));
+    auto carriesValue = [](const QString& text) {
+        int run = 0;
+        for (const QChar symbol : text) {
+            if (symbol.unicode() >= '0' && symbol.unicode() <= '9') {
+                ++run;
+                if (run >= 2)
+                    return true;
+            } else if (symbol != QLatin1Char(',')) {
+                run = 0;
+            }
+        }
+        return false;
+    };
+    for (const BacteriaScene::Annotation& annotation : scene.annotations())
+        EXPECT_FALSE(carriesValue(annotation.text)) << annotation.id.toUtf8().constData();
 }
 
 TEST(BacteriaScene, AnnotationsSayThatOverflowDoesNotStopGrowth) {
@@ -595,9 +605,8 @@ TEST(BacteriaScene, AnnotationsSayThatOverflowDoesNotStopGrowth) {
     QString all;
     for (const BacteriaScene::Annotation& annotation : scene.annotations())
         all += annotation.text;
-    // Процент радиуса и фактор переполнения берутся из модели, а не «на глаз».
-    EXPECT_TRUE(all.contains(lab::utils::formatNumber(model.overflowFactorAt(model.time()), 2)));
-    EXPECT_TRUE(all.contains(BacteriaModel::cellsText(model.dishCapacity())));
+    // Переполнение описано словами: рост не останавливается, числа — в панели.
+    EXPECT_TRUE(all.contains(QStringLiteral("рост")));
 }
 
 TEST(BacteriaScene, NarrowSchemeKeepsAnnotationsSeparate) {

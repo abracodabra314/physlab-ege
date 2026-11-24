@@ -18,7 +18,7 @@ namespace {
 constexpr double kCubicMetersPerLiter = 1e-3;
 constexpr double kPascalsPerKilopascal = 1e3;
 constexpr double kSquareMetersPerSquareCentimeter = 1e-4;
-constexpr double kGramsPerKilogram = 1e3;
+[[maybe_unused]] constexpr double kGramsPerKilogram = 1000.0;
 
 /** Отступы полосы схемы и размеры её элементов. */
 constexpr double kBandPadding = 20.0;
@@ -208,7 +208,7 @@ QVector<vectors::Arrow> AdiabaticScene::vectorsFor(double t) const {
     const double pistonMid = pistonBottom - kPistonThickness * 0.5;
     const QPointF axis(m_vessel.center().x(), pistonMid);
 
-    if (m_model->showsForces()) {
+    if (true) {  // силы в динамической модели показываем всегда, в отличие от v и a
         // Сила давления газа на поршень: F = pS, направлена вверх — газ
         // выталкивает поршень.
         const double gasForce = model->gasForceAt(t);
@@ -561,10 +561,7 @@ QVector<AdiabaticScene::Annotation> AdiabaticScene::annotations() const {
         QStringLiteral("state"),
         {QPointF(m_vessel.center().x(), m_bottomY - gasHeight * 0.5),
          QPointF(m_vessel.center().x(), m_bottomY - gasHeight * 0.25)},
-        QStringLiteral("V = %1 л, p = %2 кПа, T = %3 К")
-            .arg(utils::formatNumber(model->volumeAt(t) / kCubicMetersPerLiter, 2),
-                 utils::formatNumber(model->pressureAt(t) / kPascalsPerKilopascal, 1),
-                 utils::formatNumber(model->temperatureAt(t), 1)),
+        QStringLiteral("V, p, T"),
         style::ink());
 
     // Высота столба газа у линейки высот: она же переводится в объём V = S·h.
@@ -572,7 +569,7 @@ QVector<AdiabaticScene::Annotation> AdiabaticScene::annotations() const {
         QStringLiteral("height"),
         {QPointF(m_vessel.left() - kBandPadding * 2.2, pistonBottom - kPistonThickness * 0.5),
          QPointF(m_vessel.left() - kBandPadding * 2.2, m_vessel.center().y())},
-        QStringLiteral("h = %1 мм").arg(utils::formatNumber(heightForVolume(model->volumeAt(t)) * 1000.0, 1)),
+        QStringLiteral("h"),
         style::bodyB().darker(150));
 
     // Начальное и конечное положения поршня.
@@ -580,17 +577,13 @@ QVector<AdiabaticScene::Annotation> AdiabaticScene::annotations() const {
         QStringLiteral("start"),
         {QPointF(m_vessel.left() + kBandPadding * 1.4, m_bottomY - pixelsForHeight(m_startHeight) - 14.0),
          QPointF(m_vessel.left() + kBandPadding * 1.4, m_bottomY - pixelsForHeight(m_startHeight) + 14.0)},
-        QStringLiteral("V₁ = %1 л, T₁ = %2 К")
-            .arg(utils::formatNumber(model->initialVolume() / kCubicMetersPerLiter, 2),
-                 utils::formatNumber(model->initialTemperature(), 1)),
+        QStringLiteral("V₁, T₁"),
         style::bodyA().darker(160));
     planner.addFirstFree(
         QStringLiteral("finish"),
         {QPointF(m_vessel.left() + kBandPadding * 1.4, m_bottomY - pixelsForHeight(m_endHeight) + 14.0),
          QPointF(m_vessel.left() + kBandPadding * 1.4, m_bottomY - pixelsForHeight(m_endHeight) - 14.0)},
-        QStringLiteral("V₂ = %1 л, T₂ = %2 К")
-            .arg(utils::formatNumber(model->finalVolume() / kCubicMetersPerLiter, 2),
-                 utils::formatNumber(model->finalTemperature(), 1)),
+        QStringLiteral("V₂, T₂"),
         style::bodyC().darker(160));
 
     // Шкалы давлений и температур.
@@ -609,33 +602,28 @@ QVector<AdiabaticScene::Annotation> AdiabaticScene::annotations() const {
     planner.addFirstFree(
         QStringLiteral("outside"),
         {QPointF(pressureX + kGaugeWidth + 22.0, m_band.top() + 14.0), QPointF(pressureX, m_band.top() + 14.0)},
-        QStringLiteral("p₀ = %1 кПа").arg(utils::formatNumber(model->outsidePressure() / kPascalsPerKilopascal, 1)),
+        QStringLiteral("p₀"),
         style::ink());
 
     // Силы на поршень: их величины берутся из формул модели.
     planner.addFirstFree(
         QStringLiteral("forces"),
         {QPointF(m_vessel.center().x(), m_band.top() + 12.0), QPointF(m_vessel.center().x(), m_band.top() + 32.0)},
-        QStringLiteral("F = pS = %1 Н, F₀ = p₀S = %2 Н, Fвнеш = %3 Н")
-            .arg(utils::formatNumber(model->gasForceAt(t), 0), utils::formatNumber(model->outsideForce(), 0),
-                 utils::formatNumber(std::abs(model->externalForceAt(t)), 0)),
+        QStringLiteral("F = pS, F₀ = p₀S, Fвнеш"),
         style::inkSoft(), QColor(255, 255, 255, 205));
 
     // Скорость молекул: та же формула, что и в панели вычислений.
     planner.addFirstFree(
         QStringLiteral("molecules"),
         {QPointF(m_band.left() + 150.0, m_band.bottom() - 12.0), QPointF(m_band.left() + 150.0, m_band.bottom() - 30.0)},
-        QStringLiteral("v = √(3RT/M) = %1 м/с при M = %2 г/моль")
-            .arg(utils::formatNumber(model->rmsSpeedAtTime(t), 0),
-                 utils::formatNumber(model->molarMass() * kGramsPerKilogram, 1)),
+        QStringLiteral("v = √(3RT/M)"),
         style::bodyD().darker(160));
 
     // Работа и первое начало: знак работы объясняет, кто совершает процесс.
     planner.addFirstFree(
         QStringLiteral("work"),
         {QPointF(m_band.center().x(), m_band.bottom() - 12.0), QPointF(m_band.center().x(), m_band.bottom() - 30.0)},
-        QStringLiteral("Q = 0, A = −ΔU: A(t) = %1 Дж, ΔU(t) = %2 Дж")
-            .arg(utils::formatNumber(model->workAt(t), 0), utils::formatNumber(model->energyChangeAt(t), 0)),
+        QStringLiteral("Q = 0, A = −ΔU"),
         style::inkSoft(), QColor(255, 255, 255, 205));
 
     // Ответ задачи: состояние после завершения процесса.
@@ -644,9 +632,7 @@ QVector<AdiabaticScene::Annotation> AdiabaticScene::annotations() const {
             QStringLiteral("result"),
             {QPointF(m_band.right() - 190.0, m_band.bottom() - 12.0),
              QPointF(m_band.right() - 190.0, m_band.bottom() - 32.0)},
-            QStringLiteral("конец процесса: p₂ = %1 кПа, T₂ = %2 К")
-                .arg(utils::formatNumber(model->finalPressure() / kPascalsPerKilopascal, 1),
-                     utils::formatNumber(model->finalTemperature(), 1)),
+            QStringLiteral("конец процесса: p₂, T₂"),
             style::success().darker(130), QColor(234, 247, 239, 240));
     }
 

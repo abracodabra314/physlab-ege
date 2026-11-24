@@ -683,15 +683,13 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
     // Верхняя строка: заголовок чашки (с расшифровкой клетки) и закон роста.
     planner.addFirstFree(
         QStringLiteral("dish-title"), {QPointF(m_dish.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("чашка: посев %1, 1 клетка = %2")
-                    .arg(models::BacteriaModel::cellsText(model->initialCells()),
-                         models::BacteriaModel::cellsText(m_cellsPerCell))
-              : QStringLiteral("чашка: посев %1").arg(models::BacteriaModel::cellsText(model->initialCells())),
+        roomy ? QStringLiteral("чашка: посев N₀, 1 клетка рисунка — несколько настоящих")
+              : QStringLiteral("чашка: посев N₀"),
         style::ink());
     planner.addFirstFree(
         QStringLiteral("law"), {QPointF(m_strip.center().x(), m_band.top() + kBandPadding + 8.0)},
-        roomy ? QStringLiteral("ход опыта: N = N₀·2^(t/T_d), k = ln2/T_d = %1 ч⁻¹").arg(model->ratioText(model->growthRate()))
-              : QStringLiteral("N = N₀·2^(t/T_d), k = %1 ч⁻¹").arg(model->ratioText(model->growthRate())),
+        roomy ? QStringLiteral("ход опыта: N = N₀·2^(t/T_d), k = ln2/T_d")
+              : QStringLiteral("N = N₀·2^(t/T_d)"),
         theoryColor().darker(160));
 
     if (!model->validate().ok) {
@@ -700,32 +698,24 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
         return planner.items();
     }
 
-    const double theory = model->theoryCellsAt(t);
-    const double counted = model->countedCellsAt(t);
+
+    Q_UNUSED(model->theoryCellsAt(t));   // теория и счёт — на шкалах и панелях
+    Q_UNUSED(model->countedCellsAt(t));
     const double total = model->duration();
     const double overflow = model->overflowFactorAt(t);
 
     // Под чашкой: радиус колонии и сколько клеток в кадре помещается.
     planner.addFirstFree(
         QStringLiteral("colony"), {QPointF(m_dish.center().x(), m_dish.bottom() + kCaptionRow * 0.5)},
-        roomy ? QStringLiteral("N = %1\nR = R₀·√(N/N_мест) = %2 %")
-                    .arg(models::BacteriaModel::cellsText(counted),
-                         utils::formatNumber(100.0 * std::min(1.0, std::sqrt(std::max(0.0, overflow))), 1))
-              : QStringLiteral("N = %1\nR = %2 %")
-                    .arg(models::BacteriaModel::cellsText(counted),
-                         utils::formatNumber(100.0 * std::min(1.0, std::sqrt(std::max(0.0, overflow))), 1)),
+        roomy ? QStringLiteral("N клеток\nR = R₀·√(N/N_мест)")
+              : QStringLiteral("N · R = R₀·√(N/N_мест)"),
         style::ink(), QColor(255, 255, 255, 220));
 
     // Деления, прошедшие к моменту t: их берут и из времени, и из числа клеток.
     planner.addFirstFree(
         QStringLiteral("divisions"), {QPointF(m_strip.center().x(), m_strip.bottom() - 12.0)},
-        roomy ? QStringLiteral("n = t/T_d = %1, завершено %2, клеток %3 · теория %4")
-                    .arg(utils::formatNumber(model->divisionsElapsedAt(t), 3),
-                         utils::formatNumber(model->completedDivisionsAt(t), 0),
-                         models::BacteriaModel::cellsText(counted), models::BacteriaModel::cellsText(theory))
-              : QStringLiteral("n = %1, клеток %2")
-                    .arg(utils::formatNumber(model->divisionsElapsedAt(t), 2),
-                         models::BacteriaModel::cellsText(counted)),
+        roomy ? QStringLiteral("n = t/T_d · завершено n · клеток N")
+              : QStringLiteral("n = t/T_d"),
         style::ink(), QColor(255, 255, 255, 220));
 
     // Искомый момент: целевое число клеток и его пересечение с кривой.
@@ -735,9 +725,7 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
             QStringLiteral("target"),
             {QPointF(sceneXForTime(moment) + 112.0, sceneYForCells(model->targetCells()) - 14.0),
              QPointF(m_strip.center().x(), m_strip.top() + 36.0), QPointF(m_strip.center().x(), m_strip.center().y())},
-            QStringLiteral("N = %1: t = T_d·log₂(N/N₀) = %2")
-                .arg(models::BacteriaModel::cellsText(model->targetCells()),
-                     models::BacteriaModel::durationText(moment)),
+            QStringLiteral("t = T_d·log₂(N/N₀)"),
             style::bodyD().darker(160), QColor(255, 255, 255, 225));
     }
 
@@ -746,43 +734,30 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
     if (life <= total) {
         planner.addFirstFree(
             QStringLiteral("doubling"), {QPointF(m_strip.center().x(), m_rulerY)},
-            roomy ? QStringLiteral("T_d = %1 — за это время клеток становится вдвое больше")
-                        .arg(models::BacteriaModel::durationText(life))
-                  : QStringLiteral("T_d = %1 — клеток вдвое больше")
-                        .arg(models::BacteriaModel::durationText(life)),
+            roomy ? QStringLiteral("T_d — клеток становится вдвое больше")
+                  : QStringLiteral("T_d — клеток вдвое больше"),
             style::bodyB().darker(150), QColor(255, 255, 255, 220));
     } else {
         planner.addFirstFree(
             QStringLiteral("doubling"), {QPointF(m_strip.center().x(), m_rulerY)},
-            QStringLiteral("T_d = %1 — за опыт делений %2")
-                .arg(models::BacteriaModel::durationText(life),
-                     utils::formatNumber(model->divisionsElapsedAt(model->observationTime()), 2)),
+            QStringLiteral("T_d — больше времени опыта"),
             style::bodyB().darker(150), QColor(255, 255, 255, 220));
     }
 
     // Скорость прироста: мгновенная и средняя по подсчётам.
     planner.addFirstFree(
         QStringLiteral("growth"), {QPointF(m_growthBand.center().x() - 118.0, m_growthBand.bottom() + 14.0)},
-        roomy ? QStringLiteral("Δt = %1: прирост %2 · N′ = kN = %3 клеток/ч")
-                    .arg(models::BacteriaModel::durationText(model->observationInterval()),
-                         models::BacteriaModel::cellsText(model->growthInLastStepAt(t)),
-                         utils::formatNumber(model->growthRateOfCellsAt(t), 1))
-              : QStringLiteral("ΔN = %1 · N′ = %2")
-                    .arg(models::BacteriaModel::cellsText(model->growthInLastStepAt(t)),
-                         utils::formatNumber(model->growthRateOfCellsAt(t), 1)),
+        roomy ? QStringLiteral("Δt: прирост ΔN · N′ = kN")
+              : QStringLiteral("ΔN · N′ = kN"),
         style::bodyD().darker(160), QColor(255, 255, 255, 220));
 
     // Переполнение кадра: рост от тесноты не останавливается.
     planner.addFirstFree(
         QStringLiteral("overflow"), {QPointF(m_growthBand.center().x() + 126.0, m_growthBand.bottom() + 14.0)},
         overflow > 1.0
-            ? roomy ? QStringLiteral("кадр заполнен: N/N_мест = %1 при N_мест = %2 — рост продолжается")
-                          .arg(utils::formatNumber(overflow, 2),
-                               models::BacteriaModel::cellsText(model->dishCapacity()))
-                    : QStringLiteral("слой %1 — рост идёт")
-                          .arg(utils::formatNumber(overflow, 1))
-            : roomy ? QStringLiteral("в кадр умещается %1 клеток").arg(models::BacteriaModel::cellsText(model->dishCapacity()))
-                    : QStringLiteral("N_мест = %1").arg(models::BacteriaModel::cellsText(model->dishCapacity())),
+            ? QStringLiteral("кадр заполнен — рост продолжается")
+            : roomy ? QStringLiteral("в кадр умещается N_мест клеток")
+                    : QStringLiteral("N_мест"),
         overflow > 1.0 ? style::danger().darker(120) : style::inkSoft(), QColor(255, 255, 255, 220));
 
     // Ответ задачи после конца наблюдения.
@@ -790,16 +765,13 @@ QVector<BacteriaScene::Annotation> BacteriaScene::annotations() const {
         planner.addFirstFree(
             QStringLiteral("result"),
             {QPointF(m_strip.center().x(), m_strip.top() + 14.0), QPointF(m_strip.center().x(), m_strip.center().y())},
-            QStringLiteral("конец опыта: %1 клеток, делений %2, ×%3 от посева")
-                .arg(models::BacteriaModel::cellsText(counted),
-                     utils::formatNumber(model->completedDivisionsAt(t), 0),
-                     utils::formatNumber(model->multiplicationFactorAt(t), 1)),
+            QStringLiteral("конец опыта: N, n и ×N/N₀ — в панели"),
             style::success().darker(130), QColor(234, 247, 239, 240));
     }
 
     // Пояснения рисунка: они добавляются только там, где для них есть место.
     planner.tryAdd(QStringLiteral("window"), {QPointF(m_strip.right() - 80.0, m_strip.bottom() - 14.0)},
-                   QStringLiteral("T = %1").arg(models::BacteriaModel::durationText(model->observationTime())),
+                   QStringLiteral("T — время опыта"),
                    style::ink(), QColor(255, 255, 255, 220));
     planner.tryAdd(QStringLiteral("capacity"), {QPointF(m_strip.left() + 92.0, sceneYForCells(model->dishCapacity()) - 14.0)},
                    QStringLiteral("кадр заполнен"), capacityColor().darker(120), QColor(255, 255, 255, 215));

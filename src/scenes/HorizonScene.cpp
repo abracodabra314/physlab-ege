@@ -218,30 +218,24 @@ QVector<HorizonScene::Annotation> HorizonScene::annotations() const {
         // Расстояние по прямой — размерная линия над линией взгляда.
         planner.add(QStringLiteral("distance"),
                     labels::rulerLabelPos(observer, horizonScenePos(), -radius * kDistanceOffsetFraction),
-                    QStringLiteral("d = %1 км")
-                        .arg(utils::formatNumber(model->horizonDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
-                    style::bodyA().darker(150));
+                    QStringLiteral("d"), style::bodyA().darker(150));
         // Длина дуги поверхности — внутри круга, где нет линий.
         planner.add(QStringLiteral("arc"), planetPoint(angle * kArcLabelAngleFactor, radius * kArcLabelFraction),
-                    QStringLiteral("s = %1 км")
-                        .arg(utils::formatNumber(model->arcDistanceAt(m_model->time()) / kMetersPerKilometer, 3)),
-                    style::bodyD().darker(150));
+                    QStringLiteral("s"), style::bodyD().darker(150));
         // Центральный угол он же угол понижения горизонта.
         planner.add(QStringLiteral("alpha"), planetPoint(angle * 0.5, radius * kAlphaLabelFraction),
-                    QStringLiteral("α = %1°").arg(utils::formatNumber(model->dipAngleAt(m_model->time()), 3)),
-                    style::accentWarm().darker(150));
+                    QStringLiteral("α"), style::accentWarm().darker(150));
         // Высота наблюдателя — размерная линия слева от вертикали OA.
         planner.add(QStringLiteral("height"),
                     labels::rulerLabelPos(subsatelliteScenePos(), observer, -kHeightOffsetPixels),
-                    QStringLiteral("h = %1 м").arg(utils::formatNumber(model->heightAt(m_model->time()), 1)),
-                    style::bodyB().darker(160));
+                    QStringLiteral("h"), style::bodyB().darker(160));
         // Точка горизонта.
         planner.add(QStringLiteral("horizon"), planetPoint(angle, radius * kHorizonLabelFraction), QStringLiteral("B"),
                     style::bodyA().darker(170));
     }
     // Масштаб планеты и её центр.
     planner.add(QStringLiteral("radius"), QPointF(m_center.x() - radius * kRadiusLabelFraction, m_center.y() - 18.0),
-                QStringLiteral("R = %1 км").arg(utils::formatNumber(model->radiusKilometers(), 0)), style::ink());
+                QStringLiteral("R"), style::ink());
     planner.add(QStringLiteral("center"), m_center + QPointF(-24.0, 22.0), QStringLiteral("O"), style::ink(),
                 QColor(255, 255, 255, 240));
     planner.add(QStringLiteral("observer"), observer + QPointF(-28.0, -16.0), QStringLiteral("A"),
@@ -254,18 +248,14 @@ QVector<HorizonScene::Annotation> HorizonScene::annotations() const {
     const double exaggeration = angleExaggeration();
     if (exaggeration > 1.01) {
         planner.add(QStringLiteral("exaggeration"), QPointF(m_schemeRect.right() - 215.0, m_schemeRect.top() + 34.0),
-                    QStringLiteral("угол α на чертеже увеличен в %1 раз").arg(utils::formatNumber(exaggeration, 1)),
+                    QStringLiteral("угол α на чертеже увеличен"),
                     style::inkSoft(), QColor(255, 255, 255, 205));
     }
 
     // Итог задачи: подъём завершён, дальность горизонта — как в ответе.
     if (m_model->time() >= model->ascentTime() - 1e-9) {
         planner.add(QStringLiteral("result"), QPointF(m_schemeRect.center().x(), m_worldRect.bottom() - 4.0),
-                    QStringLiteral("h = %1 м: d = %2 км, s = %3 км, видно %4 % поверхности")
-                        .arg(utils::formatNumber(model->maxHeight(), 0),
-                             utils::formatNumber(model->horizonDistance(model->maxHeight()) / kMetersPerKilometer, 3),
-                             utils::formatNumber(model->arcDistance(model->maxHeight()) / kMetersPerKilometer, 3),
-                             utils::formatNumber(100.0 * model->visibleFraction(model->maxHeight()), 5)),
+                    QStringLiteral("подъём завершён"),
                     style::success().darker(130), QColor(234, 247, 239, 240));
     }
 
@@ -349,7 +339,8 @@ void HorizonScene::positionHandles() {
 }
 
 // ------------------------------------------------------------------
-// Векторы: скорость подъёма (сил и ускорений в модели нет)
+// Векторы: скорость подъёма и действующие силы (равновешенные: подъём
+// равномерный, a = 0, поэтому подъёмная сила равна весу наблюдателя)
 // ------------------------------------------------------------------
 
 QVector<vectors::Arrow> HorizonScene::vectorsFor(double t) const {
@@ -358,18 +349,38 @@ QVector<vectors::Arrow> HorizonScene::vectorsFor(double t) const {
     if (!model || !model->validate().ok)
         return arrows;
 
+    const QPointF observer = observerScenePos();
+
+    // Силы — всегда: их две, они равны и противоположны.
+    const double forceLength = vectors::autoScale(model->weightForceAt(t), 76.0, 60.0);
+    vectors::Arrow weight;
+    weight.from = observer;
+    weight.to = observer + QPointF(0.0, forceLength);
+    weight.symbol = QStringLiteral("mg");
+    weight.kind = vectors::Kind::Gravity;
+    weight.labelOffset = QPointF(18.0, 8.0);
+    arrows.push_back(weight);
+
+    vectors::Arrow lift;
+    lift.from = observer;
+    lift.to = observer + QPointF(0.0, -forceLength);
+    lift.symbol = QStringLiteral("F");
+    lift.kind = vectors::Kind::Tension;
+    lift.labelOffset = QPointF(18.0, -8.0);
+    arrows.push_back(lift);
+
     const double speed = model->verticalVelocityAt(t);
     if (!m_model->showsVelocities() || speed <= 0.0)
         return arrows;
 
-    const QPointF observer = observerScenePos();
-    vectors::Arrow lift;
-    lift.from = observer;
-    lift.to = observer + QPointF(0.0, -vectors::visualLength(speed, m_velocityScale, kArrowMinPixels, kArrowMaxPixels));
-    lift.symbol = QStringLiteral("v");
-    lift.kind = vectors::Kind::Velocity;
-    lift.labelOffset = QPointF(22.0, -4.0);
-    arrows.push_back(lift);
+    vectors::Arrow liftVelocity;
+    liftVelocity.from = observer + QPointF(46.0, 0.0);
+    liftVelocity.to =
+        liftVelocity.from + QPointF(0.0, -vectors::visualLength(speed, m_velocityScale, kArrowMinPixels, kArrowMaxPixels));
+    liftVelocity.symbol = QStringLiteral("v");
+    liftVelocity.kind = vectors::Kind::Velocity;
+    liftVelocity.labelOffset = QPointF(22.0, -4.0);
+    arrows.push_back(liftVelocity);
     return arrows;
 }
 

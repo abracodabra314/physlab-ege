@@ -2,6 +2,7 @@
 
 #include <QFontMetricsF>
 #include <QPainter>
+#include <QRegularExpression>
 
 #include <algorithm>
 #include <cmath>
@@ -164,6 +165,35 @@ QPointF rulerLabelPos(const QPointF& from, const QPointF& to, double offset) {
     dir /= length;
     const QPointF normal(-dir.y(), dir.x());
     return (from + to) / 2.0 + normal * (offset + 12.0);
+}
+
+QString stripValues(const QString& text) {
+    // Единый разбор для всех сцен: числа с единицами и «= число» уходят,
+    // а обозначения (s, t₁ = h/c) и имена с номерами («Теплоход 2») остаются.
+    static const QRegularExpression valueWithUnit(QStringLiteral(
+        "\\d+(?:[.,]\\d+)?\\s*"
+        "(?:км/ч|км/с|м/с|км|дм|мм|м|л|мл|с|мин|ч|К|°С|%|кг|г|Н|кН|Па|кПа|атм|Дж|кДж|Вт|кВт|В|мВ|кВ|А|мА|А/ч"
+        "|моль|Кл|Гн|Ф|Ом|Гц|м^3|м^2|л/мин|л/с)"));
+    static const QRegularExpression valueAfterEquals(QStringLiteral("(?:=|≈)\\s*[-+−]?\\d+(?:[.,]\\d+)?"));
+    static const QRegularExpression bareNumber(QStringLiteral("(?<=\\p{Ll})\\s+\\d+(?:[.,]\\d+)?"));
+
+    QString result = text;
+    result.replace(valueWithUnit, QString());
+    result.replace(valueAfterEquals, QString());
+    result.replace(bareNumber, QString());
+
+    // Подчистка висячих знаков, оставшихся после вычёркивания.
+    static const QRegularExpression danglingOperator(QStringLiteral("\\s*[=≈](?=\\s*[,;)]|$)"));
+    result.replace(danglingOperator, QString());
+    static const QRegularExpression emptyParens(QStringLiteral("\\(\\s*\\)"));
+    result.replace(emptyParens, QString());
+    static const QRegularExpression doubleSpace(QStringLiteral("\\s{2,}"));
+    result.replace(doubleSpace, QStringLiteral(" "));
+    static const QRegularExpression spaceBeforePunct(QStringLiteral("\\s+([,;.)])"));
+    result.replace(spaceBeforePunct, QStringLiteral("$1"));
+    static const QRegularExpression leadingPunct(QStringLiteral("^[\\s]*[,.:—–-]+"));
+    result.replace(leadingPunct, QString());
+    return result.trimmed();
 }
 
 }  // namespace lab::labels

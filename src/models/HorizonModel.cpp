@@ -103,6 +103,21 @@ QVector<ParamSpec> HorizonModel::paramSpecs() const {
     speed.helpText = QStringLiteral("Шар-зонд, подъёмная кабина, самолёт — скорость равномерного набора высоты");
     specs.push_back(speed);
 
+    ParamSpec mass;
+    mass.id = QStringLiteral("mass");
+    mass.label = QStringLiteral("Масса наблюдателя m");
+    mass.unit = QStringLiteral("кг");
+    mass.kind = ParamKind::Slider;
+    mass.minValue = 30.0;
+    mass.maxValue = 150.0;
+    mass.stepValue = 1.0;
+    mass.decimals = 0;
+    mass.allowZero = false;
+    mass.defaultValue = 75.0;
+    mass.group = QStringLiteral("Подъём");
+    mass.helpText = QStringLiteral("Нужна только для стрелок сил: при равномерном подъёме F = mg");
+    specs.push_back(mass);
+
     return specs;
 }
 
@@ -142,6 +157,17 @@ double HorizonModel::radiusMeters() const { return radiusKilometers() * kMetersP
 double HorizonModel::maxHeight() const { return param(QStringLiteral("h")); }
 
 double HorizonModel::ascentSpeed() const { return param(QStringLiteral("v")); }
+
+double HorizonModel::observerMass() const { return param(QStringLiteral("mass")); }
+
+double HorizonModel::weightForceAt(double) const { return observerMass() * 9.8; }
+
+double HorizonModel::liftForceAt(double t) const
+{
+    // Подъём равномерный (a = 0), поэтому подъёмная сила равна весу.
+    // После остановки кабины она по-прежнему держит наблюдателя.
+    return weightForceAt(t);
+}
 
 // ------------------------------------------------------------------
 // Геометрия: касательная к окружности

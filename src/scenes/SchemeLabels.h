@@ -97,4 +97,12 @@ void drawRulerLine(QPainter* painter, const QPointF& from, const QPointF& to, co
 /** Центр подписи размерной линии: середина отрезка со смещением на вынос. */
 QPointF rulerLabelPos(const QPointF& from, const QPointF& to, double offset);
 
+/**
+ * Убирает из текста числовые значения с единицами: на чертеже подпись
+ * остаётся смысловой («s», «t₁ = h/c», «Опыт завершён: осталось ядер»),
+ * а количества смотрят на панелях и графиках. Имена-номера («Теплоход 2»,
+ * «Кран 1») функция не трогает — это обозначения, а не величины.
+ */
+QString stripValues(const QString& text);
+
 }  // namespace lab::labels

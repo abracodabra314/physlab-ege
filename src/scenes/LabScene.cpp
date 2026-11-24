@@ -2,6 +2,7 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPen>
 
 #include <algorithm>
@@ -164,9 +165,9 @@ double LabScene::handleScenePosition(const HandleInfo& info) const {
 
 void LabScene::drawBackground(QPainter* painter, const QRectF& rect) {
     painter->fillRect(rect, style::background());
-    // Мелкая учебная сетка.
-    painter->setPen(QPen(style::grid(), 0.6));
-    constexpr double kGrid = 40.0;
+    // Тетрадный лист в клетку: частая синяя сетка, как в школьной тетради.
+    painter->setPen(QPen(style::grid(), 0.5));
+    constexpr double kGrid = 20.0;
     const double left = std::floor(rect.left() / kGrid) * kGrid;
     const double top = std::floor(rect.top() / kGrid) * kGrid;
     for (double x = left; x <= rect.right(); x += kGrid)
@@ -330,19 +331,21 @@ void LabScene::drawForeground(QPainter* painter, const QRectF& rect) {
 
 void LabScene::drawTag(QPainter* painter, const QPointF& center, const QString& text,
                        const QColor& background, const QColor& textColor) {
+    Q_UNUSED(background);
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setFont(style::uiFont(9.5, true));
+    painter->setFont(style::uiFont(9.5));
+    // Подпись в тетради — просто текст: без «пилюли» и рамки. Чтобы буквы
+    // читались на линиях чертежа, под текстом — белая обводка.
+    QPainterPath path;
     const QFontMetricsF metrics(painter->font());
-    const QRectF textRect = metrics.boundingRect(text);
-    QRectF box(center.x() - textRect.width() / 2.0, center.y() - textRect.height() / 2.0,
-               textRect.width(), textRect.height());
-    box.adjust(-8, -4, 8, 4);
-    painter->setPen(QPen(background.darker(150), 1.0));
-    painter->setBrush(background);
-    painter->drawRoundedRect(box, 5, 5);
+    path.addText(center.x() - metrics.horizontalAdvance(text) / 2.0,
+                 center.y() + metrics.xHeight() / 2.0, painter->font(), text);
+    painter->setPen(QPen(QColor(255, 255, 255, 235), 2.8));
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPath(path);
     painter->setPen(textColor);
-    painter->drawText(box, Qt::AlignCenter, text);
+    painter->drawPath(path);
     painter->restore();
 }
 

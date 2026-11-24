@@ -184,7 +184,7 @@ void SpringHorizontalScene::paintScheme(QPainter* painter) {
     if (std::abs(x) > 1e-6) {
         drawDimension(painter, QPointF(m_eqSceneX, m_schemeRect.top() + 10.0),
                       QPointF(block.center().x(), m_schemeRect.top() + 10.0),
-                      QStringLiteral("x = %1 м").arg(utils::formatNumber(x, 3)), style::accent(), -14.0);
+                      QStringLiteral("x"), style::accent(), -14.0);
     }
 
     // Состояние покоя после остановки груза.
@@ -216,7 +216,7 @@ QVector<vectors::Arrow> SpringHorizontalScene::vectorsFor(double t) const {
     const double friction = model->frictionForceAt(t);
     const double acceleration = model->accelerationOf(x, v);
 
-    if (m_model->showsForces()) {
+    if (true) {  // силы в динамической модели показываем всегда, в отличие от v и a
         // Сила тяжести — из центра тяжести груза вертикально вниз. Стрелка
         // проходит по заливаемой фигуре груза, поэтому ей нужна светлая
         // обводка: иначе вектор на цветной заливке не читается.
