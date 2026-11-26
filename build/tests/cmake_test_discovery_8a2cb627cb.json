@@ -1,5 +1,5 @@
 {
-  "tests": 73,
+  "tests": 517,
   "name": "AllTests",
   "testsuites": [
     {
@@ -418,6 +418,2406 @@
           "name": "EmptyVolumesRejected",
           "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_mixture.cpp",
           "line": 81
+        }
+      ]
+    },
+    {
+      "name": "SpringHorizontal",
+      "tests": 24,
+      "testsuite": [
+        {
+          "name": "DefaultSetupIsValid",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 40
+        },
+        {
+          "name": "IdealOmegaAndPeriodFollowFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 48
+        },
+        {
+          "name": "NormalForceAndFrictionFollowFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 57
+        },
+        {
+          "name": "OutOfRangeParametersAreClampedToPhysical",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 67
+        },
+        {
+          "name": "RejectsOffsetInsideStaticFrictionZone",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 86
+        },
+        {
+          "name": "FrictionlessMotionMatchesCosineLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 98
+        },
+        {
+          "name": "FrictionlessStartConditionsAreRespected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 110
+        },
+        {
+          "name": "FrictionlessMotionNeverStopsAndKeepsAmplitude",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 121
+        },
+        {
+          "name": "TurningPointsMatchHarmonicLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 130
+        },
+        {
+          "name": "FrictionDampsAmplitudeFromTurnToTurn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 150
+        },
+        {
+          "name": "AmplitudeLossPerHalfPeriodMatchesFormula",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 175
+        },
+        {
+          "name": "BlockEventuallyStopsInsideDeadZone",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 187
+        },
+        {
+          "name": "StaticFrictionNeitherReversesNorCreatesMotion",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 203
+        },
+        {
+          "name": "StrongerFrictionStopsMotionEarlier",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 219
+        },
+        {
+          "name": "DurationFollowsPeriod",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 231
+        },
+        {
+          "name": "SmallStiffnessLargeMassStillIntegrates",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 241
+        },
+        {
+          "name": "StateExposesBlockKinematics",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 256
+        },
+        {
+          "name": "StateMarksRestAfterStopEvent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 270
+        },
+        {
+          "name": "DerivationContainsKeyFormulasAndSubstitutions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 284
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 305
+        },
+        {
+          "name": "PlotSeriesComeFromComputedTrajectory",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 317
+        },
+        {
+          "name": "BlockHandleChangesModelNotOnlyPicture",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 336
+        },
+        {
+          "name": "TrajectoryIsRecomputedAfterParameterChange",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 355
+        },
+        {
+          "name": "SeekingBackwardIsReproducible",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring.cpp",
+          "line": 366
+        }
+      ]
+    },
+    {
+      "name": "SpringHorizontalVectors",
+      "tests": 8,
+      "testsuite": [
+        {
+          "name": "ForceDirectionsMatchEquationOfMotion",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 142
+        },
+        {
+          "name": "GravityAndNormalAreVerticalAndBalanced",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 170
+        },
+        {
+          "name": "FrictionArrowOnlyWhenFrictionInModel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 194
+        },
+        {
+          "name": "FrictionVanishesAfterStop",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 209
+        },
+        {
+          "name": "ArrowLengthsGrowWithMagnitude",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 229
+        },
+        {
+          "name": "CategoriesToggledIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 245
+        },
+        {
+          "name": "ArrowsMoveTogetherWithBlock",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 283
+        },
+        {
+          "name": "ArrowLabelsContainOnlySymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 297
+        }
+      ]
+    },
+    {
+      "name": "SpringHorizontalScene",
+      "tests": 3,
+      "testsuite": [
+        {
+          "name": "BlockPositionFollowsModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 317
+        },
+        {
+          "name": "ThreePlotsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 333
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_scene.cpp",
+          "line": 346
+        }
+      ]
+    },
+    {
+      "name": "SpringVertical",
+      "tests": 17,
+      "testsuite": [
+        {
+          "name": "EquilibriumElongationMatchesFormula",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 36
+        },
+        {
+          "name": "OmegaAndPeriodFollowFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 43
+        },
+        {
+          "name": "PeriodDoesNotDependOnAmplitude",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 51
+        },
+        {
+          "name": "PeriodScalesWithMassAndStiffness",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 60
+        },
+        {
+          "name": "MotionFollowsCosineLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 77
+        },
+        {
+          "name": "NegativeOffsetStartsWithOppositePhase",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 89
+        },
+        {
+          "name": "EquationOfMotionIsLinear",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 100
+        },
+        {
+          "name": "EnergyIsConserved",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 109
+        },
+        {
+          "name": "ForcesBalanceAtEquilibrium",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 127
+        },
+        {
+          "name": "ElongationBoundsMatchAmplitude",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 141
+        },
+        {
+          "name": "RejectsInvalidParameters",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 149
+        },
+        {
+          "name": "NoStopEventBecauseMotionIsPeriodic",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 165
+        },
+        {
+          "name": "StateCarriesLoadAndSpring",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 176
+        },
+        {
+          "name": "DerivationContainsKeyFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 187
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 203
+        },
+        {
+          "name": "SeriesMatchAnalyticalSolution",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 213
+        },
+        {
+          "name": "BlockHandleSetsOffsetAndRestartsTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 230
+        }
+      ]
+    },
+    {
+      "name": "SpringVerticalVectors",
+      "tests": 4,
+      "testsuite": [
+        {
+          "name": "OnlyGravityAndElasticAreShown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 267
+        },
+        {
+          "name": "DirectionsArePhysicallyCorrect",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 282
+        },
+        {
+          "name": "ElasticForceGrowsWithElongation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 304
+        },
+        {
+          "name": "CategoriesToggledIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 323
+        }
+      ]
+    },
+    {
+      "name": "SpringVerticalScene",
+      "tests": 1,
+      "testsuite": [
+        {
+          "name": "ThreePlotsAreDrawn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_spring_vertical.cpp",
+          "line": 347
+        }
+      ]
+    },
+    {
+      "name": "Projectile",
+      "tests": 27,
+      "testsuite": [
+        {
+          "name": "ProjectionsFollowTrigonometry",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 26
+        },
+        {
+          "name": "AngleOfFortyFiveDegreesIsSymmetric",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 36
+        },
+        {
+          "name": "MotionFollowsProjectionLaws",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 46
+        },
+        {
+          "name": "HorizontalMotionIsUniformAndVerticalIsAccelerated",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 60
+        },
+        {
+          "name": "StartConditionsAreRespected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 72
+        },
+        {
+          "name": "FlightTimeFromSurfaceMatchesFormula",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 85
+        },
+        {
+          "name": "FlightTimeAccountsForLaunchHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 92
+        },
+        {
+          "name": "HorizontalShotFromHeightIsAllowed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 104
+        },
+        {
+          "name": "RejectsDegenerateShots",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 114
+        },
+        {
+          "name": "RangeMatchesFormula",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 128
+        },
+        {
+          "name": "RangeAndHeightFollowApexFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 136
+        },
+        {
+          "name": "ApexIsInsideFlight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 148
+        },
+        {
+          "name": "SpeedAtImpactMatchesProjections",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 155
+        },
+        {
+          "name": "TrajectoryEquationMatchesParametricMotion",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 171
+        },
+        {
+          "name": "TrajectoryPassesThroughLaunchAndLandingPoints",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 182
+        },
+        {
+          "name": "DurationEqualsFlightTimeAndEventIsLanding",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 194
+        },
+        {
+          "name": "MotionStopsAtGround",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 204
+        },
+        {
+          "name": "StateCarriesShellAndItsProjections",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 220
+        },
+        {
+          "name": "ShellSpeedIsZeroAfterLanding",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 239
+        },
+        {
+          "name": "DerivationContainsKeyFormulasAndSubstitutions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 253
+        },
+        {
+          "name": "DerivationReportsInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 275
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 284
+        },
+        {
+          "name": "SeriesCoverWholeFlight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 301
+        },
+        {
+          "name": "HandlesCoverAngleAndLaunchPoint",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 331
+        },
+        {
+          "name": "DraggingRestartsTheFlight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 354
+        },
+        {
+          "name": "TrajectoryScalesWithSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 364
+        },
+        {
+          "name": "ComplementaryAnglesGiveEqualRangeOnLevelGround",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile.cpp",
+          "line": 375
+        }
+      ]
+    },
+    {
+      "name": "ProjectileVectors",
+      "tests": 8,
+      "testsuite": [
+        {
+          "name": "VelocityAndItsProjectionsAreShown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 119
+        },
+        {
+          "name": "ProjectionIsTheSumComponentOfVelocity",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 149
+        },
+        {
+          "name": "AccelerationPointsDownAndIsConstant",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 179
+        },
+        {
+          "name": "OnlyGravityIsShownAmongForces",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 199
+        },
+        {
+          "name": "NoVectorsAfterLanding",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 219
+        },
+        {
+          "name": "CategoriesToggledIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 229
+        },
+        {
+          "name": "ShellPositionFollowsMotionEquations",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 261
+        },
+        {
+          "name": "ArrowLabelsContainOnlySymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 278
+        }
+      ]
+    },
+    {
+      "name": "ProjectileScene",
+      "tests": 4,
+      "testsuite": [
+        {
+          "name": "TrajectoryGrowsWithTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 298
+        },
+        {
+          "name": "ShellMovesAlongSchemeWithTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 316
+        },
+        {
+          "name": "FourPlotsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 344
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_projectile_scene.cpp",
+          "line": 358
+        }
+      ]
+    },
+    {
+      "name": "Horizon",
+      "tests": 33,
+      "testsuite": [
+        {
+          "name": "DistanceFollowsPythagoras",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 28
+        },
+        {
+          "name": "DistanceMatchesSchoolNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 40
+        },
+        {
+          "name": "ApproximateFormulaIsExactAtSmallHeights",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 48
+        },
+        {
+          "name": "DistanceGrowsWithSquareRootOfHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 59
+        },
+        {
+          "name": "SmallerPlanetGivesCloserHorizon",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 70
+        },
+        {
+          "name": "CentralAngleFollowsCosine",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 83
+        },
+        {
+          "name": "CentralAngleGrowsWithHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 95
+        },
+        {
+          "name": "AngleTendsToRightAngleAtOrbitHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 103
+        },
+        {
+          "name": "ArcLengthEqualsRadiusTimesAngle",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 116
+        },
+        {
+          "name": "StraightLineIsLongerThanArc",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 124
+        },
+        {
+          "name": "ArcAndDistanceAgreeForSmallHeights",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 137
+        },
+        {
+          "name": "VisibleFractionMatchesSphericalSegment",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 152
+        },
+        {
+          "name": "VisibleFractionIsSmallAndGrowsWithHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 165
+        },
+        {
+          "name": "HeightGrowsLinearlyAndStopsAtTarget",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 178
+        },
+        {
+          "name": "DurationEqualsAscentTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 192
+        },
+        {
+          "name": "HorizonDistanceFollowsHeightDuringAscent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 202
+        },
+        {
+          "name": "DistanceGrowsMonotonicallyDuringAscent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 215
+        },
+        {
+          "name": "RejectsHeightComparableToRadius",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 232
+        },
+        {
+          "name": "OutOfRangeValuesAreClampedNotRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 239
+        },
+        {
+          "name": "AcceptsOrdinarySchoolSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 250
+        },
+        {
+          "name": "StateCarriesObserverAndPlanet",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 260
+        },
+        {
+          "name": "StateMarksAscentFinished",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 281
+        },
+        {
+          "name": "DerivationContainsKeyFormulasAndSubstitutions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 297
+        },
+        {
+          "name": "DerivationRendersWithoutUnknownCommands",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 322
+        },
+        {
+          "name": "DerivationReportsInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 340
+        },
+        {
+          "name": "AnswerMatchesDirectComputation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 349
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 358
+        },
+        {
+          "name": "TimeSeriesCoverWholeAscent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 376
+        },
+        {
+          "name": "HeightVersusDistanceSeriesMatchFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 396
+        },
+        {
+          "name": "HandlesCoverHeightAndRadius",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 421
+        },
+        {
+          "name": "ReadbackShowsHorizonDistance",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 440
+        },
+        {
+          "name": "DraggingRestartsAscent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 449
+        },
+        {
+          "name": "SwitchingPlanetRecomputesEverything",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon.cpp",
+          "line": 459
+        }
+      ]
+    },
+    {
+      "name": "HorizonGeometry",
+      "tests": 11,
+      "testsuite": [
+        {
+          "name": "ObserverStaysOnVerticalAbovePlanet",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 140
+        },
+        {
+          "name": "HorizonPointLiesOnPlanetSurface",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 156
+        },
+        {
+          "name": "SightLineIsPerpendicularToRadiusAtHorizon",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 170
+        },
+        {
+          "name": "ObserverHeightMatchesDrawnAngle",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 189
+        },
+        {
+          "name": "DrawnAngleGrowsWithHeight",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 204
+        },
+        {
+          "name": "LiftIsProportionalToInverseCosine",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 224
+        },
+        {
+          "name": "HeightHandleTracksObserver",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 244
+        },
+        {
+          "name": "HandleMappingIsInvertible",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 266
+        },
+        {
+          "name": "LabelsDoNotOverlapEachOther",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 299
+        },
+        {
+          "name": "LabelsStayInsideScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 328
+        },
+        {
+          "name": "LabelsCarryModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 346
+        }
+      ]
+    },
+    {
+      "name": "HorizonVectors",
+      "tests": 6,
+      "testsuite": [
+        {
+          "name": "OnlyAscentVelocityIsShown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 380
+        },
+        {
+          "name": "VelocityArrowPointsUpFromObserver",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 408
+        },
+        {
+          "name": "NoVelocityAfterAscentFinishes",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 428
+        },
+        {
+          "name": "VelocityScalesWithAscentSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 440
+        },
+        {
+          "name": "VelocitiesToggleIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 462
+        },
+        {
+          "name": "ArrowLabelsContainOnlySymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 480
+        }
+      ]
+    },
+    {
+      "name": "HorizonScene",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "PlanetAndSightLineAreDrawn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 501
+        },
+        {
+          "name": "PlanetGrowsWithRadiusParameter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 515
+        },
+        {
+          "name": "FourPanelsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 535
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 548
+        },
+        {
+          "name": "HandlesAndSchemeSurviveInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_horizon_scene.cpp",
+          "line": 562
+        }
+      ]
+    },
+    {
+      "name": "Sound",
+      "tests": 34,
+      "testsuite": [
+        {
+          "name": "SoundSpeedFollowsTemperature",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 37
+        },
+        {
+          "name": "DirectionChoiceSetsSignOfSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 54
+        },
+        {
+          "name": "DistanceBetweenShipsChangesByRelativeSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 70
+        },
+        {
+          "name": "EmissionMomentsAreEquidistant",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 88
+        },
+        {
+          "name": "EmissionPointIsWhereShipWas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 96
+        },
+        {
+          "name": "EmissionPointDoesNotDependOnObservationTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 109
+        },
+        {
+          "name": "FrontRadiusGrowsWithSoundSpeedOnly",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 123
+        },
+        {
+          "name": "FrontCentreStaysWhenObserverMoves",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 141
+        },
+        {
+          "name": "ArrivalTimeFollowsClosingCondition",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 161
+        },
+        {
+          "name": "ArrivalMeansFrontReachesObserver",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 175
+        },
+        {
+          "name": "ArrivalTimesGrowWithEmissionIndex",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 188
+        },
+        {
+          "name": "ApproachingShipsReceiveSignalsMoreOften",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 204
+        },
+        {
+          "name": "ReceptionPeriodMatchesFormulaAndArrivalDifference",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 216
+        },
+        {
+          "name": "ObserverRunningAwayStretchesReceptionPeriod",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 232
+        },
+        {
+          "name": "CountsGrowAtEmissionAndArrivalMoments",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 253
+        },
+        {
+          "name": "ObservationEndsAfterLastReception",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 270
+        },
+        {
+          "name": "RejectsShipMovingAtSoundSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 291
+        },
+        {
+          "name": "MovingTowardsSoundIsValidEvenAtHighSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 311
+        },
+        {
+          "name": "DegenerateValuesAreClampedByThePanel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 321
+        },
+        {
+          "name": "StateCarriesShipsAndEveryFront",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 346
+        },
+        {
+          "name": "FrontPositionsStayAtEqualSpacing",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 373
+        },
+        {
+          "name": "DerivationContainsKeyFormulasAndNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 389
+        },
+        {
+          "name": "DerivationRendersWithoutUnknownCommands",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 413
+        },
+        {
+          "name": "AnswerQuotesReceptionPeriodAndFirstArrival",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 430
+        },
+        {
+          "name": "DerivationReportsInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 439
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 448
+        },
+        {
+          "name": "GapSeriesIsLinear",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 470
+        },
+        {
+          "name": "FrontSeriesStartsAtEmissionMoment",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 484
+        },
+        {
+          "name": "PathSeriesMatchMotionLaws",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 500
+        },
+        {
+          "name": "ReceptionPeriodSeriesAreMonotonic",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 520
+        },
+        {
+          "name": "SeriesShareTheSameSpeedAxis",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 541
+        },
+        {
+          "name": "HandlesCoverGapAndTemperature",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 559
+        },
+        {
+          "name": "ReadbackShowsReceptionAndSoundSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 579
+        },
+        {
+          "name": "DraggingRestartsObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound.cpp",
+          "line": 589
+        }
+      ]
+    },
+    {
+      "name": "SoundFronts",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "CentresAreFixedAtEmissionPoints",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 150
+        },
+        {
+          "name": "CentresStayPutWhenObserverIsMoved",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 173
+        },
+        {
+          "name": "RadiusIsSameScaleOnBothAxes",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 200
+        },
+        {
+          "name": "EmissionAndReceptionFlagsFollowTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 216
+        },
+        {
+          "name": "ReceptionMarkIsWhereObserverWas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 242
+        }
+      ]
+    },
+    {
+      "name": "SoundVectors",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "OnlyShipVelocitiesAreShown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 274
+        },
+        {
+          "name": "ArrowsAreHorizontalAndProportionalToSpeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 300
+        },
+        {
+          "name": "DirectionsFollowTheChoiceParameter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 325
+        },
+        {
+          "name": "VelocitiesToggleIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 357
+        },
+        {
+          "name": "ArrowLabelsContainOnlySymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 371
+        }
+      ]
+    },
+    {
+      "name": "SoundHandles",
+      "tests": 2,
+      "testsuite": [
+        {
+          "name": "ObserverHandleTracksObserverShip",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 392
+        },
+        {
+          "name": "HandleMappingIsInvertible",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 417
+        }
+      ]
+    },
+    {
+      "name": "SoundLabels",
+      "tests": 3,
+      "testsuite": [
+        {
+          "name": "LabelsDoNotOverlapEachOther",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 449
+        },
+        {
+          "name": "LabelsStayInsideScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 470
+        },
+        {
+          "name": "LabelsCarryModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 485
+        }
+      ]
+    },
+    {
+      "name": "SoundScene",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "FrontsAndShipsAreDrawn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 523
+        },
+        {
+          "name": "MoreFrontsAreDrawnLater",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 536
+        },
+        {
+          "name": "FourPanelsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 550
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 564
+        },
+        {
+          "name": "SchemeAndHandlesSurviveInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_sound_scene.cpp",
+          "line": 578
+        }
+      ]
+    },
+    {
+      "name": "Adiabatic",
+      "tests": 41,
+      "testsuite": [
+        {
+          "name": "GasChoiceSetsGammaAndMolarMass",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 52
+        },
+        {
+          "name": "HeatCapacitiesFollowGamma",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 72
+        },
+        {
+          "name": "MoleculeCountComesFromAmountOfSubstance",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 84
+        },
+        {
+          "name": "InitialPressureComesFromIdealGasLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 99
+        },
+        {
+          "name": "AdiabatKeepsPVToTheGammaConstant",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 108
+        },
+        {
+          "name": "TemperatureFollowsVolumeLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 123
+        },
+        {
+          "name": "EndStateAlsoSatisfiesIdealGasLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 139
+        },
+        {
+          "name": "CompressionHeatsGasAndExpansionCoolsIt",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 152
+        },
+        {
+          "name": "PressureAndTemperatureAreMonotonicAlongProcess",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 170
+        },
+        {
+          "name": "VolumeChangesLinearlyAndStopsAfterProcess",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 191
+        },
+        {
+          "name": "PistonSpeedIsConstantAndZeroAfterwards",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 203
+        },
+        {
+          "name": "ObservationCoversWholeProcess",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 216
+        },
+        {
+          "name": "WorkEqualsIntegralOfPressure",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 236
+        },
+        {
+          "name": "WorkSignFollowsVolumeChange",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 248
+        },
+        {
+          "name": "FirstLawClosesAtEveryMoment",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 261
+        },
+        {
+          "name": "InternalEnergyIsProportionalToTemperature",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 279
+        },
+        {
+          "name": "GasForceIsPressureTimesArea",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 292
+        },
+        {
+          "name": "ExternalForceBalancesThePiston",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 303
+        },
+        {
+          "name": "AreaChangesForceButNotPressureOrTemperature",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 326
+        },
+        {
+          "name": "RmsSpeedFollowsTemperatureAndMolarMass",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 345
+        },
+        {
+          "name": "MoleculeSpeedGrowsAlongCompression",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 364
+        },
+        {
+          "name": "StateCarriesPistonGasAndMolecules",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 381
+        },
+        {
+          "name": "MoleculeDirectionsDoNotDriftWithTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 414
+        },
+        {
+          "name": "RejectsMotionlessPiston",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 432
+        },
+        {
+          "name": "RejectsGammaNotAboveOne",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 438
+        },
+        {
+          "name": "OutOfRangeValuesAreClampedNotRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 449
+        },
+        {
+          "name": "ExtremeCompressionIsRejectedNotCrashed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 464
+        },
+        {
+          "name": "DerivationContainsKeyFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 478
+        },
+        {
+          "name": "DerivationQuotesModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 499
+        },
+        {
+          "name": "DerivationRendersWithoutUnknownCommands",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 516
+        },
+        {
+          "name": "DerivationIsDimensionallyConsistent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 533
+        },
+        {
+          "name": "AnswerQuotesEndState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 550
+        },
+        {
+          "name": "DerivationReportsInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 560
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 569
+        },
+        {
+          "name": "HandlesCoverVolumesAndPistonArea",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 593
+        },
+        {
+          "name": "HandleReadbackShowsComputedValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 620
+        },
+        {
+          "name": "DraggingRestartsTheProcess",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 632
+        },
+        {
+          "name": "PressureVersusVolumeIsAdiabatAndIsothermIsFlatter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 646
+        },
+        {
+          "name": "TemperatureVersusVolumeMatchesLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 683
+        },
+        {
+          "name": "PressureVersusTemperatureUsesAdiabatExponent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 696
+        },
+        {
+          "name": "TimeSeriesMatchStateValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic.cpp",
+          "line": 709
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticGeometry",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "GasHeightMatchesVolumeOverArea",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 159
+        },
+        {
+          "name": "HeightRatioEqualsVolumeRatio",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 174
+        },
+        {
+          "name": "PistonStaysInsideVesselOverWholeProcess",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 188
+        },
+        {
+          "name": "VesselHeightShrinksDuringCompression",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 209
+        },
+        {
+          "name": "WiderPistonMakesVesselWiderAndGasTaller",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 221
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticMolecules",
+      "tests": 4,
+      "testsuite": [
+        {
+          "name": "CountMatchesModelAndPositionsStayInGas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 251
+        },
+        {
+          "name": "SpeedEqualsFormulaFromModel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 278
+        },
+        {
+          "name": "SpeedGrowsAsGasIsCompressed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 296
+        },
+        {
+          "name": "ExpansionSlowsMoleculesDown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 313
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticVectors",
+      "tests": 8,
+      "testsuite": [
+        {
+          "name": "OnlyPressureForcesAndPistonSpeedAreShown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 330
+        },
+        {
+          "name": "GasForceArrowPointsUpAndOutsideArrowDown",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 353
+        },
+        {
+          "name": "ArrowLengthsAreProportionalToForces",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 372
+        },
+        {
+          "name": "ExternalArrowFlipsWhenOutsidePressureWins",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 406
+        },
+        {
+          "name": "PistonSpeedArrowFollowsProcessDirection",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 432
+        },
+        {
+          "name": "NoSpeedArrowAfterProcessEnds",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 456
+        },
+        {
+          "name": "ForcesAndSpeedToggleIndependently",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 468
+        },
+        {
+          "name": "ArrowLabelsContainOnlySymbols",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 491
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticHandles",
+      "tests": 2,
+      "testsuite": [
+        {
+          "name": "HandlesTrackVolumesAndArea",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 512
+        },
+        {
+          "name": "MappingIsInvertible",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 542
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticLabels",
+      "tests": 4,
+      "testsuite": [
+        {
+          "name": "LabelsDoNotOverlapEachOther",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 568
+        },
+        {
+          "name": "LabelsStayInsideScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 589
+        },
+        {
+          "name": "LabelsCarryModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 604
+        },
+        {
+          "name": "ResultAppearsOnlyAfterProcessEnds",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 647
+        }
+      ]
+    },
+    {
+      "name": "AdiabaticScene",
+      "tests": 5,
+      "testsuite": [
+        {
+          "name": "VesselPistonAndMoleculesAreDrawn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 674
+        },
+        {
+          "name": "VesselIsWiderWithLargerPistonArea",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 689
+        },
+        {
+          "name": "FourPanelsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 705
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 718
+        },
+        {
+          "name": "SchemeAndHandlesSurviveInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_adiabatic_scene.cpp",
+          "line": 732
+        }
+      ]
+    },
+    {
+      "name": "Bacteria",
+      "tests": 63,
+      "testsuite": [
+        {
+          "name": "GrowthRateComesFromDoublingTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 50
+        },
+        {
+          "name": "BothWritingsOfTheLawAgree",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 59
+        },
+        {
+          "name": "DoublingTimeExactlyDoublesTheColony",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 71
+        },
+        {
+          "name": "ColonyGrowsMonotonically",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 86
+        },
+        {
+          "name": "DivisionsComeFromTimeAndFromCellCount",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 106
+        },
+        {
+          "name": "DivisionsElapsedIsExactlyTimeOverDoubling",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 119
+        },
+        {
+          "name": "SteppedCountDoublesAtWholeDivisionsOnly",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 130
+        },
+        {
+          "name": "SteppedCountNeverExceedsTheSmoothLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 149
+        },
+        {
+          "name": "CountedCellsAreWholeNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 160
+        },
+        {
+          "name": "TargetTimeIsDoublingTimesLogarithm",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 177
+        },
+        {
+          "name": "TargetTimeScalesWithDoublingTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 191
+        },
+        {
+          "name": "TargetBelowSeedNeedsNoDivisions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 203
+        },
+        {
+          "name": "InstantaneousGrowthIsProportionalToColony",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 217
+        },
+        {
+          "name": "GrowthSpeedAlsoDoublesEveryPeriod",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 234
+        },
+        {
+          "name": "AverageGrowthOverIntervalIsBelowInstantaneous",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 249
+        },
+        {
+          "name": "GrowthPerIntervalMatchesLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 273
+        },
+        {
+          "name": "GrowthPerIntervalGrowsWithTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 285
+        },
+        {
+          "name": "DishCapacityIsFixedAndPositive",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 306
+        },
+        {
+          "name": "ColonyRadiusGrowsAsSquareRootOfCells",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 321
+        },
+        {
+          "name": "OverflowFactorReachesOneAtCapacity",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 335
+        },
+        {
+          "name": "GrowthStopsWhenTheDishIsFull",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 351
+        },
+        {
+          "name": "SpeciesChoiceSetsDoublingAndObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 377
+        },
+        {
+          "name": "EverySpeciesLeavesSeveralDivisionsVisible",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 393
+        },
+        {
+          "name": "SeedIsFreeParameterForListedSpecies",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 405
+        },
+        {
+          "name": "DefaultSetupShowsSeveralDivisions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 413
+        },
+        {
+          "name": "TimeIsMeasuredInHoursWithRoomForTheResult",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 427
+        },
+        {
+          "name": "EventTimeIsTheTargetMoment",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 439
+        },
+        {
+          "name": "TheorySeriesFollowsTheLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 457
+        },
+        {
+          "name": "SteppedSeriesHasAStepAtEveryDivision",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 471
+        },
+        {
+          "name": "LogarithmSeriesIsAStraightLineWithSlopeK",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 485
+        },
+        {
+          "name": "GrowthVersusCellsIsAStraightLineThroughOrigin",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 507
+        },
+        {
+          "name": "DivisionsSeriesIsAStraightLineOfSlopeOneOverDoubling",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 528
+        },
+        {
+          "name": "PerStepGrowthSeriesHasOneBarPerInterval",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 546
+        },
+        {
+          "name": "AverageGrowthSeriesFollowsDifferences",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 569
+        },
+        {
+          "name": "GrowthSeriesStartsAtZero",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 590
+        },
+        {
+          "name": "StateCarriesCellsDivisionsAndOverflow",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 604
+        },
+        {
+          "name": "StateIsResolvedOnlyAfterTheObservationEnds",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 633
+        },
+        {
+          "name": "StateIsFiniteAcrossTheWholeShow",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 646
+        },
+        {
+          "name": "SeedCannotBeEmptiedThroughTheField",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 663
+        },
+        {
+          "name": "ZeroDoublingTimeIsRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 678
+        },
+        {
+          "name": "RunawayGrowthIsRejectedWithReadableNumber",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 685
+        },
+        {
+          "name": "CoarseCountingIntervalIsRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 697
+        },
+        {
+          "name": "ValidSetupIsAccepted",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 704
+        },
+        {
+          "name": "OutOfRangeValuesAreClampedNotRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 711
+        },
+        {
+          "name": "DerivationContainsKeyFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 725
+        },
+        {
+          "name": "DerivationQuotesModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 747
+        },
+        {
+          "name": "DerivationChecksTheLawAtWholeDivisions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 765
+        },
+        {
+          "name": "DerivationSeparatesSmoothLawAndWholeSteps",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 780
+        },
+        {
+          "name": "DerivationRendersWithoutUnknownCommands",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 795
+        },
+        {
+          "name": "DerivationOfEverySpeciesIsComplete",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 810
+        },
+        {
+          "name": "DerivationOfInvalidSetupExplainsWhatToDo",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 832
+        },
+        {
+          "name": "AnswerQuotesTheSameNumbersAsTheSteps",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 843
+        },
+        {
+          "name": "ReadoutsCarryTheKeyQuantities",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 858
+        },
+        {
+          "name": "ReadoutsOfInvalidSetupWarnOnly",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 883
+        },
+        {
+          "name": "HandlesExposeSeedDoublingWindowAndTarget",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 898
+        },
+        {
+          "name": "DraggingDoublingHandleKeepsTheObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 913
+        },
+        {
+          "name": "DraggingWindowHandleKeepsTheDoublingTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 927
+        },
+        {
+          "name": "DraggingSeedAndTargetChangeTheLawOnly",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 937
+        },
+        {
+          "name": "HandleValuesTrackTheModel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 951
+        },
+        {
+          "name": "DurationTextUsesReadableUnits",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 973
+        },
+        {
+          "name": "RatioTextKeepsSmallConstantsReadable",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 982
+        },
+        {
+          "name": "CellsTextRoundsAndSwitchesToPowers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 992
+        },
+        {
+          "name": "TimeUnitLabelMatchesHours",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria.cpp",
+          "line": 1000
+        }
+      ]
+    },
+    {
+      "name": "BacteriaScene",
+      "tests": 35,
+      "testsuite": [
+        {
+          "name": "CellCountFollowsWholeCellCountNotTheSmoothCurve",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 207
+        },
+        {
+          "name": "CellsOnlyAppearAsTimeGrows",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 230
+        },
+        {
+          "name": "ColonyRadiusGrowsAsSquareRootOfCells",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 250
+        },
+        {
+          "name": "CellsStayInsideTheDish",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 281
+        },
+        {
+          "name": "DishIsACircleInscribedInItsFrame",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 303
+        },
+        {
+          "name": "FilledDishMatchesTheCapacityRadius",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 320
+        },
+        {
+          "name": "FilledDishAddsLayersAndStopsTheCount",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 347
+        },
+        {
+          "name": "DividingCellsMatchTheLastCompletedIntervalGrowth",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 375
+        },
+        {
+          "name": "NoCellIsMarkedDividingBeforeTheFirstCount",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 407
+        },
+        {
+          "name": "DoublingMarkMatchesTimeScale",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 425
+        },
+        {
+          "name": "CellAxisLevelsMatchWholeDivisions",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 444
+        },
+        {
+          "name": "CapacityLevelSitsWhereTheDishFills",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 468
+        },
+        {
+          "name": "TargetMarkSitsOnTheoreticalCurve",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 482
+        },
+        {
+          "name": "CurrentMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 499
+        },
+        {
+          "name": "SchemeHasNoVectorsEvenWithAllCategoriesOn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 516
+        },
+        {
+          "name": "AnnotationsDoNotOverlap",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 536
+        },
+        {
+          "name": "AnnotationsStayInsideSchemeBand",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 555
+        },
+        {
+          "name": "AnnotationsCarryModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 570
+        },
+        {
+          "name": "AnnotationsSayThatGrowthStopsWhenFull",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 601
+        },
+        {
+          "name": "NarrowSchemeKeepsAnnotationsSeparate",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 615
+        },
+        {
+          "name": "HandlesMapBetweenPixelsAndModelValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 643
+        },
+        {
+          "name": "HandlesSitOnTheirMarks",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 663
+        },
+        {
+          "name": "DraggingDoublingHandleRescalesTheScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 686
+        },
+        {
+          "name": "DraggingTargetHandleMovesTheTargetLevel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 704
+        },
+        {
+          "name": "DraggingSeedHandleKeepsTheColonyConsistent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 729
+        },
+        {
+          "name": "ColonyAndDishAreRendered",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 751
+        },
+        {
+          "name": "OverflowCracksAppearOnlyWhenTheDishIsFull",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 770
+        },
+        {
+          "name": "FourPanelsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 794
+        },
+        {
+          "name": "GrowthBandShowsBarsPerCountingInterval",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 831
+        },
+        {
+          "name": "SteppedDivisionsAreDrawnOnTheScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 844
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 864
+        },
+        {
+          "name": "SlowSpeciesKeepsSchemeReadable",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 880
+        },
+        {
+          "name": "SmallSeedStillShowsEveryDivision",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 903
+        },
+        {
+          "name": "SchemeSurvivesInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 923
+        },
+        {
+          "name": "DefaultSetupIsTheTeachingCase",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_bacteria_scene.cpp",
+          "line": 943
+        }
+      ]
+    },
+    {
+      "name": "Decay",
+      "tests": 44,
+      "testsuite": [
+        {
+          "name": "DecayConstantComesFromHalfLife",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 44
+        },
+        {
+          "name": "IsotopeChoiceSetsHalfLifeAndObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 56
+        },
+        {
+          "name": "ObservationCoversSeveralHalfLives",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 74
+        },
+        {
+          "name": "ExponentialAndPowerOfTwoAreTheSameLaw",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 93
+        },
+        {
+          "name": "EveryHalfLifeHalvesTheCount",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 104
+        },
+        {
+          "name": "SurvivingFractionMatchesExponential",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 116
+        },
+        {
+          "name": "TheoryCountDecaysMonotonically",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 132
+        },
+        {
+          "name": "TargetTimeComesFromLogarithm",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 148
+        },
+        {
+          "name": "ActivityIsLambdaTimesN",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 169
+        },
+        {
+          "name": "ShorterHalfLifeMeansHigherActivity",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 182
+        },
+        {
+          "name": "StepProbabilityIsLambdaDeltaT",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 198
+        },
+        {
+          "name": "CountedSeriesIsIntegerAndNeverGrows",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 215
+        },
+        {
+          "name": "CountFollowsTheoryWithinExpectedScatter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 234
+        },
+        {
+          "name": "ExperienceIsReproducibleWithSameSeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 257
+        },
+        {
+          "name": "OtherSeedGivesAnotherExperience",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 271
+        },
+        {
+          "name": "MoreNucleiReduceRelativeScatter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 290
+        },
+        {
+          "name": "CounterSeesDecaysAndActivityMatchesTheory",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 304
+        },
+        {
+          "name": "NoDecaysRecordedBeforeObservationStarts",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 333
+        },
+        {
+          "name": "EventIsMomentOfGivenFraction",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 345
+        },
+        {
+          "name": "StateMarksEndOfObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 359
+        },
+        {
+          "name": "StateCarriesTheoryAndCounterSideBySide",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 372
+        },
+        {
+          "name": "RejectsFractionOutsideZeroAndOne",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 405
+        },
+        {
+          "name": "RejectsStepTooCoarseForHalfLife",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 415
+        },
+        {
+          "name": "OutOfRangeValuesAreClampedNotRejected",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 437
+        },
+        {
+          "name": "LongLivingIsotopeIsStillCountable",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 449
+        },
+        {
+          "name": "DerivationContainsKeyFormulas",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 464
+        },
+        {
+          "name": "DerivationQuotesModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 487
+        },
+        {
+          "name": "DerivationDistinguishesTheoryAndCounter",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 504
+        },
+        {
+          "name": "DerivationRendersWithoutUnknownCommands",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 520
+        },
+        {
+          "name": "DerivationAndAnswerQuoteTheSameEndState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 535
+        },
+        {
+          "name": "DerivationOfListedIsotopeIsStillComplete",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 546
+        },
+        {
+          "name": "ReadoutsFollowModelState",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 564
+        },
+        {
+          "name": "HandlesCoverSampleHalfLifeWindowAndFraction",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 587
+        },
+        {
+          "name": "HandlesWriteIntoPanelParameters",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 605
+        },
+        {
+          "name": "HandleReadbackShowsComputedValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 630
+        },
+        {
+          "name": "DraggingRestartsObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 644
+        },
+        {
+          "name": "CountedSeriesIsAStepFunction",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 658
+        },
+        {
+          "name": "TheorySeriesMatchesLawAndSpansObservation",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 682
+        },
+        {
+          "name": "CountedSeriesFollowsModelStateValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 697
+        },
+        {
+          "name": "DecaysSeriesComplementsNuclei",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 717
+        },
+        {
+          "name": "ActivitySeriesIsProportionalToNuclei",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 745
+        },
+        {
+          "name": "CountsPerStepSeriesIsNonNegativeAndConsistent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 757
+        },
+        {
+          "name": "LogarithmIsStraightLineWithSlopeMinusLambda",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 773
+        },
+        {
+          "name": "DeviationSeriesStaysNearZero",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay.cpp",
+          "line": 789
+        }
+      ]
+    },
+    {
+      "name": "DecayScene",
+      "tests": 28,
+      "testsuite": [
+        {
+          "name": "NucleiGridMatchesCounterNotTheory",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 147
+        },
+        {
+          "name": "CellsOnlyTurnEmptyAsTimeGrows",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 168
+        },
+        {
+          "name": "CellOrderIsFixedForSameSeed",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 190
+        },
+        {
+          "name": "CellsStayInsideSampleFrame",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 216
+        },
+        {
+          "name": "SampleKeepsReadableNumberOfCells",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 236
+        },
+        {
+          "name": "FreshCellsMatchDecaysOfCurrentStep",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 254
+        },
+        {
+          "name": "HalfLifeMarkMatchesTimeScale",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 277
+        },
+        {
+          "name": "TargetMarkSitsOnTheoreticalCurve",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 297
+        },
+        {
+          "name": "CurrentMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 316
+        },
+        {
+          "name": "ScaleMarksHalfFractionsAtWholeHalfLives",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 329
+        },
+        {
+          "name": "SchemeHasNoVectorsEvenWithAllCategoriesOn",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 352
+        },
+        {
+          "name": "AnnotationsDoNotOverlap",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 372
+        },
+        {
+          "name": "AnnotationsStayInsideSchemeBand",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 391
+        },
+        {
+          "name": "AnnotationsCarryModelNumbers",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 406
+        },
+        {
+          "name": "AnnotationsUseOnlyModelQuantities",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 437
+        },
+        {
+          "name": "HandlesMapBetweenPixelsAndModelValues",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 455
+        },
+        {
+          "name": "HalfLifeHandleSitsOnTheRuler",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 475
+        },
+        {
+          "name": "DraggingHalfLifeHandleRescalesTheScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 498
+        },
+        {
+          "name": "DraggingNucleiHandleKeepsGridConsistent",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 515
+        },
+        {
+          "name": "FractionHandleMovesTheTargetLevel",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 531
+        },
+        {
+          "name": "SampleAndSchemeAreRendered",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 552
+        },
+        {
+          "name": "FourPanelsAreDrawnBelowScheme",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 571
+        },
+        {
+          "name": "CounterBandShowsDecayBars",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 598
+        },
+        {
+          "name": "TimeAxisMarkerFollowsModelTime",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 611
+        },
+        {
+          "name": "LongLivingIsotopeKeepsSchemeReadable",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 627
+        },
+        {
+          "name": "NarrowSchemeKeepsAnnotationsSeparate",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 652
+        },
+        {
+          "name": "SchemeSurvivesInvalidSetup",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 670
+        },
+        {
+          "name": "DefaultSetupIsTheTeachingCase",
+          "file": "\/Users\/abracodabra\/Documents\/phisics_sim\/tests\/test_decay_scene.cpp",
+          "line": 687
         }
       ]
     }

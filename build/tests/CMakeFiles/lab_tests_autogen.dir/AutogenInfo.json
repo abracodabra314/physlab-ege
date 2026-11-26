@@ -77,6 +77,26 @@
 	"SOURCES" : 
 	[
 		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_adiabatic.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_adiabatic_scene.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_bacteria.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_bacteria_scene.cpp",
+			"Mu",
+			null
+		],
+		[
 			"/Users/abracodabra/Documents/phisics_sim/tests/test_boat.cpp",
 			"Mu",
 			null
@@ -87,12 +107,67 @@
 			null
 		],
 		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_decay.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_decay_scene.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_horizon.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_horizon_scene.cpp",
+			"Mu",
+			null
+		],
+		[
 			"/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp",
 			"Mu",
 			null
 		],
 		[
 			"/Users/abracodabra/Documents/phisics_sim/tests/test_motion.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_projectile.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_projectile_scene.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_sound.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_sound_scene.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_spring.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_spring_scene.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/Users/abracodabra/Documents/phisics_sim/tests/test_spring_vertical.cpp",
 			"Mu",
 			null
 		],

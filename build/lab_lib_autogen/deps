@@ -1089,30 +1089,66 @@ lab_lib_autogen/timestamp: \
 	/Users/abracodabra/Documents/phisics_sim/src/core/ModelTypes.h \
 	/Users/abracodabra/Documents/phisics_sim/src/core/Simulation.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/core/Simulation.h \
+	/Users/abracodabra/Documents/phisics_sim/src/core/Trajectory.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/core/Trajectory.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/AdiabaticModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/AdiabaticModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/BacteriaModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/BacteriaModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/BoatModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/BoatModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/DecayModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/DecayModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/HorizonModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/HorizonModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/MixtureModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/MixtureModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/MotionModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/MotionModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/ProjectileModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/ProjectileModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SoundModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SoundModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SpringHorizontalModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SpringHorizontalModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SpringVerticalModel.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/models/SpringVerticalModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/TankModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/TankModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/WellModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/WellModel.h \
 	/Users/abracodabra/Documents/phisics_sim/src/models/WorkModel.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/models/WorkModel.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/AdiabaticScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/AdiabaticScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/BacteriaScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/BacteriaScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/BoatScene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/BoatScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/DecayScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/DecayScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/DragHandleItem.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/DragHandleItem.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/HorizonScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/HorizonScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/LabScene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/LabScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/MixtureScene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/MixtureScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/MotionScene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/MotionScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/ProjectileScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/ProjectileScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SchemeLabels.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SchemeLabels.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/SchemePrimitives.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/SchemePrimitives.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SoundScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SoundScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SpringHorizontalScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SpringHorizontalScene.h \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SpringVerticalScene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/src/scenes/SpringVerticalScene.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/Style.h \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/TankScene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/src/scenes/TankScene.h \
@@ -1140,6 +1176,9 @@ lab_lib_autogen/timestamp: \
 	/Users/abracodabra/Documents/phisics_sim/src/utils/MathText.h \
 	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QHash \
 	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QObject \
+	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QPointF \
+	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QRectF \
+	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QSizeF \
 	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QString \
 	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QStringList \
 	/opt/homebrew/Cellar/qtbase/6.12.0_2/include/QtCore/QTimer \
@@ -1607,82 +1646,23 @@ lab_lib_autogen/timestamp: \
 	/opt/homebrew/opt/qt/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets.cmake \
 	/opt/homebrew/opt/qt/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargetsPrecheck.cmake \
 	/opt/homebrew/opt/qt/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsVersionlessTargets.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeCXXCompiler.cmake.in \
-	/opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp \
 	/opt/homebrew/share/cmake/Modules/CMakeCXXInformation.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeCommonLanguageInclude.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeCompilerIdDetection.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerSupport.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeDetermineSystem.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeFindBinUtils.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeFindDependencyMacro.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeGenericSystem.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeInitializeConfigs.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeLanguageInformation.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeNinjaFindMake.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeParseImplicitIncludeInfo.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeParseImplicitLinkInfo.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeParseLibraryArchitecture.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeSystem.cmake.in \
 	/opt/homebrew/share/cmake/Modules/CMakeSystemSpecificInformation.cmake \
 	/opt/homebrew/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeTestCXXCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/CMakeTestCompilerCommon.cmake \
 	/opt/homebrew/share/cmake/Modules/CheckCXXCompilerFlag.cmake \
 	/opt/homebrew/share/cmake/Modules/CheckCXXSourceCompiles.cmake \
 	/opt/homebrew/share/cmake/Modules/CheckIncludeFileCXX.cmake \
 	/opt/homebrew/share/cmake/Modules/CheckLibraryExists.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/ADSP-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/ARMCC-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/ARMClang-DetermineCompiler.cmake \
 	/opt/homebrew/share/cmake/Modules/Compiler/AppleClang-CXX.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/AppleClang-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Borland-DetermineCompiler.cmake \
 	/opt/homebrew/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Clang-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Clang-DetermineCompilerInternal.cmake \
 	/opt/homebrew/share/cmake/Modules/Compiler/Clang.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Cray-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/CrayClang-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Diab-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Embarcadero-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Fujitsu-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/GHS-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake \
 	/opt/homebrew/share/cmake/Modules/Compiler/GNU.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/HP-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/IAR-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Intel-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/MSVC-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/NVHPC-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/NVIDIA-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/OrangeC-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/PGI-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/PathScale-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/PellesC-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Renesas-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/SCO-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/TI-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/TIClang-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Tasking-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/Watcom-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/XL-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake \
-	/opt/homebrew/share/cmake/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake \
 	/opt/homebrew/share/cmake/Modules/FindGTest.cmake \
 	/opt/homebrew/share/cmake/Modules/FindOpenGL.cmake \
 	/opt/homebrew/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
@@ -1693,20 +1673,16 @@ lab_lib_autogen/timestamp: \
 	/opt/homebrew/share/cmake/Modules/GoogleTest.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake \
-	/opt/homebrew/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake \
-	/opt/homebrew/share/cmake/Modules/Internal/CMakeInspectCXXLinker.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CheckCommon.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CheckCompilerFlag.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CheckFlagCommonConfig.cmake \
 	/opt/homebrew/share/cmake/Modules/Internal/CheckSourceCompiles.cmake \
-	/opt/homebrew/share/cmake/Modules/Internal/FeatureTesting.cmake \
 	/opt/homebrew/share/cmake/Modules/Linker/AppleClang-CXX.cmake \
 	/opt/homebrew/share/cmake/Modules/Linker/AppleClang.cmake \
 	/opt/homebrew/share/cmake/Modules/MacroAddFileDependencies.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Apple-AppleClang-CXX.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Apple-Clang-CXX.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Apple-Clang.cmake \
-	/opt/homebrew/share/cmake/Modules/Platform/Darwin-Determine-CXX.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Darwin-Initialize.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Darwin.cmake \
 	/opt/homebrew/share/cmake/Modules/Platform/Linker/Apple-AppleClang-CXX.cmake \

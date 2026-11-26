@@ -1,9 +1,24 @@
 lab_tests_autogen/timestamp: \
 	/Users/abracodabra/Documents/phisics_sim/tests/CMakeLists.txt \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_adiabatic.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_adiabatic_scene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_bacteria.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_bacteria_scene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_boat.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_core.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_decay.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_decay_scene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_horizon.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_horizon_scene.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_mixture.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_motion.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_projectile.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_projectile_scene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_sound.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_sound_scene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_spring.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_spring_scene.cpp \
+	/Users/abracodabra/Documents/phisics_sim/tests/test_spring_vertical.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_tank.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_well.cpp \
 	/Users/abracodabra/Documents/phisics_sim/tests/test_work.cpp \
